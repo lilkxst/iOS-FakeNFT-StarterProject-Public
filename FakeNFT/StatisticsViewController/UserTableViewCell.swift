@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 class UserTableViewCell: UITableViewCell {
 
@@ -18,7 +19,7 @@ class UserTableViewCell: UITableViewCell {
     }
 
     private func setupUI() {
- 
+
             rankingLabel.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(rankingLabel)
 
@@ -26,7 +27,7 @@ class UserTableViewCell: UITableViewCell {
             avatarImageView.layer.cornerRadius = 20
             avatarImageView.clipsToBounds = true
             contentView.addSubview(avatarImageView)
-        
+
             usernameLabel.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(usernameLabel)
 
@@ -34,7 +35,7 @@ class UserTableViewCell: UITableViewCell {
             contentView.addSubview(nftCountLabel)
 
             NSLayoutConstraint.activate([
-                
+
                 rankingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
                 rankingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
@@ -55,9 +56,9 @@ class UserTableViewCell: UITableViewCell {
     func configure(with user: User) {
         rankingLabel.text = user.rating
 
-        if let imageUrl = URL(string: user.avatar), let imageData = try? Data(contentsOf: imageUrl) {
-            avatarImageView.image = UIImage(data: imageData)
-        }
+        if let imageUrl = URL(string: user.avatar) {
+                    avatarImageView.kf.setImage(with: imageUrl)
+                }
 
         usernameLabel.text = user.name
 

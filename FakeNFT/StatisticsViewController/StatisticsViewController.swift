@@ -46,10 +46,16 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
         return presenter.users.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath)
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "UserCell",
+            for: indexPath) as? UserTableViewCell else {
+            return UITableViewCell()
+        }
+        
         let user = presenter.users[indexPath.row]
-        cell.textLabel?.text = "\(user.name) - \(user.description)"
+        cell.configure(with: user)
         return cell
     }
 
