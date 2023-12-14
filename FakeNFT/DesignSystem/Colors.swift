@@ -24,14 +24,14 @@ extension UIColor {
             alpha: CGFloat(alpha) / 255
         )
     }
-    
+
     private static let ypBlackDay = UIColor(hexString: "1A1B22")
     private static let ypWhiteDay = UIColor(hexString: "FFFFFF")
     private static let ypLightGreyDay = UIColor(hexString: "F7F7F8")
     private static let ypWhileNight = UIColor(hexString: "1A1B22")
     private static let ypBlackNight = UIColor(hexString: "FFFFFF")
     private static let ypLightGreyNight = UIColor(hexString: "2C2C2E")
-    
+
     // Universal Colors
     static let ypGrayUniversal = UIColor(hexString: "625C5C")
     static let ypRedUniversal = UIColor(hexString: "F56B6C")
@@ -41,23 +41,23 @@ extension UIColor {
     static let ypBlackUniversal = UIColor(hexString: "1A1B22")
     static let yowhiteUniversal = UIColor(hexString: "FFFFFF")
     static let ypYellowUniversal = UIColor(hexString: "FEEF0D")
-    
+
     static let ypWhite = UIColor { traits in
         return traits.userInterfaceStyle == .dark
         ? .ypWhileNight
         : .ypWhiteDay
     }
-    
+
     static let ypBlack = UIColor { traits in
         return traits.userInterfaceStyle == .dark
         ? .ypBlackNight
         : .ypBlackDay
     }
-     
+
     static let ypLightGrey = UIColor { traits in
         return traits.userInterfaceStyle == .dark
         ? .ypLightGreyNight
         : .ypLightGreyDay
     }
-    
+
 }
