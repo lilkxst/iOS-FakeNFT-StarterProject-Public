@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class CartTableViewCell: UITableViewCell {
     
@@ -27,12 +28,15 @@ final class CartTableViewCell: UITableViewCell {
         return titleLabel
     }()
     
-    private lazy var ratingView = UIView()
+    private lazy var ratingView: RatingView = {
+        let ratingView = RatingView()
+        return ratingView
+    }()
     
     private lazy var priceTitle: UILabel = {
         let priceTitle = UILabel()
         priceTitle.font = .caption2
-        priceTitle.text = "Цена"
+        priceTitle.text = NSLocalizedString("CartCell.price", comment: "")
         return priceTitle
     }()
     
@@ -44,6 +48,7 @@ final class CartTableViewCell: UITableViewCell {
     
     private lazy var deleteButton: UIButton = {
         let deleteButton = UIButton()
+        deleteButton.setImage(UIImage(named: "DeleteFromCart"), for: .normal)
         return deleteButton
     }()
     
@@ -89,7 +94,7 @@ final class CartTableViewCell: UITableViewCell {
             priceValue.topAnchor.constraint(equalTo: priceTitle.bottomAnchor, constant: 2),
             priceValue.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             
-            deleteButton.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor),
+            deleteButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             deleteButton.trailingAnchor.constraint(equalTo: fieldView.trailingAnchor)
         ])
         fieldView.translatesAutoresizingMaskIntoConstraints = false
@@ -99,5 +104,12 @@ final class CartTableViewCell: UITableViewCell {
         priceTitle.translatesAutoresizingMaskIntoConstraints = false
         priceValue.translatesAutoresizingMaskIntoConstraints = false
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func updateCell(nftTitle: String, nftImage: URL?, nftRating: Int, nftPrice: Float) {
+        titleLabel.text = nftTitle
+        imageNft.kf.setImage(with: nftImage)
+        ratingView.setRating(rating: nftRating)
+        priceValue.text = "\(nftPrice) ETH"
     }
 }

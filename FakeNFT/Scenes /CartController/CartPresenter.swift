@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 final class CartPresenter {
     
     private var viewController: CartViewControllerProtocol?
@@ -16,5 +15,13 @@ final class CartPresenter {
     
     init(viewController: CartViewControllerProtocol) {
         self.viewController = viewController
+    }
+    
+    func totalPrice() -> Float {
+        var price: Float = 0
+        for nft in cartContent {
+            price += nft.price
+        }
+        return price
     }
 }

@@ -11,6 +11,17 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     
     private var presenter: CartPresenter?
     
+    let servicesAssembly: ServicesAssembly
+
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private lazy var cartTable: UITableView = {
         let cartTable = UITableView()
         cartTable.separatorStyle = .none
@@ -20,13 +31,13 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     private lazy var placeholderLabel: UILabel = {
         let placeholderLabel = UILabel()
         placeholderLabel.font = .bodyBold
-        placeholderLabel.text = "Корзина пуста"
+        placeholderLabel.text = NSLocalizedString("Cart.emptyCart", comment: "")
         return placeholderLabel
     }()
     
     private lazy var bottomView: UIView = {
         let bottomView = UIView()
-        //bottomView.backgroundColor = .yaLightGrayLight
+        bottomView.backgroundColor = .ypLightGrey
         bottomView.layer.masksToBounds = true
         bottomView.layer.cornerRadius = 12
         bottomView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -43,6 +54,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         let totalPriceLabel = UILabel()
         totalPriceLabel.font = .bodyBold
         totalPriceLabel.textColor = .green
+        totalPriceLabel.text = ""
         return totalPriceLabel
     }()
     
@@ -50,20 +62,29 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         let paymentButton = UIButton()
         paymentButton.layer.masksToBounds = true
         paymentButton.layer.cornerRadius = 16
-        paymentButton.backgroundColor = .black
+        paymentButton.backgroundColor = .ypBlack
         paymentButton.setTitleColor(.white, for: .normal)
         paymentButton.titleLabel?.font = .bodyBold
-        paymentButton.setTitle("К оплате", for: .normal)
+        paymentButton.setTitle(NSLocalizedString("Cart.paymentButton", comment: ""), for: .normal)
         return paymentButton
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupViews()
         presenter = CartPresenter(viewController: self)
         cartTable.register(CartTableViewCell.self, forCellReuseIdentifier: "CartTableViewCell")
         cartTable.delegate = self
         cartTable.dataSource = self
+        showPlaceholder()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        countNftInCartLabel.text = "\(presenter!.cartContent.count) NFT"
+        totalPriceLabel.text = "\(presenter!.totalPrice()) ETH"
     }
     
     private func setupViews() {
@@ -101,6 +122,21 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
             placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+        cartTable.translatesAutoresizingMaskIntoConstraints = false
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        countNftInCartLabel.translatesAutoresizingMaskIntoConstraints = false
+        totalPriceLabel.translatesAutoresizingMaskIntoConstraints = false
+        paymentButton.translatesAutoresizingMaskIntoConstraints = false
+        placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func showPlaceholder() {
+        if presenter!.cartContent.isEmpty {
+            placeholderLabel.isHidden = false
+            bottomView.isHidden = true
+        } else {
+            placeholderLabel.isHidden = true
+        }
     }
 }
 
@@ -112,10 +148,13 @@ extension CartViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = cartTable.dequeueReusableCell(withIdentifier: "CartTableViewCell", for: indexPath) as? CartTableViewCell else { return UITableViewCell() }
+        cell.updateCell(nftTitle: presenter!.cartContent[indexPath.row].title, nftImage: presenter!.cartContent[indexPath.row].imageURL ?? nil, nftRating: presenter!.cartContent[indexPath.row].rating, nftPrice: presenter!.cartContent[indexPath.row].price)
         return cell
     }
 }
 
 extension CartViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 140
+    }
 }
