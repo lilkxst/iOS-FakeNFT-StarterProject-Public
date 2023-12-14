@@ -17,4 +17,8 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+
+    func provideNetworkClient() -> NetworkClient {
+           return networkClient
+       }
 }
