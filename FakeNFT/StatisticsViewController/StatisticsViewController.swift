@@ -25,16 +25,27 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
     }
 
     func setupTableView() {
-        tableView = UITableView(frame: self.view.bounds)
+        tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UserTableViewCell.self, forCellReuseIdentifier: "UserCell")
         tableView.dataSource = self
         tableView.delegate = self
-        self.view.addSubview(tableView)
+        tableView.separatorStyle = .none
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 88
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+                tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+                tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+                tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
     }
 
     func setupNavigationBar() {
         let filterButton = UIBarButtonItem(
-            image: UIImage(named: "filterChoseImages"),
+            image: UIImage(named: "filterChoseImages")?.withRenderingMode(.alwaysOriginal),
             style: .plain,
             target: self,
             action: #selector(filterTapped)
@@ -53,7 +64,7 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
             for: indexPath) as? UserTableViewCell else {
             return UITableViewCell()
         }
-        
+
         let user = presenter.users[indexPath.row]
         cell.configure(with: user)
         return cell
@@ -62,6 +73,10 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         presenter.didSelectUser(at: indexPath.row)
     }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 88 
+        }
 
     @objc func filterTapped() {
 

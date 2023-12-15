@@ -1,6 +1,5 @@
 import UIKit
 
-
 struct User: Decodable {
     let name: String
     let avatar: String

@@ -3,6 +3,7 @@ import Kingfisher
 
 class UserTableViewCell: UITableViewCell {
 
+    private let cardView = UIView()
     private let rankingLabel = UILabel()
     private let avatarImageView = UIImageView()
     private let usernameLabel = UILabel()
@@ -20,49 +21,75 @@ class UserTableViewCell: UITableViewCell {
 
     private func setupUI() {
 
-            rankingLabel.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview(rankingLabel)
+        contentView.backgroundColor = .clear
 
-            avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-            avatarImageView.layer.cornerRadius = 20
-            avatarImageView.clipsToBounds = true
-            contentView.addSubview(avatarImageView)
+        cardView.translatesAutoresizingMaskIntoConstraints = false
+        cardView.backgroundColor = .ypLightGrey
+        cardView.layer.cornerRadius = 12
+        contentView.addSubview(cardView)
 
-            usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview(usernameLabel)
+        rankingLabel.translatesAutoresizingMaskIntoConstraints = false
+        rankingLabel.backgroundColor = .clear
+        rankingLabel.textAlignment = .center
+        rankingLabel.layer.cornerRadius = 10
+        rankingLabel.layer.masksToBounds = true
+        rankingLabel.font = .systemFont(ofSize: 16)
+        contentView.addSubview(rankingLabel)
 
-            nftCountLabel.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview(nftCountLabel)
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        avatarImageView.layer.cornerRadius = 14
+        avatarImageView.clipsToBounds = true
+        contentView.addSubview(avatarImageView)
 
-            NSLayoutConstraint.activate([
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.font = .boldSystemFont(ofSize: 22)
+        cardView.addSubview(usernameLabel)
 
-                rankingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-                rankingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+        nftCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        nftCountLabel.font = .boldSystemFont(ofSize: 22)
+        cardView.addSubview(nftCountLabel)
 
-                avatarImageView.leadingAnchor.constraint(equalTo: rankingLabel.trailingAnchor, constant: 10),
-                avatarImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-                avatarImageView.widthAnchor.constraint(equalToConstant: 40),
-                avatarImageView.heightAnchor.constraint(equalToConstant: 40),
+        NSLayoutConstraint.activate([
 
-                usernameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 10),
-                usernameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            cardView.leadingAnchor.constraint(equalTo: rankingLabel.trailingAnchor, constant: 10),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            cardView.widthAnchor.constraint(equalToConstant: 308),
+            cardView.heightAnchor.constraint(equalToConstant: 80),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+                cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
 
-                nftCountLabel.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 10),
-                nftCountLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-                nftCountLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-            ])
-        }
+            rankingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            rankingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            rankingLabel.widthAnchor.constraint(equalToConstant: 35),
+            rankingLabel.heightAnchor.constraint(equalToConstant: 80),
+
+            // Констрейнты для avatarImageView
+            avatarImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            avatarImageView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 28),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 28),
+
+            usernameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 10),
+            usernameLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
+
+            nftCountLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
+            nftCountLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor)
+        ])
+    }
 
     func configure(with user: User) {
-        rankingLabel.text = user.rating
+        rankingLabel.text = Int(user.rating) != nil ? user.rating : "N/A"
 
         if let imageUrl = URL(string: user.avatar) {
                     avatarImageView.kf.setImage(with: imageUrl)
                 }
 
         usernameLabel.text = user.name
+        self.selectionStyle = .none
 
-        nftCountLabel.text = "NFTs: \(user.nfts.count)"
+        nftCountLabel.text = "\(user.nfts.count)"
     }
 
   }
