@@ -1,6 +1,8 @@
 import UIKit
 
-final class StatisticsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class StatisticsViewController: UIViewController, UsersViewProtocol, UITableViewDataSource, UITableViewDelegate {
+
+    private var activityIndicator: UIActivityIndicatorView!
     var presenter: UsersPresenter!
     var tableView: UITableView!
     let servicesAssembly: ServicesAssembly
@@ -19,8 +21,10 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
         setupTableView()
         setupNavigationBar()
         presenter = UsersPresenter()
-        presenter.setNetworkClient(servicesAssembly.provideNetworkClient())
         presenter.view = self
+        presenter.setNetworkClient(servicesAssembly.provideNetworkClient())
+        setupActivityIndicator()
+        activityIndicator.startAnimating()
         presenter.loadUsers()
     }
 
@@ -34,7 +38,7 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 88
         view.addSubview(tableView)
-        
+
         NSLayoutConstraint.activate([
                 tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
                 tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -52,6 +56,22 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
         )
         navigationItem.rightBarButtonItem = filterButton
     }
+
+    private func setupActivityIndicator() {
+           activityIndicator = UIActivityIndicatorView(style: .large)
+           activityIndicator.center = view.center
+           activityIndicator.hidesWhenStopped = true
+           view.addSubview(activityIndicator)
+       }
+
+    func displayUsers(_ users: [User]) {
+            activityIndicator.stopAnimating()
+            tableView.reloadData()
+        }
+
+        func displayError(_ error: Error) {
+            activityIndicator.stopAnimating()
+        }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter.users.count
@@ -75,7 +95,7 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 88 
+            return 88
         }
 
     @objc func filterTapped() {

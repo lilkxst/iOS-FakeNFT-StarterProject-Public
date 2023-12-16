@@ -1,26 +1,30 @@
 import UIKit
 
- final class UsersPresenter {
+protocol UsersViewProtocol: AnyObject {
+    func displayUsers(_ users: [User])
+    func displayError(_ error: Error)
+}
 
-    weak var view: StatisticsViewController?
-     var networkClient: NetworkClient?
+final class UsersPresenter {
 
+    weak var view: UsersViewProtocol?
+    var networkClient: NetworkClient?
     var users: [User] = []
 
-     func setNetworkClient(_ client: NetworkClient) {
-             networkClient = client
-         }
+    func setNetworkClient(_ client: NetworkClient) {
+        networkClient = client
+    }
 
     func viewDidLoad() {
         updateView()
     }
 
     func updateView() {
-        view?.tableView.reloadData()
+        view?.displayUsers(users)
     }
 
-     func didSelectUser(at index: Int) {
-     }
+    func didSelectUser(at index: Int) {
+    }
 
      func loadUsers() {
          guard let networkClient = networkClient else {
@@ -36,8 +40,9 @@ import UIKit
                      self?.users = users.sorted {
                          (Int($0.rating) ?? 0) < (Int($1.rating) ?? 0)
                      }
-                     self?.view?.tableView.reloadData()
+                     self?.view?.displayUsers(users)
                  case .failure(let error):
+                     self?.view?.displayError(error)
                      print("Error: \(error)")
                  }
              }
