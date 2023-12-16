@@ -8,6 +8,7 @@ class UserTableViewCell: UITableViewCell {
     private let avatarImageView = UIImageView()
     private let usernameLabel = UILabel()
     private let nftCountLabel = UILabel()
+    private let spacerView = UIView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -22,6 +23,8 @@ class UserTableViewCell: UITableViewCell {
     private func setupUI() {
 
         contentView.backgroundColor = .clear
+        spacerView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(spacerView)
 
         cardView.translatesAutoresizingMaskIntoConstraints = false
         cardView.backgroundColor = .ypLightGrey
@@ -58,14 +61,13 @@ class UserTableViewCell: UITableViewCell {
             cardView.widthAnchor.constraint(equalToConstant: 308),
             cardView.heightAnchor.constraint(equalToConstant: 80),
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-                cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
 
             rankingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             rankingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             rankingLabel.widthAnchor.constraint(equalToConstant: 35),
             rankingLabel.heightAnchor.constraint(equalToConstant: 80),
 
-            // Констрейнты для avatarImageView
             avatarImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
             avatarImageView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
             avatarImageView.widthAnchor.constraint(equalToConstant: 28),
@@ -75,7 +77,13 @@ class UserTableViewCell: UITableViewCell {
             usernameLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
 
             nftCountLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
-            nftCountLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor)
+            nftCountLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
+
+            spacerView.heightAnchor.constraint(equalToConstant: 8),
+            spacerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            spacerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            spacerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+
         ])
     }
 
