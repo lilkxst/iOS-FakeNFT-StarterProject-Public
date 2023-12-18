@@ -10,7 +10,6 @@ final class CatalogViewController: UIViewController {
     // MARK: - Properties
     
     let servicesAssembly: ServicesAssembly
-    let testNftButton = UIButton()
     private var presenter: CatalogPresenterProtocol?
     private let tableView: UITableView = {
         let table = UITableView()
@@ -61,12 +60,6 @@ final class CatalogViewController: UIViewController {
     
     func configUI(){
         
-        view.addSubview(testNftButton)
-        testNftButton.constraintCenters(to: view)
-        testNftButton.setTitle(Constants.openNftTitle, for: .normal)
-        testNftButton.addTarget(self, action: #selector(showNft), for: .touchUpInside)
-        testNftButton.setTitleColor(.systemBlue, for: .normal)
-        
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -87,14 +80,6 @@ final class CatalogViewController: UIViewController {
        navigationController?.pushViewController(vc, animated: true)
     }
 
-    @objc
-    func showNft() {
-        let assembly = NftDetailAssembly(servicesAssembler: servicesAssembly)
-        let nftInput = NftDetailInput(id: Constants.testNftId)
-        let nftViewController = assembly.build(with: nftInput)
-        present(nftViewController, animated: true)
-    }
-    
     @objc
     func addSorting(){
         
