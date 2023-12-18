@@ -11,8 +11,7 @@ final class CollectionNFTViewController: UIViewController {
     
     // MARK: - Properties
     
-    let servicesAssembly: ServicesAssembly
-    
+    private let servicesAssembly: ServicesAssembly
     private var presenter: CollectionPresenterProtocol?
     
     private lazy var scrollView: UIScrollView = {
@@ -89,8 +88,6 @@ final class CollectionNFTViewController: UIViewController {
         return collection
     }()
     
-    
-    
     // MARK: - Init
     
     convenience init(servicesAssembly: ServicesAssembly){
@@ -108,14 +105,12 @@ final class CollectionNFTViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
     }
-    
     
     // MARK: - Functions
     
@@ -176,17 +171,14 @@ final class CollectionNFTViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
-    
 }
-
 
 // MARK: - CollectionView Delegate && DataSource
 
 extension CollectionNFTViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-   
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -199,9 +191,7 @@ extension CollectionNFTViewController: UICollectionViewDelegate, UICollectionVie
         cell.config(with: model)
         return cell
     }
-    
 }
-
 
 //MARK: - UITCollectionView FlowLayout
 
@@ -212,7 +202,7 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        return CGSize(width: 108, height: 192)
+         CGSize(width: 108, height: 192)
     }
     
     func collectionView(
@@ -220,15 +210,15 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return 8
+        8
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
+        9
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
 }

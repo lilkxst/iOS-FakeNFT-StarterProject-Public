@@ -13,19 +13,18 @@ protocol CatalogPresenterProtocol {
 
 final class CatalogPresenter: CatalogPresenterProtocol {
     
-    
     // MARK: - Properties
     weak var view: NftCatalogView?
+    private let service: NftService 
     var collectionsNFT: [CatalogNFTCellViewModel] = custonCollectionsNFT
     
     // MARK: - Init
 
-    init() {
+    init(service: NftService) {
+        self.service = service
     }
     
     // MARK: - Functions
-    
-    
     
 }
 

@@ -33,7 +33,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
 
 let custonCollectionCells: [CollectionNFTCellViewModel] = [
     CollectionNFTCellViewModel(nameNFT: "Archi", price: "1", isLiked: true, isInTheBasket: true, rating: 2, url: URL(string: "https://practicum.yandex.ru")!),
-    CollectionNFTCellViewModel(nameNFT: "Ruby", price: "2", isLiked: true, isInTheBasket: true, rating: 5, url: URL(string: "https://practicum.yandex.ru")!),
+    CollectionNFTCellViewModel(nameNFT: "Ruby", price: "2", isLiked: true, isInTheBasket: true, rating: 0, url: URL(string: "https://practicum.yandex.ru")!),
     CollectionNFTCellViewModel(nameNFT: "Doritos", price: "11", isLiked: false, isInTheBasket: false, rating: 5, url: URL(string: "https://practicum.yandex.ru")!),
     CollectionNFTCellViewModel(nameNFT: "Cheatos", price: "12", isLiked: true, isInTheBasket: false, rating: 4, url: URL(string: "https://practicum.yandex.ru")!),
     CollectionNFTCellViewModel(nameNFT: "lays", price: "13", isLiked: false, isInTheBasket: true, rating: 3, url: URL(string: "https://practicum.yandex.ru")!)

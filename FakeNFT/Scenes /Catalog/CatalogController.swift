@@ -1,15 +1,14 @@
 import UIKit
 
 protocol NftCatalogView: AnyObject {
-    
+    func update()
 }
 
 final class CatalogViewController: UIViewController {
-
     
     // MARK: - Properties
     
-    let servicesAssembly: ServicesAssembly
+    private let servicesAssembly: ServicesAssembly
     private var presenter: CatalogPresenterProtocol?
     private let tableView: UITableView = {
         let table = UITableView()
@@ -22,7 +21,7 @@ final class CatalogViewController: UIViewController {
     // MARK: - Initialization
     
     convenience init(servicesAssembly: ServicesAssembly){
-        self.init(servicesAssembly: servicesAssembly, presenter: CatalogPresenter())
+        self.init(servicesAssembly: servicesAssembly, presenter: CatalogPresenter(service: servicesAssembly.nftService))
     }
     
     init(servicesAssembly: ServicesAssembly, presenter: CatalogPresenterProtocol) {
@@ -51,7 +50,7 @@ final class CatalogViewController: UIViewController {
     
     func navBar(){
         if let navigationBar = navigationController?.navigationBar {
-            let item = UIBarButtonItem(image: UIImage(named: "Light"), style: .plain, target: self, action: #selector(addSorting))
+            let item = UIBarButtonItem(image: UIImage(named: "Sort"), style: .plain, target: self, action: #selector(addSorting))
             navigationBar.topItem?.setRightBarButton(item, animated: false)
             navigationBar.tintColor = .ypBlack
         }
@@ -81,7 +80,7 @@ final class CatalogViewController: UIViewController {
     }
 
     @objc
-    func addSorting(){
+    private func addSorting(){
         
     }
 }
@@ -103,7 +102,7 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 187
+       187
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -113,9 +112,12 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     
 }
 
+// MARK: - NftCatalogView
 
 extension CatalogViewController: NftCatalogView {
-    
+    func update() {
+        tableView.reloadData()
+    }
 }
  
 private enum Constants {

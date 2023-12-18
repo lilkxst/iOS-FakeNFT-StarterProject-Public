@@ -9,10 +9,13 @@ import UIKit
 
 final class RatingView: UIView {
     
-    private lazy var starImage: UIImageView = {
-        let starImage = UIImageView()
-        starImage.backgroundColor = .clear
-        return starImage
+    private lazy var starsStacView: UIStackView = {
+       let view = UIStackView()
+        view.axis = .horizontal
+        view.alignment = .leading
+        view.distribution = .fill
+        view.spacing = 2
+       return view
     }()
     
     override init(frame: CGRect) {
@@ -26,32 +29,27 @@ final class RatingView: UIView {
     }
     
     private func setupViews() {
-        addSubview(starImage)
+        addSubview(starsStacView)
         
         NSLayoutConstraint.activate([
-            starImage.topAnchor.constraint(equalTo: topAnchor),
-            starImage.bottomAnchor.constraint(equalTo: bottomAnchor),
-            starImage.leadingAnchor.constraint(equalTo: leadingAnchor),
-            starImage.trailingAnchor.constraint(equalTo: trailingAnchor)
+            starsStacView.topAnchor.constraint(equalTo: topAnchor),
+            starsStacView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            starsStacView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            starsStacView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
         
-        starImage.translatesAutoresizingMaskIntoConstraints = false
+        starsStacView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func setRating(rating: Int) {
-        switch rating {
-        case 1: 
-            starImage.image = UIImage(named: "ratingOne")
-        case 2: 
-            starImage.image = UIImage(named: "ratingTwo")
-        case 3: 
-            starImage.image = UIImage(named: "ratingThree")
-        case 4: 
-            starImage.image = UIImage(named: "ratingFour")
-        case 5: 
-            starImage.image = UIImage(named: "ratingFive")
-        default:
-            starImage.image = UIImage(named: "ratingZero")
-        }
+    func setStars(with rating: Int){
+        var index = 0
+        repeat {
+            let view = UIImageView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            starsStacView.addArrangedSubview(view)
+            view.image = index < rating ? UIImage(named: "goldStar") : UIImage(named: "grayStar")
+            index += 1
+        } while index < 5
     }
+    
 }

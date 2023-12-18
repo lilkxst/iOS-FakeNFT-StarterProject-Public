@@ -23,7 +23,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
         return btn
     }()
     
-    //Вью с рейтингом
+    private var ratingView = RatingView()
     
     private lazy var nameNFTLabel: UILabel = {
        let label = UILabel()
@@ -69,7 +69,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Functions
     
     func configUI(){
-        [imageView, likeButton, stackViewDescription, basketButton].forEach{
+        [imageView, likeButton, ratingView, stackViewDescription, basketButton].forEach{
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -90,6 +90,11 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
             likeButton.heightAnchor.constraint(equalToConstant: 40),
             likeButton.widthAnchor.constraint(equalToConstant: 40),
             
+            ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            ratingView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            ratingView.widthAnchor.constraint(equalToConstant: 68),
+            ratingView.heightAnchor.constraint(equalToConstant: 12),
+            
             stackViewDescription.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 24),
             stackViewDescription.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackViewDescription.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -105,7 +110,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     func config(with model: CollectionNFTCellViewModel){
         nameNFTLabel.text = model.nameNFT
         priceLabel.text = model.price + " ETH"
-        //
+        ratingView.setStars(with: model.rating)
         basketButton.setImage(setBasket(isInTheBasket: model.isInTheBasket), for: .normal)
         likeButton.setImage(setLike(isLiked: model.isLiked), for: .normal)
     }
