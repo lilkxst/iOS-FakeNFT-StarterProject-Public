@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol NftCollectionView: AnyObject {
+    func setup(name: String, cover: String, author: String, description: String)
+}
+
 final class CollectionNFTViewController: UIViewController {
     
     // MARK: - Properties
@@ -32,32 +36,20 @@ final class CollectionNFTViewController: UIViewController {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "Cover Collection")
         view.clipsToBounds = true
         return view
     }()
-    
-    let stackViewTextLabel: UIStackView = {
+
+    let stackViewDescriptionLabel: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = 0
-        sv.alignment = .leading
+        sv.alignment = .top
         sv.distribution = .fill
-        return sv
-    }()
-    
-    let stackViewNameLabel: UIStackView = {
-        let sv = UIStackView()
-        sv.axis = .vertical
-        sv.spacing = 8
-        sv.alignment = .leading
-        sv.distribution = .fillEqually
         return sv
     }()
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Peach"
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         return label
@@ -65,19 +57,31 @@ final class CollectionNFTViewController: UIViewController {
     
     private var authorLable: UILabel = {
         let label = UILabel()
-        label.text = "Автор коллекции ...."
+        label.text = "Автор коллекции:"
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         return label
     }()
     
+    private var authorButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(.systemBlue, for: .normal)
+        return button
+    }()
+    
     private var descriptionLable: UILabel = {
         let label = UILabel()
-        label.text = "Персиковый - как облака над закатным солнецм в окенае. В этой коллекции совмещены трогательная нежность и живая игривость сказачных зефирных зверей."
         label.textAlignment = .left
+        label.sizeToFit()
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         return label
+    }()
+    
+    private var spacerView: UIView = {
+       let view = UIView()
+        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        return view
     }()
     
     private let collectionView: UICollectionView = {
@@ -90,8 +94,8 @@ final class CollectionNFTViewController: UIViewController {
     
     // MARK: - Init
     
-    convenience init(servicesAssembly: ServicesAssembly){
-        self.init(servicesAssembly: servicesAssembly, presenter: CollectionNFTPresenter())
+    convenience init(servicesAssembly: ServicesAssembly, collection: NFTCollection?){
+        self.init(servicesAssembly: servicesAssembly, presenter: CollectionNFTPresenter(service: servicesAssembly.nftCatalogService, collection: collection))
     }
     
     init(servicesAssembly: ServicesAssembly, presenter: CollectionPresenterProtocol) {
@@ -110,6 +114,8 @@ final class CollectionNFTViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
+        presenter?.view = self
+        presenter?.load()
     }
     
     // MARK: - Functions
@@ -127,18 +133,30 @@ final class CollectionNFTViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         //Формируем описание Коллекции
-        contentView.addSubview(stackViewTextLabel)
-        stackViewTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        [stackViewNameLabel, descriptionLable ].forEach{
-            stackViewTextLabel.addArrangedSubview($0)
+        [nameLabel, authorLable, authorButton, stackViewDescriptionLabel].forEach{
+            contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+//        contentView.addSubview(stackViewTextLabel)
+//        stackViewTextLabel.translatesAutoresizingMaskIntoConstraints = false
+//        [stackViewNameLabel, stackViewDescriptionLabel ].forEach{
+//            stackViewTextLabel.addArrangedSubview($0)
+//            $0.translatesAutoresizingMaskIntoConstraints = false
+//        }
+        
+        stackViewDescriptionLabel.addArrangedSubview(descriptionLable)
+        stackViewDescriptionLabel.addArrangedSubview(spacerView)
         
         //Формируем описание названия Коллекции и автора
-        [nameLabel, authorLable ].forEach{
-            stackViewNameLabel.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
+//        [nameLabel, stackViewAuthorLabel ].forEach{
+//            stackViewNameLabel.addArrangedSubview($0)
+//            $0.translatesAutoresizingMaskIntoConstraints = false
+//        }
+//
+//        [authorLable, authorButton ].forEach{
+//            stackViewAuthorLabel.addArrangedSubview($0)
+//            $0.translatesAutoresizingMaskIntoConstraints = false
+//        }
         
         //Настраиваем коллекцию
         contentView.addSubview(collectionView)
@@ -160,12 +178,27 @@ final class CollectionNFTViewController: UIViewController {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 310),
             
-            stackViewTextLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
-            stackViewTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            stackViewTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            stackViewTextLabel.heightAnchor.constraint(equalToConstant: 136),
+            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -16),
+            nameLabel.heightAnchor.constraint(equalToConstant: 28),
             
-            collectionView.topAnchor.constraint(equalTo: stackViewTextLabel.bottomAnchor, constant: 24),
+            authorLable.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 13),
+            authorLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            authorLable.widthAnchor.constraint(equalToConstant: 112),
+            authorLable.heightAnchor.constraint(equalToConstant: 18),
+            
+            authorButton.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            authorButton.leadingAnchor.constraint(equalTo: authorLable.trailingAnchor, constant: 4),
+            authorButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
+            authorButton.heightAnchor.constraint(equalToConstant: 28),
+            
+            stackViewDescriptionLabel.topAnchor.constraint(equalTo: authorButton.bottomAnchor, constant: 0),
+            stackViewDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            stackViewDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -16),
+            stackViewDescriptionLabel.heightAnchor.constraint(equalToConstant: 72),
+            
+            collectionView.topAnchor.constraint(equalTo: stackViewDescriptionLabel.bottomAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
@@ -221,4 +254,21 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
         UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
+}
+
+extension CollectionNFTViewController: NftCollectionView {
+    
+    func setup(name: String, cover: String, author: String, description: String) {
+        imageView.kf.setImage(with: URL(string: cover))
+        nameLabel.text = name
+        authorButton.setTitle(author, for: .normal)
+        authorButton.addTarget(self, action: #selector(didTapAuthor), for: .touchUpInside)
+        descriptionLable.text = description
+       
+    }
+    
+    @objc
+    func didTapAuthor(){
+        //Открываем Webview
+    }
 }

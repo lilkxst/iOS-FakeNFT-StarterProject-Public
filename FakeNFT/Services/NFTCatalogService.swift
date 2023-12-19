@@ -7,8 +7,10 @@
 
 import Foundation
 
+typealias NftCollectionsCompletion = (Result< [NFTCollection], Error>) -> Void
+
 protocol NftCatalogServiceProtocol {
-    func loadNft(id: String, completion: @escaping NftCompletion)
+    func loadNft(completion: @escaping NftCollectionsCompletion)
 }
 
 final class NftCatalogService: NftCatalogServiceProtocol {
@@ -21,25 +23,20 @@ final class NftCatalogService: NftCatalogServiceProtocol {
         self.networkClient = networkClient
     }
 
-    func loadNft(id: String, completion: @escaping NftCompletion) {
-        if let nft = storage.getNft(with: id) {
-            completion(.success(nft))
-            return
-        }
-
-        let request = NFTRequest(id: id)
-        networkClient.send(request: request, type: Nft.self) { [weak storage] result in
+    func loadNft( completion: @escaping NftCollectionsCompletion) {
+      
+       let request = CollectionsRequest()
+        
+        networkClient.send(request: request, type: [NFTCollection].self) { [weak storage] result in
             switch result {
-            case .success(let nft):
-                storage?.saveNft(nft)
-                completion(.success(nft))
+            case .success(let collections):
+               // storage?.saveNft(nft)
+                completion(.success(collections))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
     }
-    
-    
     
     
 }

@@ -9,6 +9,8 @@ import UIKit
 
 protocol CollectionPresenterProtocol {
     var collectionCells: [CollectionNFTCellViewModel] { get }
+    var view: NftCollectionView? { get set }
+    func load()
     
 }
 
@@ -17,16 +19,24 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     
     
     // MARK: - Properties
-    weak var view: NftCatalogView?
+    weak var view: NftCollectionView?
+    private let service: NftCatalogServiceProtocol
+    var collection: NFTCollection?
     var collectionCells: [CollectionNFTCellViewModel] = custonCollectionCells
     
     // MARK: - Init
     
-    init() {
+    init(service: NftCatalogServiceProtocol, collection: NFTCollection?) {
+        self.service = service
+        self.collection = collection
     }
     
     // MARK: - Functions
     
+    func load(){
+        guard let collection else { return }
+        view?.setup(name: collection.name, cover: collection.cover, author: collection.author, description: collection.description)
+    }
     
 }
 

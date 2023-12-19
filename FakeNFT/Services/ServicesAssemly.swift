@@ -17,4 +17,12 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+    
+    var nftCatalogService: NftCatalogServiceProtocol {
+        NftCatalogService(
+            networkClient: networkClient,
+            storage: nftStorage
+        )
+    }
+    
 }

@@ -21,7 +21,7 @@ final class CatalogViewController: UIViewController {
     // MARK: - Initialization
     
     convenience init(servicesAssembly: ServicesAssembly){
-        self.init(servicesAssembly: servicesAssembly, presenter: CatalogPresenter(service: servicesAssembly.nftService))
+        self.init(servicesAssembly: servicesAssembly, presenter: CatalogPresenter(service: servicesAssembly.nftCatalogService))
     }
     
     init(servicesAssembly: ServicesAssembly, presenter: CatalogPresenterProtocol) {
@@ -43,6 +43,8 @@ final class CatalogViewController: UIViewController {
         view.backgroundColor = .systemBackground
         navBar()
         configUI()
+        presenter?.view = self
+        presenter?.getCollections()
     }
     
     
@@ -74,8 +76,11 @@ final class CatalogViewController: UIViewController {
         
     }
     
-   func showNFTCollection() {
-       let vc = CollectionNFTViewController(servicesAssembly: servicesAssembly)
+    func showNFTCollection(indexPath: IndexPath) {
+       let vc = CollectionNFTViewController(
+        servicesAssembly: servicesAssembly,
+        collection: presenter?.collectionsNFT[indexPath.row]
+       )
        navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -95,7 +100,7 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CatalogNFTCell = tableView.dequeueReusableCell()
-        guard let model = presenter?.collectionsNFT[indexPath.row] else { return cell }
+        guard let model = presenter?.getModel(for: indexPath) else { return cell }
         cell.config(with: model)
         cell.selectionStyle = .none
         return cell
@@ -107,9 +112,8 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //Переход на экран коллекции NFT
-        showNFTCollection()
+        showNFTCollection(indexPath: indexPath)
     }
-    
 }
 
 // MARK: - NftCatalogView
