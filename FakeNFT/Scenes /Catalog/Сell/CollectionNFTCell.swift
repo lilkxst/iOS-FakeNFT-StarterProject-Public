@@ -108,6 +108,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     func config(with model: CollectionNFTCellViewModel){
+        imageView.kf.setImage(with: model.url)
         nameNFTLabel.text = model.nameNFT
         priceLabel.text = model.price + " ETH"
         ratingView.setStars(with: model.rating)

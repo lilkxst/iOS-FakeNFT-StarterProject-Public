@@ -9,6 +9,7 @@ import UIKit
 
 protocol NftCollectionView: AnyObject {
     func setup(name: String, cover: String, author: String, description: String)
+    func updateCollection()
 }
 
 final class CollectionNFTViewController: UIViewController {
@@ -95,7 +96,7 @@ final class CollectionNFTViewController: UIViewController {
     // MARK: - Init
     
     convenience init(servicesAssembly: ServicesAssembly, collection: NFTCollection?){
-        self.init(servicesAssembly: servicesAssembly, presenter: CollectionNFTPresenter(service: servicesAssembly.nftCatalogService, collection: collection))
+        self.init(servicesAssembly: servicesAssembly, presenter: CollectionNFTPresenter(service: servicesAssembly, collection: collection))
     }
     
     init(servicesAssembly: ServicesAssembly, presenter: CollectionPresenterProtocol) {
@@ -215,12 +216,12 @@ extension CollectionNFTViewController: UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        presenter?.collectionCells.count ?? 0
+        presenter?.nfts.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: CollectionNFTCell = collectionView.dequeueReusableCell(indexPath: indexPath)
-        guard let model = presenter?.collectionCells[indexPath.row] else { return cell }
+        guard let model = presenter?.getModel(for: indexPath ) else { return cell }
         cell.config(with: model)
         return cell
     }
@@ -256,7 +257,14 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
+//MARK: - UITCollectionView FlowLayout
+
 extension CollectionNFTViewController: NftCollectionView {
+    
+    func updateCollection() {
+        print(presenter?.nfts)
+        collectionView.reloadData()
+    }
     
     func setup(name: String, cover: String, author: String, description: String) {
         imageView.kf.setImage(with: URL(string: cover))
@@ -264,7 +272,6 @@ extension CollectionNFTViewController: NftCollectionView {
         authorButton.setTitle(author, for: .normal)
         authorButton.addTarget(self, action: #selector(didTapAuthor), for: .touchUpInside)
         descriptionLable.text = description
-       
     }
     
     @objc
