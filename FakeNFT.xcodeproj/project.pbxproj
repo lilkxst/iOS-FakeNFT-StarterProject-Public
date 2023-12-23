@@ -229,8 +229,6 @@
 		3F68069529CBBAF100B4F915 /* FakeNFT */ = {
 			isa = PBXGroup;
 			children = (
-				CCD998C12B2A231E002B9621 /* Presenters */,
-				CCD998BD2B2A208C002B9621 /* StatisticsViewController */,
 				3F68069629CBBAF100B4F915 /* AppDelegate.swift */,
 				3F68069829CBBAF100B4F915 /* SceneDelegate.swift */,
 				E1CD40DA2A96BE9B00BE7FE8 /* Resources */,
@@ -273,6 +271,7 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				CC16F3862B36DB8800B2C8B7 /* Statistics */,
 				E1A1B9D82AA01C9700C3AFBC /* TabBarController */,
 				0CF2C2D92A783C1600FDC837 /* Common */,
 				0CFCB7472A7808870009A829 /* Catalog */,
@@ -341,13 +340,14 @@
 			path = Requests;
 			sourceTree = "<group>";
 		};
-		CCD998BD2B2A208C002B9621 /* StatisticsViewController */ = {
+		CC16F3862B36DB8800B2C8B7 /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
-				CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */,
 				CCD998C42B2B0C2F002B9621 /* UserTableViewCell.swift */,
+				CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */,
+				CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */,
 			);
-			path = StatisticsViewController;
+			path = Statistics;
 			sourceTree = "<group>";
 		};
 		CCD998BE2B2A2144002B9621 /* Users */ = {
@@ -356,14 +356,6 @@
 				CCD998BF2B2A2159002B9621 /* Users.swift */,
 			);
 			path = Users;
-			sourceTree = "<group>";
-		};
-		CCD998C12B2A231E002B9621 /* Presenters */ = {
-			isa = PBXGroup;
-			children = (
-				CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */,
-			);
-			path = Presenters;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
