@@ -11,6 +11,12 @@ protocol UsersPresenterProtocol: AnyObject {
     func setNetworkClient(_ client: NetworkClient)
     func loadUsers()
     func didSelectUser(at index: Int)
+    func changeSortType(_ sortType: SortType)
+}
+
+enum SortType {
+    case rating
+    case alphabetical
 }
 
 final class UsersPresenter: UsersPresenterProtocol {
@@ -18,6 +24,7 @@ final class UsersPresenter: UsersPresenterProtocol {
     private var networkClient: NetworkClient?
     weak var view: UsersViewProtocol?
     var users: [User] = []
+    var sortType: SortType = .rating
     
     func setNetworkClient(_ client: NetworkClient) {
         networkClient = client
@@ -41,23 +48,38 @@ final class UsersPresenter: UsersPresenterProtocol {
         
         let request = UsersRequest()
         networkClient.send(request: request, type: [User].self) { [weak self] result in
-            switch result {
-            case .success(let users):
-                DispatchQueue.global(qos: .userInitiated).async {
-                    let sortedUsers = users.sorted {
-                        (Int($0.rating) ?? 0) < (Int($1.rating) ?? 0)
-                    }
+            DispatchQueue.global(qos: .userInitiated).async {
+                switch result {
+                case .success(let users):
+                    self?.users = users
+                    self?.sortUsers()
                     DispatchQueue.main.async {
-                        self?.users = sortedUsers
-                        self?.view?.displayUsers(sortedUsers)
+                        if let sortedUsers = self?.users {
+                            self?.view?.displayUsers(sortedUsers)
+                        }
                     }
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self?.view?.displayError(error)
-                    print("Error: \(error)")
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self?.view?.displayError(error)
+                        print("Error: \(error)")
+                    }
                 }
             }
+        }
+    }
+    
+    func changeSortType(_ sortType: SortType) {
+        self.sortType = sortType
+        sortUsers()
+        view?.displayUsers(users)
+    }
+    
+    private func sortUsers() {
+        switch sortType {
+        case .rating:
+            users.sort { (Int($0.rating) ?? 0) > (Int($1.rating) ?? 0) }
+        case .alphabetical:
+            users.sort { $0.name < $1.name }
         }
     }
     

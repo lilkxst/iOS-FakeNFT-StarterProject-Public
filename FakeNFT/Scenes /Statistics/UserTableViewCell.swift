@@ -69,13 +69,11 @@ final class UserTableViewCell: UITableViewCell {
         cardView.addSubview(nftCountLabel)
     }
     
-    
     private func setupUI() {
         contentView.backgroundColor = .clear
         addSubViews()
         applyConstraints()
     }
-    
     
     func applyConstraints() {
         NSLayoutConstraint.activate([
@@ -113,8 +111,8 @@ final class UserTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with user: User) {
-        rankingLabel.text = Int(user.rating) != nil ? user.rating : "N/A"
+    func configure(with user: User, index: Int) {
+        rankingLabel.text = "\(index + 1)"
         
         if let imageUrl = URL(string: user.avatar) {
             avatarImageView.kf.setImage(with: imageUrl)
