@@ -43,6 +43,8 @@
 		3FC8C39129D2453B0081F015 /* ExampleRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39029D2453B0081F015 /* ExampleRequest.swift */; };
 		3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */; };
 		699EBA3E2B291D26008EA6FF /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699EBA3D2B291D26008EA6FF /* RatingView.swift */; };
+		CC2FA2592B39EA4A004EFA33 /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */; };
+		CC2FA25B2B39EB12004EFA33 /* UserInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */; };
 		CCD998BC2B2A1E3E002B9621 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */; };
 		CCD998C02B2A2159002B9621 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998BF2B2A2159002B9621 /* Users.swift */; };
 		CCD998C32B2A2341002B9621 /* StatisticsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */; };
@@ -107,6 +109,8 @@
 		3FC8C39029D2453B0081F015 /* ExampleRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleRequest.swift; sourceTree = "<group>"; };
 		3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatters+Presets.swift"; sourceTree = "<group>"; };
 		699EBA3D2B291D26008EA6FF /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
+		CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoPresenter.swift; sourceTree = "<group>"; };
 		CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		CCD998BF2B2A2159002B9621 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsPresenter.swift; sourceTree = "<group>"; };
@@ -346,6 +350,8 @@
 				CCD998C42B2B0C2F002B9621 /* UserTableViewCell.swift */,
 				CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */,
 				CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */,
+				CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */,
+				CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -549,6 +555,7 @@
 			files = (
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
+				CC2FA25B2B39EB12004EFA33 /* UserInfoPresenter.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
 				CCD998BC2B2A1E3E002B9621 /* StatisticsViewController.swift in Sources */,
 				E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */,
@@ -560,6 +567,7 @@
 				CCD998C32B2A2341002B9621 /* StatisticsPresenter.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				CCD998C02B2A2159002B9621 /* Users.swift in Sources */,
+				CC2FA2592B39EA4A004EFA33 /* UserInfoViewController.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				699EBA3E2B291D26008EA6FF /* RatingView.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,

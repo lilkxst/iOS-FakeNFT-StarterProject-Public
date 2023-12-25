@@ -8,6 +8,8 @@ protocol UsersViewProtocol: AnyObject {
 protocol UsersPresenterProtocol: AnyObject {
     var users: [User] { get set }
     var view: UsersViewProtocol? { get set }
+    var onUserSelected: ((User) -> Void)? { get set }
+
     func setNetworkClient(_ client: NetworkClient)
     func loadUsers()
     func didSelectUser(at index: Int)
@@ -20,32 +22,36 @@ enum SortType {
 }
 
 final class UsersPresenter: UsersPresenterProtocol {
-    
+
     private var networkClient: NetworkClient?
     weak var view: UsersViewProtocol?
     var users: [User] = []
     var sortType: SortType = .rating
-    
+    var onUserSelected: ((User) -> Void)?
+
     func setNetworkClient(_ client: NetworkClient) {
         networkClient = client
     }
     func viewDidLoad() {
         updateView()
     }
-    
+
     func updateView() {
         view?.displayUsers(users)
     }
-    
+
     func didSelectUser(at index: Int) {
-    }
-    
+           guard index < users.count else { return }
+           let user = users[index]
+           onUserSelected?(user)
+       }
+
     func loadUsers() {
         guard let networkClient = networkClient else {
             print("NetworkClient is not set in UsersPresenter")
             return
         }
-        
+
         let request = UsersRequest()
         networkClient.send(request: request, type: [User].self) { [weak self] result in
             DispatchQueue.global(qos: .userInitiated).async {
@@ -67,13 +73,13 @@ final class UsersPresenter: UsersPresenterProtocol {
             }
         }
     }
-    
+
     func changeSortType(_ sortType: SortType) {
         self.sortType = sortType
         sortUsers()
         view?.displayUsers(users)
     }
-    
+
     private func sortUsers() {
         switch sortType {
         case .rating:
@@ -82,5 +88,5 @@ final class UsersPresenter: UsersPresenterProtocol {
             users.sort { $0.name < $1.name }
         }
     }
-    
+
 }
