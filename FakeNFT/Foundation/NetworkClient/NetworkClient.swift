@@ -124,6 +124,12 @@ struct DefaultNetworkClient: NetworkClient {
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = dtoEncoded
         }
+        if let body = request.body {
+            urlRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+           // let body = "likes=1001,23".data(using: .utf8)
+            urlRequest.httpBody = body
+        }
+        
         return urlRequest
     }
 

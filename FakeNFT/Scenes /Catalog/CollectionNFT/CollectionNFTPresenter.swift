@@ -8,11 +8,11 @@
 import UIKit
 
 protocol CollectionPresenterProtocol {
-    var collectionCells: [CollectionNFTCellViewModel] { get }
     var nfts: [Nft] { get }
     var view: NftCollectionView? { get set }
     func load()
     func getModel(for indexPath: IndexPath) -> CollectionNFTCellViewModel
+    func changeLikeState(for indexPath: IndexPath, state: Bool)
     
 }
 
@@ -24,8 +24,8 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     weak var view: NftCollectionView?
     private let service: ServicesAssembly
     var collection: NFTCollection?
+    var profile: Profile?
     var nfts: [Nft] = []
-    var collectionCells: [CollectionNFTCellViewModel] = custonCollectionCells
     
     // MARK: - Init
     
@@ -33,6 +33,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
         self.service = service
         self.collection = collection
         getNFTs()
+        //getProfile()
     }
     
     // MARK: - Functions
@@ -60,15 +61,27 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
             }
     }
     
+    func getProfile(){
+        service.nftCatalogService.loadProfile(completion: {[weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+            case .failure(let error):
+                print(error)
+            }
+        })
+    }
+    
     func getModel(for indexPath: IndexPath) -> CollectionNFTCellViewModel {
         convertToViewModel(nft: nfts[indexPath.row])
     }
     
     func convertToViewModel(nft: Nft) -> CollectionNFTCellViewModel {
         CollectionNFTCellViewModel(
+            id: nft.id,
             nameNFT: nft.name,
             price: String(nft.price),
-            isLiked: true,
+            isLiked: service.nftCatalogService.likeState(for: nft.id),
             isInTheBasket: true,
             rating: nft.rating,
             url: URL(string: nft.images[0])!
@@ -81,14 +94,21 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
         return name.capitalized
     }
     
-}
-
-
-let custonCollectionCells: [CollectionNFTCellViewModel] = [
-    CollectionNFTCellViewModel(nameNFT: "Archi", price: "1", isLiked: true, isInTheBasket: true, rating: 2, url: URL(string: "https://practicum.yandex.ru")!),
-    CollectionNFTCellViewModel(nameNFT: "Ruby", price: "2", isLiked: true, isInTheBasket: true, rating: 0, url: URL(string: "https://practicum.yandex.ru")!),
-    CollectionNFTCellViewModel(nameNFT: "Doritos", price: "11", isLiked: false, isInTheBasket: false, rating: 5, url: URL(string: "https://practicum.yandex.ru")!),
-    CollectionNFTCellViewModel(nameNFT: "Cheatos", price: "12", isLiked: true, isInTheBasket: false, rating: 4, url: URL(string: "https://practicum.yandex.ru")!),
-    CollectionNFTCellViewModel(nameNFT: "lays", price: "13", isLiked: false, isInTheBasket: true, rating: 3, url: URL(string: "https://practicum.yandex.ru")!)
+    // MARK: - Cells Functions
     
-]
+    func changeLikeState(for indexPath: IndexPath, state: Bool) {
+        
+        service.nftCatalogService.setLike(id: nfts[indexPath.row].id, completion: {[weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                //обновить ячейку
+                self?.view?.updateCell(indexPath: indexPath)
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+    }
+    
+}

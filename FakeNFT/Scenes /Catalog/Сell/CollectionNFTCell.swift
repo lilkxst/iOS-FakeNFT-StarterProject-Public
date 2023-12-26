@@ -9,6 +9,10 @@ import UIKit
 
 final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     
+    private var id: String?
+    var indexPath: IndexPath?
+    private var likeState: Bool = false
+    var delegate: NftCellDelegate?
     private lazy var imageView: UIImageView = {
        let img = UIImageView()
         img.image = UIImage(named: "Cover Collection")
@@ -69,6 +73,9 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Functions
     
     func configUI(){
+        likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
+        basketButton.addTarget(self, action: #selector(didTapBasket), for: .touchUpInside)
+        
         [imageView, likeButton, ratingView, stackViewDescription, basketButton].forEach{
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -108,8 +115,9 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     func config(with model: CollectionNFTCellViewModel){
+        self.id = model.id
         imageView.kf.setImage(with: model.url)
-        nameNFTLabel.text = model.nameNFT
+        nameNFTLabel.text = model.nameNFT.components(separatedBy: " ").first
         priceLabel.text = model.price + " ETH"
         ratingView.setStars(with: model.rating)
         basketButton.setImage(setBasket(isInTheBasket: model.isInTheBasket), for: .normal)
@@ -117,11 +125,22 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     func setLike(isLiked: Bool) -> UIImage? {
-        isLiked ? UIImage(named: "Favourites icons") : UIImage(named: "Favourites icons")
+        self.likeState = isLiked
+        return likeState ? UIImage(named: "Favourites") : UIImage(named: "UnFavorites")
     }
     
     func setBasket(isInTheBasket: Bool) -> UIImage? {
         isInTheBasket ? UIImage(named: "Cart") : UIImage(named: "Cart")
     }
     
+    @objc
+    func didTapLike(){
+        guard let indexPath else { return }
+        delegate?.changeLike(for: indexPath, state: likeState)
+    }
+    
+    @objc
+    func didTapBasket(){
+        
+    }
 }

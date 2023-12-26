@@ -10,6 +10,7 @@ import UIKit
 protocol NftCollectionView: AnyObject {
     func setup(name: String, cover: String, author: String, description: String)
     func updateCollection()
+    func updateCell(indexPath: IndexPath)
 }
 
 final class CollectionNFTViewController: UIViewController {
@@ -223,8 +224,11 @@ extension CollectionNFTViewController: UICollectionViewDelegate, UICollectionVie
         let cell: CollectionNFTCell = collectionView.dequeueReusableCell(indexPath: indexPath)
         guard let model = presenter?.getModel(for: indexPath ) else { return cell }
         cell.config(with: model)
+        cell.indexPath = indexPath
+        cell.delegate = self
         return cell
     }
+    
 }
 
 //MARK: - UITCollectionView FlowLayout
@@ -261,8 +265,12 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
 
 extension CollectionNFTViewController: NftCollectionView {
     
+    func updateCell(indexPath: IndexPath) {
+        collectionView.reloadItems(at: [indexPath])
+    }
+    
+    
     func updateCollection() {
-        print(presenter?.nfts)
         collectionView.reloadData()
     }
     
@@ -278,4 +286,14 @@ extension CollectionNFTViewController: NftCollectionView {
     func didTapAuthor(){
         //Открываем Webview
     }
+}
+
+//MARK: - NftCellDelegate
+
+extension CollectionNFTViewController: NftCellDelegate {
+    
+    func changeLike(for indexPath: IndexPath, state: Bool) {
+        presenter?.changeLikeState(for: indexPath, state: state)
+    }
+    
 }

@@ -8,6 +8,7 @@
 import Foundation
 
 struct CollectionNFTCellViewModel {
+    let id: String
     let nameNFT: String
     let price: String
     let isLiked: Bool
