@@ -16,8 +16,6 @@ final class UserInfoPresenter {
             view?.displayUserInfo(user)
         }
     }
-
-    // Дополнительная логика...
 }
 
 protocol UserInfoViewProtocol: AnyObject {

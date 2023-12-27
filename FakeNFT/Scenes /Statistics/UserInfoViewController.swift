@@ -7,13 +7,14 @@
 
 import UIKit
 
-class UserInfoViewController: UIViewController {
+final class UserInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
     var user: User?
 
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = 40
+        imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -39,33 +40,29 @@ class UserInfoViewController: UIViewController {
         button.setTitle("Перейти на сайт пользователя", for: .normal)
         button.addTarget(self, action: #selector(websiteButtonTapped), for: .touchUpInside)
         button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 16
         return button
     }()
 
-    private lazy var nftButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Коллекция NFT", for: .normal)
-        button.addTarget(self, action: #selector(nftButtonTapped), for: .touchUpInside)
-
-        button.setTitleColor(.black, for: .normal)
-        button.layer.cornerRadius = 10
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.black.cgColor
-        button.contentHorizontalAlignment = .left
-        button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        button.tintColor = .black
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: -button.imageView!.frame.size.width, bottom: 0, right: button.imageView!.frame.size.width)
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: button.titleLabel!.frame.size.width + 16, bottom: 0, right: -button.titleLabel!.frame.size.width)
-        return button
+    private lazy var customTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "CustomCell")
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
+        return tableView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.tintColor = .black
     }
 
     private func setupUI() {
@@ -90,41 +87,54 @@ class UserInfoViewController: UIViewController {
         view.addSubview(nameLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(websiteButton)
-        view.addSubview(nftButton)
+        view.addSubview(customTableView)
+
     }
 
     private func applyConstraints() {
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 80),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 80),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 70),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 70),
 
-            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 10),
+            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
             nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
 
-            descriptionLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 10),
+            descriptionLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 20),
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            websiteButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
-            websiteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            websiteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            websiteButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 28),
+            websiteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            websiteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            websiteButton.heightAnchor.constraint(equalToConstant: 40),
 
-            nftButton.topAnchor.constraint(equalTo: websiteButton.bottomAnchor, constant: 10),
-            nftButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            nftButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            customTableView.topAnchor.constraint(equalTo: websiteButton.bottomAnchor, constant: 20),
+            customTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            customTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            customTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 
         ])
     }
 
-    @objc private func websiteButtonTapped() {
-        if let urlString = user?.website, let url = URL(string: urlString) {
-        }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
 
-    @objc private func nftButtonTapped() {
-        dismiss(animated: true)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as? CustomTableViewCell else {
+            return UITableViewCell()
+        }
+
+        let nftCount = user?.nfts.count ?? 0
+        cell.configure(with: nftCount)
+
+        return cell
+    }
+
+    @objc private func websiteButtonTapped() {
+
     }
 
 }
