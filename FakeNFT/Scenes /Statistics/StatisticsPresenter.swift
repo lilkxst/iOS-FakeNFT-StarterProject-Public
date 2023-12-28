@@ -29,6 +29,10 @@ final class UsersPresenter: UsersPresenterProtocol {
     var sortType: SortType = .rating
     var onUserSelected: ((User) -> Void)?
 
+    init(servicesAssembly: ServicesAssembly) {
+         self.networkClient = servicesAssembly.provideNetworkClient()
+     }
+
     func setNetworkClient(_ client: NetworkClient) {
         networkClient = client
     }
