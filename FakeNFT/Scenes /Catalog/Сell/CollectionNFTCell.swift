@@ -130,7 +130,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     func setBasket(isInTheBasket: Bool) -> UIImage? {
-        isInTheBasket ? UIImage(named: "Cart") : UIImage(named: "Cart")
+        isInTheBasket ? UIImage(named: "Delete") : UIImage(named: "Add")
     }
     
     @objc
@@ -141,6 +141,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     
     @objc
     func didTapBasket(){
-        
+        guard let indexPath else { return }
+        delegate?.changeOrder(for: indexPath)
     }
 }

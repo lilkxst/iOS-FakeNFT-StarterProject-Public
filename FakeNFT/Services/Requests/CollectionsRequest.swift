@@ -23,11 +23,61 @@ struct ProfileRequest: NetworkRequest {
     }
 }
 
+struct OrdersGetRequest: NetworkRequest {
+    
+    var endpoint: URL? {
+        URL(string: "https://\(RequestConstants.baseURL)/api/v1/orders/1")
+    }
+}
+
+struct OrdersPutRequest: NetworkRequest {
+    
+    let httpMethod: HttpMethod = .put
+    var id: String
+    var orders: Set<String>
+    var endpoint: URL? {
+        URL(string: "https://\(RequestConstants.baseURL)/api/v1/orders/1")
+    }
+    var body: Data? {
+        return ordersToString().data(using: .utf8)
+    }
+    
+    init(id:String, orders: Set<String>) {
+        self.orders = orders
+        self.id = id
+    }
+    
+    func ordersToString() ->String {
+        var ordersString = "\(CatalogRequestConstants.orders)="
+        
+            if orders.isEmpty {
+                //Формируем пустую строку, чтобы массив лайков был пустой в профиле
+                ordersString += ""
+            } else {
+                //Добавляем id из массива
+                for (index , order) in orders.enumerated() {
+                    ordersString += order
+                    
+                    //Проверяем на разделитель
+                    if index != orders.count-1 {
+                        ordersString += ","
+                    }
+                }
+            }
+        //Добавляем id заказа
+        ordersString += "&\(CatalogRequestConstants.id)=\(id)"
+        print(ordersString)
+        return ordersString
+    }
+
+}
+
+
 struct LikeRequest: NetworkRequest {
 
     let httpMethod: HttpMethod = .put
     var dto: Encodable?
-    var likes: Set<String> //[String]
+    var likes: Set<String>
     var body: Data? {
       
         return likesToString().data(using: .utf8)
@@ -43,7 +93,7 @@ struct LikeRequest: NetworkRequest {
     }
     
     func likesToString()->String{
-         var likeString = "\(LikeRequestConstants.likes)="
+         var likeString = "\(CatalogRequestConstants.likes)="
         
         if likes.isEmpty {
             //Формируем пустую строку, чтобы массив лайков был пустой в профиле
@@ -64,6 +114,8 @@ struct LikeRequest: NetworkRequest {
     
 }
 
-private enum LikeRequestConstants {
+public enum CatalogRequestConstants {
     static let likes = "likes"
+    static let orders = "nfts"
+    static let id = "id"
 }

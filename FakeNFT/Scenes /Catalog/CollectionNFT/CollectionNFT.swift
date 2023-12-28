@@ -292,6 +292,10 @@ extension CollectionNFTViewController: NftCollectionView {
 
 extension CollectionNFTViewController: NftCellDelegate {
     
+    func changeOrder(for indexPath: IndexPath) {
+        presenter?.changeOrderState(for: indexPath)
+    }
+    
     func changeLike(for indexPath: IndexPath, state: Bool) {
         presenter?.changeLikeState(for: indexPath, state: state)
     }

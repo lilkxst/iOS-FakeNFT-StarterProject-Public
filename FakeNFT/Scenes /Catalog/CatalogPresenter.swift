@@ -35,8 +35,6 @@ final class CatalogPresenter: CatalogPresenterProtocol {
             case .success(let collections):
                 self.collectionsNFT = collections
                 self.view?.update()
-                print(collections)
-                print(collections.count)
             case .failure(let error):
                 print(error)
             }

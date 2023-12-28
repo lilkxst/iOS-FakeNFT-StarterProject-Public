@@ -9,4 +9,5 @@ import Foundation
 
 public protocol NftCellDelegate {
     func changeLike(for indexPath: IndexPath, state: Bool)
+    func changeOrder(for indexPath: IndexPath)
 }

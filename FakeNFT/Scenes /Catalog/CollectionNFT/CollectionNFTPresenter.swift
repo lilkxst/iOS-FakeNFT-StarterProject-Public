@@ -13,6 +13,7 @@ protocol CollectionPresenterProtocol {
     func load()
     func getModel(for indexPath: IndexPath) -> CollectionNFTCellViewModel
     func changeLikeState(for indexPath: IndexPath, state: Bool)
+    func changeOrderState(for indexPath: IndexPath)
     
 }
 
@@ -33,7 +34,6 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
         self.service = service
         self.collection = collection
         getNFTs()
-        //getProfile()
     }
     
     // MARK: - Functions
@@ -82,7 +82,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
             nameNFT: nft.name,
             price: String(nft.price),
             isLiked: service.nftCatalogService.likeState(for: nft.id),
-            isInTheBasket: true,
+            isInTheBasket: service.nftCatalogService.basketState(for: nft.id),
             rating: nft.rating,
             url: URL(string: nft.images[0])!
         )
@@ -96,7 +96,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     
     // MARK: - Cells Functions
     
-    func changeLikeState(for indexPath: IndexPath, state: Bool) {
+    func changeLikeState(for indexPath: IndexPath, state: Bool){
         
         service.nftCatalogService.setLike(id: nfts[indexPath.row].id, completion: {[weak self] result in
             switch result {
@@ -109,6 +109,19 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
             }
         })
         
+    }
+    
+    func changeOrderState(for indexPath: IndexPath){
+        
+        service.nftCatalogService.setOrders(id: nfts[indexPath.row].id, completion: {[weak self] result in
+            switch result {
+            case .success:
+                //обновить ячейку
+                self?.view?.updateCell(indexPath: indexPath)
+            case .failure(let error):
+                print(error)
+            }
+        })
     }
     
 }
