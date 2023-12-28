@@ -101,7 +101,6 @@ final class NftCatalogService: NftCatalogServiceProtocol {
         }
         
         let request = LikeRequest(likes: storage.likes)
-        print("лайки - \(storage.likes)")
         networkClient.send(request: request, type: Profile.self) { [weak storage] result in
             switch result {
             case .success(let profile):
@@ -109,7 +108,6 @@ final class NftCatalogService: NftCatalogServiceProtocol {
                 profile.likes.forEach{
                     self.storage.saveNft($0)
                 }
-                print("Ответ, лайки - \(profile.likes)")
                 completion(.success(profile))
             case .failure(let error):
                 completion(.failure(error))
@@ -125,17 +123,13 @@ final class NftCatalogService: NftCatalogServiceProtocol {
         } else {
             storage.saveOrders(id)
         }
-        sleep(3)
         
         let request = OrdersPutRequest(id: storage.orderId ?? "", orders: storage.orders)
-        print("Заказ - \(storage.orders)")
-        print("Id - \(storage.orderId)")
-       // print(request.ordersToString())
+        
         networkClient.send(request: request, type: Orders.self) { [weak self] result in
             switch result {
             case .success(let orders):
                 //Сохраняем id заказа
-                print(orders)
                 self?.storage.saveOrderId(orderId: orders.id)
                 //Сохраняем nft в заказе
                 orders.nfts.forEach{

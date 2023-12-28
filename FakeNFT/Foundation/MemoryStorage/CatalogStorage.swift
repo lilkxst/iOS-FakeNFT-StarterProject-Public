@@ -29,8 +29,8 @@ final class CatalogStorage: CatalogStorageProtocol {
     private let syncQueue = DispatchQueue(label: "sync-nft-queue")
 
     func saveNft(_ nft: String) {
-        syncQueue.async { [weak self] in
-                self?.likes.insert(nft)
+        syncQueue.sync { [weak self] in
+            self?.likes.insert(nft)
         }
     }
 
@@ -54,9 +54,8 @@ final class CatalogStorage: CatalogStorageProtocol {
     }
     
     func saveOrders(_ nft: String) {
-        syncQueue.async { [weak self] in
+        syncQueue.sync { [weak self] in
                 self?.orders.insert(nft)
-                print("заказ сохранили - \(self?.orders)")
         }
     }
     
