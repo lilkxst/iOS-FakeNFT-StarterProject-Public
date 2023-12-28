@@ -9,14 +9,14 @@ import UIKit
 
 final class CartViewController: UIViewController, CartViewControllerProtocol {
     
-    private var presenter: CartPresenter?
+    private var presenter: CartPresenterProtocol?
     
     let servicesAssembly: ServicesAssembly
-
+    
     init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
-        super.init(nibName: nil, bundle: nil)
-    }
+            self.servicesAssembly = servicesAssembly
+            super.init(nibName: nil, bundle: nil)
+        }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -73,18 +73,13 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         super.viewDidLoad()
         
         setupViews()
-        presenter = CartPresenter(viewController: self)
+        presenter = CartPresenter(viewController: self, orderService: servicesAssembly.orderService, nftByIdService: servicesAssembly.nftByIdService)
         cartTable.register(CartTableViewCell.self, forCellReuseIdentifier: "CartTableViewCell")
         cartTable.delegate = self
         cartTable.dataSource = self
+        presenter?.getOrder()
+        presenter?.setOrder()
         showPlaceholder()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        countNftInCartLabel.text = "\(presenter!.cartContent.count) NFT"
-        totalPriceLabel.text = "\(presenter!.totalPrice()) ETH"
     }
     
     private func setupViews() {
@@ -131,24 +126,31 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     }
     
     func showPlaceholder() {
-        if presenter!.cartContent.isEmpty {
+        if presenter?.count() == 0 {
             placeholderLabel.isHidden = false
             bottomView.isHidden = true
         } else {
+            guard let count = presenter?.count() else { return }
+            guard let totalPrice = presenter?.totalPrice() else { return }
+            countNftInCartLabel.text = "\(count) NFT"
+            totalPriceLabel.text = "\(totalPrice) ETH"
             placeholderLabel.isHidden = true
+            bottomView.isHidden = false
+            cartTable.reloadData()
         }
     }
 }
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let count = presenter?.cartContent.count else { return 0 }
+        guard let count = presenter?.count() else { return 0 }
         return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = cartTable.dequeueReusableCell(withIdentifier: "CartTableViewCell", for: indexPath) as? CartTableViewCell else { return UITableViewCell() }
-        cell.updateCell(nftTitle: presenter!.cartContent[indexPath.row].title, nftImage: presenter!.cartContent[indexPath.row].imageURL ?? nil, nftRating: presenter!.cartContent[indexPath.row].rating, nftPrice: presenter!.cartContent[indexPath.row].price)
+        guard let model = presenter?.getModel(indexPath: indexPath) else { return cell }
+        cell.updateCell(with: model)
         return cell
     }
 }

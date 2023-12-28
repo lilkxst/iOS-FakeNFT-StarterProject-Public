@@ -106,10 +106,10 @@ final class CartTableViewCell: UITableViewCell {
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func updateCell(nftTitle: String, nftImage: URL?, nftRating: Int, nftPrice: Float) {
-        titleLabel.text = nftTitle
-        imageNft.kf.setImage(with: nftImage)
-        ratingView.setRating(rating: nftRating)
-        priceValue.text = "\(nftPrice) ETH"
+    func updateCell(with model: NftDataModel) {
+        titleLabel.text = model.name
+        imageNft.kf.setImage(with: URL(string: model.images[0]))
+        ratingView.setRating(rating: model.rating)
+        priceValue.text = "\(model.price) ETH"
     }
 }

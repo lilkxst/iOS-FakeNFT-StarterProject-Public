@@ -40,15 +40,15 @@ final class RatingView: UIView {
     
     func setRating(rating: Int) {
         switch rating {
-        case 1: 
+        case 1, 2:
             starImage.image = UIImage(named: "ratingOne")
-        case 2: 
+        case 3, 4:
             starImage.image = UIImage(named: "ratingTwo")
-        case 3: 
+        case 5, 6:
             starImage.image = UIImage(named: "ratingThree")
-        case 4: 
+        case 7, 8:
             starImage.image = UIImage(named: "ratingFour")
-        case 5: 
+        case 9, 10: 
             starImage.image = UIImage(named: "ratingFive")
         default:
             starImage.image = UIImage(named: "ratingZero")
