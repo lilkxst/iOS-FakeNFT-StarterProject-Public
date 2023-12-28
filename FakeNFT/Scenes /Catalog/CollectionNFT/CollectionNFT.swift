@@ -43,11 +43,11 @@ final class CollectionNFTViewController: UIViewController {
     }()
 
     let stackViewDescriptionLabel: UIStackView = {
-        let sv = UIStackView()
-        sv.axis = .vertical
-        sv.alignment = .top
-        sv.distribution = .fill
-        return sv
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .top
+        stack.distribution = .fill
+        return stack
     }()
     
     private lazy var nameLabel: UILabel = {
@@ -139,26 +139,9 @@ final class CollectionNFTViewController: UIViewController {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-//        contentView.addSubview(stackViewTextLabel)
-//        stackViewTextLabel.translatesAutoresizingMaskIntoConstraints = false
-//        [stackViewNameLabel, stackViewDescriptionLabel ].forEach{
-//            stackViewTextLabel.addArrangedSubview($0)
-//            $0.translatesAutoresizingMaskIntoConstraints = false
-//        }
         
         stackViewDescriptionLabel.addArrangedSubview(descriptionLable)
         stackViewDescriptionLabel.addArrangedSubview(spacerView)
-        
-        //Формируем описание названия Коллекции и автора
-//        [nameLabel, stackViewAuthorLabel ].forEach{
-//            stackViewNameLabel.addArrangedSubview($0)
-//            $0.translatesAutoresizingMaskIntoConstraints = false
-//        }
-//
-//        [authorLable, authorButton ].forEach{
-//            stackViewAuthorLabel.addArrangedSubview($0)
-//            $0.translatesAutoresizingMaskIntoConstraints = false
-//        }
         
         //Настраиваем коллекцию
         contentView.addSubview(collectionView)
@@ -284,7 +267,7 @@ extension CollectionNFTViewController: NftCollectionView {
     
     @objc
     func didTapAuthor(){
-        //Открываем Webview
+        // TODO: Открываем Webview
     }
 }
 

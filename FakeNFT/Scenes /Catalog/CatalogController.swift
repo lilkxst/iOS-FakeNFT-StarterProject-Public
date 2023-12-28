@@ -21,7 +21,8 @@ final class CatalogViewController: UIViewController {
     // MARK: - Initialization
     
     convenience init(servicesAssembly: ServicesAssembly){
-        self.init(servicesAssembly: servicesAssembly, presenter: CatalogPresenter(service: servicesAssembly.nftCatalogService))
+        let presenter = CatalogPresenter(service: servicesAssembly.nftCatalogService)
+        self.init(servicesAssembly: servicesAssembly, presenter: presenter)
     }
     
     init(servicesAssembly: ServicesAssembly, presenter: CatalogPresenterProtocol) {
