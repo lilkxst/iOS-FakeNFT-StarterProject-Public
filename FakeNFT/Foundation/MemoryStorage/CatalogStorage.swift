@@ -8,8 +8,8 @@
 import Foundation
 
 protocol CatalogStorageProtocol: AnyObject {
-    var likes: Set<String> { get }
-    var orders: Set<String> { get }
+    var likes: Set<String> { get set }
+    var orders: Set<String> { get set }
     var orderId: String? { get }
     func saveNft(_ nft: String)
     func getNft(with id: String) -> String?
@@ -49,7 +49,6 @@ final class CatalogStorage: CatalogStorageProtocol {
     func saveOrderId(orderId: String){
         syncQueue.sync { [weak self] in
             self?.orderId = orderId
-            orders.removeAll()
         }
     }
     

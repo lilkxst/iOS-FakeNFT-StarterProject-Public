@@ -92,21 +92,31 @@ final class NftCatalogService: NftCatalogServiceProtocol {
     }
     
     func setLike(id: String, completion: @escaping ProfileCompletion) {
+        var likes = storage.likes
+        
         //Проверка на наличие nft во множестве лайков
-        if let nft = storage.getNft(with: id) {
-            //нужно удалить nft
-            storage.deleteNft(with: nft)
+        if let _ = storage.getNft(with: id) {
+            //нужно удалить nft, убираем лайк
+            likes.remove(id)
         } else {
-            storage.saveNft(id)
+            //нужно добавить nft, ставим лайк
+            likes.insert(id)
         }
         
-        let request = LikeRequest(likes: storage.likes)
-        networkClient.send(request: request, type: Profile.self) { [weak storage] result in
+        let request = LikeRequest(likes: likes)
+      
+        networkClient.send(request: request, type: Profile.self) { [weak self] result in
             switch result {
             case .success(let profile):
+                //очищаем старый массив
+                self?.storage.likes.removeAll()
+                
                 // сохранить новый массив лайков
-                profile.likes.forEach{
-                    self.storage.saveNft($0)
+                if !profile.likes.isEmpty{
+                    //Сохраняем массив nft пользователя
+                    profile.likes[0].components(separatedBy: ",").forEach{
+                        self?.storage.saveNft($0)
+                    }
                 }
                 completion(.success(profile))
             case .failure(let error):
@@ -116,24 +126,31 @@ final class NftCatalogService: NftCatalogServiceProtocol {
     }
     
     func setOrders(id: String, completion: @escaping OrdersCompletion) {
-        //Проверка на наличие nft во множестве лайков
+        var orders = storage.orders
+        //Проверка на наличие nft в заказе
         if storage.finderInOrders(id) {
-            //нужно удалить nft
-            storage.deleteOrders(with: id)
+            //нужно удалить nft, убираем из заказа
+            orders.remove(id)
         } else {
-            storage.saveOrders(id)
+            //нужно добавить nft в заказ
+            orders.insert(id)
         }
         
-        let request = OrdersPutRequest(id: storage.orderId ?? "", orders: storage.orders)
+        let request = OrdersPutRequest(id: storage.orderId ?? "", orders: orders)
         
         networkClient.send(request: request, type: Orders.self) { [weak self] result in
             switch result {
             case .success(let orders):
                 //Сохраняем id заказа
                 self?.storage.saveOrderId(orderId: orders.id)
+                //очищаем старый заказ
+                self?.storage.orders.removeAll()
                 //Сохраняем nft в заказе
-                orders.nfts.forEach{
-                    self?.storage.saveOrders($0)
+                if !orders.nfts.isEmpty{
+                    //Сохраняем массив nft пользователя
+                    orders.nfts[0].components(separatedBy: ",").forEach{
+                        self?.storage.saveOrders($0)
+                    }
                 }
                 completion(.success(orders))
             case .failure(let error):

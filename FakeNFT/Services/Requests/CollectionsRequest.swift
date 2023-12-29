@@ -109,6 +109,7 @@ struct LikeRequest: NetworkRequest {
                 }
             }
         }
+        print("строка - \(likeString)")
         return likeString
     }
     
