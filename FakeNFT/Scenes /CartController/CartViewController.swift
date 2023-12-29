@@ -53,7 +53,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     private lazy var totalPriceLabel: UILabel = {
         let totalPriceLabel = UILabel()
         totalPriceLabel.font = .bodyBold
-        totalPriceLabel.textColor = .green
+        totalPriceLabel.textColor = .ypGreenUniversal
         totalPriceLabel.text = ""
         return totalPriceLabel
     }()
