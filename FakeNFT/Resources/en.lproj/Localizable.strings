@@ -1,0 +1,10 @@
+"Tab.catalog" = "Catalog";
+"Tab.cart" = "Cart";
+"Catalog.openNft" = "Open Nft";
+"Error.network" = "A network error occured";
+"Error.unknown" = "An unknown error occured";
+"Error.repeat" = "Repeat";
+"Error.title" = "Error";
+"Cart.emptyCart" = "Shopping cart is empty";
+"Cart.paymentButton" = "To pay";
+"CartCell.price" = "Price";
