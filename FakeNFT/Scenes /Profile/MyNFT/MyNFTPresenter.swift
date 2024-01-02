@@ -41,7 +41,11 @@ final class MyNFTPresenter: MyNFTPresenterProtocol {
     }
     
     func viewDidLoad() {
-        loadNfts()
+        if nftsID.count > 0 {
+            loadNfts()
+        } else {
+            view?.showCap()
+        }
     }
     
     func isLiked(nft: Nft) -> Bool {
