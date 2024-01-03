@@ -49,7 +49,7 @@ final class MyNFTPresenter: MyNFTPresenterProtocol {
     }
     
     func isLiked(nft: Nft) -> Bool {
-        return likedNft.contains(nft.id)
+        likedNft.contains(nft.id)
     }
     
     private func loadNfts() {

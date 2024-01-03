@@ -31,8 +31,7 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
     }
     
     func loadImage() {
-        let url = nft?.images.first
-        guard let url else { return }
+        guard let url = nft?.images.first else { return }
         view?.showLoading()
         URLSession.shared.dataTask(with: URLRequest(url: url)) { [weak self] data, response, error in
             guard let data = data, error == nil else { return }
@@ -71,7 +70,8 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
     }
     
     func isLiked() -> Bool {
-        return likedNfts.contains(nft?.id ?? "")
+        guard let id = nft?.id else { return false }
+        return likedNfts.contains(id)
     }
     
 }
