@@ -16,7 +16,7 @@ protocol UsersPresenterProtocol: AnyObject {
     func changeSortType(_ sortType: SortType)
 }
 
-enum SortType {
+enum SortType: String {
     case rating
     case alphabetical
 }
@@ -80,6 +80,7 @@ final class UsersPresenter: UsersPresenterProtocol {
 
     func changeSortType(_ sortType: SortType) {
         self.sortType = sortType
+        UserDefaults.standard.set(sortType.rawValue, forKey: "selectedSortType")
         sortUsers()
         view?.displayUsers(users)
     }

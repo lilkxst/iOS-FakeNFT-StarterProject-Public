@@ -39,6 +39,11 @@ final class StatisticsViewController: UIViewController, UsersViewProtocol {
         addSubViews()
         applyConstraints()
 
+        if let savedSortType = UserDefaults.standard.string(forKey: "selectedSortType"),
+              let sortType = SortType(rawValue: savedSortType) {
+               presenter?.changeSortType(sortType)
+           }
+
         presenter?.onUserSelected = { [weak self] user in
                let userInfoVC = UserInfoViewController()
                userInfoVC.user = user
@@ -98,7 +103,7 @@ final class StatisticsViewController: UIViewController, UsersViewProtocol {
     }
 
     @objc private func filterTapped() {
-        let alertController = UIAlertController(title: nil, message: "Выберите способ сортировки", preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: nil, message: "Сортировка", preferredStyle: .actionSheet)
 
         let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
             self?.presenter?.changeSortType(.rating)
