@@ -19,6 +19,9 @@ final class CollectionNFTViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     private var presenter: CollectionPresenterProtocol?
+    private var contentSize: CGSize {
+        CGSize(width: view.frame.width, height: presenter?.getContentSize() ?? view.frame.height)
+    }
     
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -26,7 +29,7 @@ final class CollectionNFTViewController: UIViewController {
         scroll.isScrollEnabled = true
         scroll.showsVerticalScrollIndicator = true
         scroll.showsHorizontalScrollIndicator = false
-        scroll.contentSize = CGSize(width: view.frame.width, height: 1500)
+        scroll.contentSize = contentSize
         return scroll
     }()
     
@@ -90,7 +93,6 @@ final class CollectionNFTViewController: UIViewController {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.register(CollectionNFTCell.self)
         collection.showsVerticalScrollIndicator = false
-        collection.layer.masksToBounds = true
         return collection
     }()
     
@@ -155,7 +157,7 @@ final class CollectionNFTViewController: UIViewController {
             scrollView.widthAnchor.constraint(equalToConstant: view.frame.width),
             
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: -103),
-            contentView.heightAnchor.constraint(equalToConstant: 1500),
+            contentView.heightAnchor.constraint(equalToConstant: scrollView.contentSize.height),
             contentView.widthAnchor.constraint(equalToConstant: view.frame.width),
             
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
@@ -181,7 +183,7 @@ final class CollectionNFTViewController: UIViewController {
             stackViewDescriptionLabel.topAnchor.constraint(equalTo: authorButton.bottomAnchor, constant: 0),
             stackViewDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackViewDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -16),
-            stackViewDescriptionLabel.heightAnchor.constraint(equalToConstant: 72),
+            stackViewDescriptionLabel.heightAnchor.constraint(lessThanOrEqualToConstant: 72),
             
             collectionView.topAnchor.constraint(equalTo: stackViewDescriptionLabel.bottomAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -244,7 +246,7 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
-//MARK: - UITCollectionView FlowLayout
+//MARK: - NftCollectionView
 
 extension CollectionNFTViewController: NftCollectionView {
     

@@ -160,7 +160,7 @@ final class NftCatalogService: NftCatalogServiceProtocol {
     }
     
     func likeState(for id:String) -> Bool {
-       storage.getNft(with: id) == nil ? false : true
+       storage.getNft(with: id) != nil
     }
     
     func basketState(for id:String) -> Bool {

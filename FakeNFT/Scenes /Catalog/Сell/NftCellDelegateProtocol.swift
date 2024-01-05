@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol NftCellDelegate {
+protocol NftCellDelegate {
     func changeLike(for indexPath: IndexPath, state: Bool)
     func changeOrder(for indexPath: IndexPath)
 }

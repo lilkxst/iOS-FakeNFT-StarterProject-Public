@@ -78,11 +78,11 @@ final class CatalogViewController: UIViewController {
     }
     
     func showNFTCollection(indexPath: IndexPath) {
-       let vc = CollectionNFTViewController(
+       let viewController = CollectionNFTViewController(
         servicesAssembly: servicesAssembly,
         collection: presenter?.collectionsNFT[indexPath.row]
        )
-       navigationController?.pushViewController(vc, animated: true)
+       navigationController?.pushViewController(viewController, animated: true)
     }
 
     @objc

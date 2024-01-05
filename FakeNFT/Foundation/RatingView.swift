@@ -20,7 +20,6 @@ final class RatingView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupViews()
     }
     
@@ -42,6 +41,7 @@ final class RatingView: UIView {
     }
     
     func setStars(with rating: Int){
+        removeAllArrangedSubviews()
         var index = 0
         let stars = Double(rating / 2)
         repeat {
@@ -52,5 +52,16 @@ final class RatingView: UIView {
             index += 1
         } while index < 5
     }
+    
+    func removeAllArrangedSubviews() {
+            
+        let removedSubviews = starsStacView.arrangedSubviews.reduce([]) { (allSubviews, subview) -> [UIView] in
+            self.starsStacView.removeArrangedSubview(subview)
+                return allSubviews + [subview]
+            }
+            
+            NSLayoutConstraint.deactivate(removedSubviews.flatMap({ $0.constraints }))
+            removedSubviews.forEach({ $0.removeFromSuperview() })
+        }
     
 }

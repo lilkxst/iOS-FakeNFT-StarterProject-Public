@@ -30,11 +30,11 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     // MARK: - Functions
     
     func getCollections(){
-        service.loadNft( completion: { result in
+        service.loadNft( completion: { [weak self] result in
             switch result {
             case .success(let collections):
-                self.collectionsNFT = collections
-                self.view?.update()
+                self?.collectionsNFT = collections
+                self?.view?.update()
             case .failure(let error):
                 print(error)
             }

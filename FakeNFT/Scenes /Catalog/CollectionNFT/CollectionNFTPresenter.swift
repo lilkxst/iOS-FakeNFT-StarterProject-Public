@@ -14,7 +14,7 @@ protocol CollectionPresenterProtocol {
     func getModel(for indexPath: IndexPath) -> CollectionNFTCellViewModel
     func changeLikeState(for indexPath: IndexPath, state: Bool)
     func changeOrderState(for indexPath: IndexPath)
-    
+    func getContentSize() -> Double?
 }
 
 
@@ -37,6 +37,12 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     }
     
     // MARK: - Functions
+    
+    func getContentSize() -> Double? {
+        guard let count = collection?.nfts.count else { return nil }
+        let size = Double( 490 + (count % 3)*192 )
+        return size 
+    }
     
     func load(){
         guard let collection else { return }

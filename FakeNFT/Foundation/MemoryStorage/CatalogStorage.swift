@@ -25,18 +25,18 @@ final class CatalogStorage: CatalogStorageProtocol {
     var likes: Set<String> = []
     var orders: Set<String> = []
     var orderId: String?
-
+    
     private let syncQueue = DispatchQueue(label: "sync-nft-queue")
-
+    
     func saveNft(_ nft: String) {
         syncQueue.sync { [weak self] in
             self?.likes.insert(nft)
         }
     }
-
+    
     func getNft(with id: String) -> String? {
-       return syncQueue.sync {
-           likes.first(where: { nft in nft == id } )
+        return syncQueue.sync {
+            likes.first(where: {$0 == id } )
         }
     }
     
@@ -54,7 +54,7 @@ final class CatalogStorage: CatalogStorageProtocol {
     
     func saveOrders(_ nft: String) {
         syncQueue.sync { [weak self] in
-                self?.orders.insert(nft)
+            self?.orders.insert(nft)
         }
     }
     

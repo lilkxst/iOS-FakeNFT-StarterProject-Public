@@ -72,7 +72,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     
     // MARK: - Functions
     
-    func configUI(){
+    private func configUI(){
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
         basketButton.addTarget(self, action: #selector(didTapBasket), for: .touchUpInside)
         
@@ -134,13 +134,13 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     @objc
-    func didTapLike(){
+    private func didTapLike(){
         guard let indexPath else { return }
         delegate?.changeLike(for: indexPath, state: likeState)
     }
     
     @objc
-    func didTapBasket(){
+    private func didTapBasket(){
         guard let indexPath else { return }
         delegate?.changeOrder(for: indexPath)
     }

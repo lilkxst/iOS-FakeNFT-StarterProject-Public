@@ -66,7 +66,6 @@ struct OrdersPutRequest: NetworkRequest {
             }
         //Добавляем id заказа
         ordersString += "&\(CatalogRequestConstants.id)=\(id)"
-        print(ordersString)
         return ordersString
     }
 
@@ -109,13 +108,12 @@ struct LikeRequest: NetworkRequest {
                 }
             }
         }
-        print("строка - \(likeString)")
         return likeString
     }
     
 }
 
-public enum CatalogRequestConstants {
+enum CatalogRequestConstants {
     static let likes = "likes"
     static let orders = "nfts"
     static let id = "id"
