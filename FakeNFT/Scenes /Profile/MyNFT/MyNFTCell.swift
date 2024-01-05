@@ -100,6 +100,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
     var presenter: MyNFTCellPresenterProtocol?
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         iconImageView.image = nil
     }
     
