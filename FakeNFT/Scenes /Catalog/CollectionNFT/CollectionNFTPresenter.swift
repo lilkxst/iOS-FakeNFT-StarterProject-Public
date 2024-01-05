@@ -40,7 +40,8 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     
     func getContentSize() -> Double? {
         guard let count = collection?.nfts.count else { return nil }
-        let size = Double( 490 + (count % 3)*192 )
+        let lineSize = (Double(count) / 3).rounded(.up )*(192 + 8 )
+        let size = Double( 490 + lineSize)
         return size 
     }
     
