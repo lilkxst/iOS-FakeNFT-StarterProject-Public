@@ -2,7 +2,6 @@ import Foundation
 
 protocol MyNFTCellPresenterProtocol: AnyObject {
     var view: MyNFTCellView? {get set}
-    var likedNfts: Set<String> { get }
     var delegate: MyNFTViewControllerProtocol? { get set}
     var nft: Nft? {get}
     func loadImage()
@@ -16,17 +15,14 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
     let servicesAssembly: ServicesAssembly?
     
     let nft: Nft?
-    var likedNfts: Set<String>
     weak var delegate: MyNFTViewControllerProtocol?
     
     init(view: MyNFTCellView? = nil,
          nft: Nft?,
-         likedNfts: Set<String>,
          servicesAssembly: ServicesAssembly?)
     {
         self.view = view
         self.nft = nft
-        self.likedNfts = likedNfts
         self.servicesAssembly = servicesAssembly
     }
     
@@ -47,20 +43,20 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
         view?.unenabledLikeButton()
         view?.showLoading()
         guard let idLikedNFt = nft?.id else { return }
-        var likedNftsSet = likedNfts
-        if likedNftsSet.contains(idLikedNFt) {
-            likedNftsSet.remove(idLikedNFt)
+        var likedNftsSet = delegate?.presenter?.likedNft
+        if likedNftsSet?.contains(idLikedNFt) ?? false {
+            likedNftsSet?.remove(idLikedNFt)
         } else {
-            likedNftsSet.insert(idLikedNFt)
+            likedNftsSet?.insert(idLikedNFt)
         }
         servicesAssembly?.profileService.saveProfile(
-            profileEditing: ProfileModelEditing(likes: Array(likedNftsSet))) { [weak self, likedNftsSet] result in
-                guard let self else { return }
+            profileEditing: ProfileModelEditing(likes: Array(likedNftsSet ?? Set()))) { [weak self, likedNftsSet] result in
+                guard let self, let likedNftsSet else { return }
                 self.view?.enabledLikeButton()
                 self.view?.hideLoading()
                 switch result {
                 case .success(_):
-                    self.likedNfts = likedNftsSet
+                    self.delegate?.presenter?.likedNft = likedNftsSet
                     self.delegate?.presenter?.updateData(likesNft: likedNftsSet)
                     self.view?.updateLikeImage()
                 case .failure(_):
@@ -70,8 +66,8 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
     }
     
     func isLiked() -> Bool {
-        guard let id = nft?.id else { return false }
-        return likedNfts.contains(id)
+        guard let id = nft?.id, let likedNft = delegate?.presenter?.likedNft else { return false }
+        return likedNft.contains(id)
     }
     
 }

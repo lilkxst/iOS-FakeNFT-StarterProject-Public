@@ -92,7 +92,6 @@ final class MyNFTViewController: UITableViewController, MyNFTViewControllerProto
         guard let nft = presenter?.nfts[indexPath.row] else { return UITableViewCell()}
         let presenter = MyNFTCellPresenter(view: cell,
                                             nft: nft,
-                                            likedNfts: presenter?.likedNft ?? Set(),
                                             servicesAssembly: presenter?.servicesAssembly )
         presenter.delegate = self
         cell.presenter = presenter

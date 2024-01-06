@@ -7,7 +7,7 @@ protocol MyNFTPresenterProtocol: AnyObject {
     var view: MyNFTViewControllerProtocol? { get set }
     var nfts: [Nft] { get }
     var nftsID: Set<String> { get }
-    var likedNft: Set<String> { get }
+    var likedNft: Set<String> { get set }
     var completionHandler: (([String]) -> ())? { get set }
     func isLiked(nft: Nft) -> Bool
     func viewDidLoad()
