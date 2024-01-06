@@ -43,15 +43,15 @@
 ## Module 3:
 
 #### Сортировка Каталога
-- Сортировка по названия (est: 60 min; fact: x min).
-- Сортировка по количеству NFT (est: 60 min; fact: x min).
+- Сортировка по названия (est: 60 min; fact: 80 min).
+- Сортировка по количеству NFT (est: 60 min; fact: 20 min).
 
 #### Логика
-- Индикатор загрузки (est: 40 min; fact: x min).
-- Отображение WebView (est: 40 min; fact: x min).
-- Обработки ошибок (est: 30 min; fact: x min).
+- Индикатор загрузки (est: 40 min; fact: 40 min).
+- Отображение WebView (est: 40 min; fact: 60 min).
+- Обработки ошибок (est: 30 min; fact: 60 min).
 
 #### Последние правки перед слиянием
-- Проверка чистоты кода (est: 30 min; fact: x min).
+- Проверка чистоты кода (est: 30 min; fact: 30 min).
 
-`Total:` est: 260 min; fact: x min.
+`Total:` est: 260 min; fact: 280 min.

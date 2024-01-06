@@ -6,11 +6,16 @@
 //
 
 import UIKit
+import ProgressHUD
+
 
 protocol NftCollectionView: AnyObject {
     func setup(name: String, cover: String, author: String, description: String)
     func updateCollection()
     func updateCell(indexPath: IndexPath)
+    func showLoadingAlert()
+    func startLoadIndicator()
+    func stopLoadIndicator()
 }
 
 final class CollectionNFTViewController: UIViewController {
@@ -121,6 +126,7 @@ final class CollectionNFTViewController: UIViewController {
         configNavBar()
         presenter?.view = self
         presenter?.load()
+        presenter?.getNFTs()
     }
     
     // MARK: - Functions
@@ -254,6 +260,42 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
 //MARK: - NftCollectionView
 
 extension CollectionNFTViewController: NftCollectionView {
+    
+    func showLoadingAlert(){
+        let alert = UIAlertController(
+            title: NSLocalizedString("error", comment: ""),
+            message: NSLocalizedString("alertMessageNFT", comment: ""),
+            preferredStyle: .alert
+        )
+        
+        let repeatAction = UIAlertAction(
+            title: NSLocalizedString("repeat", comment: ""),
+            style: .default
+        ){ action in
+            self.presenter?.getNFTs()
+        }
+        
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("close", comment: ""),
+            style: .cancel
+        )
+        
+        [ repeatAction, cancelAction ].forEach{
+            alert.addAction($0)
+        }
+        
+        alert.preferredAction = cancelAction
+        present(alert, animated: true)
+        
+    }
+    
+    func startLoadIndicator() {
+        ProgressHUD.show()
+    }
+    
+    func stopLoadIndicator() {
+        ProgressHUD.dismiss()
+    }
     
     func updateCell(indexPath: IndexPath) {
         collectionView.reloadItems(at: [indexPath])

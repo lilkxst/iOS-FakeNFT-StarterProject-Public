@@ -21,35 +21,38 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     // MARK: - Properties
     weak var view: NftCatalogView?
     private let service: NftCatalogServiceProtocol
+    private let sortingStorage: SortingNftStorage
     var collectionsNFT: [NFTCollection] = []
-    private var sortingKey = "sorting"
-    private var sorting: Sorting? {
-        get{
-            guard let value = UserDefaults.standard.value(forKey: sortingKey) as? Int else {return nil}
-            return Sorting(rawValue: value)
-        }
-        set (newValue){
-            UserDefaults.standard.set(newValue?.rawValue, forKey: sortingKey)
-        }
-    }
+    
+  
     
     // MARK: - Init
+    convenience init(service: NftCatalogServiceProtocol ){
+        let storage = SortingNftStorage()
+        self.init(service: service, sortingStorage: storage)
+    }
 
-    init(service: NftCatalogServiceProtocol) {
+    init(service: NftCatalogServiceProtocol, sortingStorage: SortingNftStorage) {
         self.service = service
+        self.sortingStorage = sortingStorage
     }
     
     // MARK: - Functions
     
     func getCollections(){
+        view?.startLoadIndicator()
         service.loadNft( completion: { [weak self] result in
             switch result {
             case .success(let collections):
                 self?.collectionsNFT = collections
                 //проверить сохранена ли сортировка
+                self?.checkSorting()
+                self?.view?.stopLoadIndicator()
                 self?.view?.update()
             case .failure(let error):
                 print(error)
+                self?.view?.stopLoadIndicator()
+                self?.view?.showLoadingAlert()
             }
         }
         )
@@ -70,18 +73,26 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     
     // MARK: - Sorting
     
+    private func checkSorting(){
+        //Проверяем сохранена ли сортировка
+        guard let sorting = sortingStorage.getSorting() else { return }
+        switch sorting {
+        case .byName:
+            sortingByName()
+        case .byCount:
+            sortingByCount()
+        }
+    }
+    
     func sortingByCount(){
-        sorting = .count
+        sortingStorage.saveSorting(.byCount)
         collectionsNFT = collectionsNFT.sorted{ $0.nfts.count > $1.nfts.count }
         view?.update()
-        //TODO: сохранить сортировку
-        
-        
     }
     
     func sortingByName(){
-        sorting = .name
-        collectionsNFT = collectionsNFT.sorted{ ($0.author.first ?? " ") <= ($1.author.first ?? " ") }
+        sortingStorage.saveSorting(.byName)
+        collectionsNFT = collectionsNFT.sorted{ $0.author < $1.author }
         view?.update()
     }
     

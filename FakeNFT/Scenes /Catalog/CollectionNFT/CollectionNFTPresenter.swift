@@ -11,6 +11,7 @@ protocol CollectionPresenterProtocol {
     var nfts: [Nft] { get }
     var view: NftCollectionView? { get set }
     func load()
+    func getNFTs()
     func getModel(for indexPath: IndexPath) -> CollectionNFTCellViewModel
     func changeLikeState(for indexPath: IndexPath, state: Bool)
     func changeOrderState(for indexPath: IndexPath)
@@ -34,13 +35,12 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     init(service: ServicesAssembly, collection: NFTCollection?) {
         self.service = service
         self.collection = collection
-        getNFTs()
     }
     
     // MARK: - Functions
     
     func getAuthorURL()-> URL?{
-        let url = URL(string: "") //nfts[0].author
+        let url = URL(string: "") //Тут должен лежать url на автора коллекции nfts[0].author
         return url
     }
     
@@ -48,7 +48,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
         guard let count = collection?.nfts.count else { return nil }
         let lineSize = (Double(count) / 3).rounded(.up )*(192 + 8 )
         let size = Double( 490 + lineSize)
-        return size 
+        return size
     }
     
     func load(){
@@ -60,18 +60,21 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
         guard let collection,
               !collection.nfts.isEmpty else { return }
         
-        //Сделать запросы по ID
         collection.nfts.forEach{
-                service.nftService.loadNft(id: $0, completion: { [weak self] result in
-                    switch result {
-                    case .success(let nft):
-                        self?.nfts.append(nft)
-                        self?.view?.updateCollection()
-                    case .failure(let error):
-                        print(error)
-                    }
-                })
-            }
+            view?.startLoadIndicator()
+            service.nftService.loadNft(id: $0, completion: { [weak self] result in
+                switch result {
+                case .success(let nft):
+                    self?.nfts.append(nft)
+                    self?.view?.stopLoadIndicator()
+                    self?.view?.updateCollection()
+                case .failure(let error):
+                    self?.view?.stopLoadIndicator()
+                    self?.view?.showLoadingAlert()
+                    print(error)
+                }
+            })
+        }
     }
     
     func getProfile(){

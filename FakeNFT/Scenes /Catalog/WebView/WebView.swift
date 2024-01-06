@@ -32,7 +32,7 @@ final class WebView: UIViewController {
         load()
     }
     
-   private func configUI(){
+    private func configUI(){
         view.addSubview(webView)
         
         NSLayoutConstraint.activate([

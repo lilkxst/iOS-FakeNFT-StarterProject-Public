@@ -1,7 +1,11 @@
 import UIKit
+import ProgressHUD
 
 protocol NftCatalogView: AnyObject {
     func update()
+    func showLoadingAlert()
+    func startLoadIndicator()
+    func stopLoadIndicator()
 }
 
 final class CatalogViewController: UIViewController {
@@ -30,17 +34,17 @@ final class CatalogViewController: UIViewController {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     
     // MARK: - LifeCycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .systemBackground
         navBar()
         configUI()
@@ -78,13 +82,13 @@ final class CatalogViewController: UIViewController {
     }
     
     func showNFTCollection(indexPath: IndexPath) {
-       let viewController = CollectionNFTViewController(
-        servicesAssembly: servicesAssembly,
-        collection: presenter?.collectionsNFT[indexPath.row]
-       )
-       navigationController?.pushViewController(viewController, animated: true)
+        let viewController = CollectionNFTViewController(
+            servicesAssembly: servicesAssembly,
+            collection: presenter?.collectionsNFT[indexPath.row]
+        )
+        navigationController?.pushViewController(viewController, animated: true)
     }
-
+    
     @objc
     private func addSorting(){
         let alert = UIAlertController(
@@ -137,7 +141,7 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       187
+        187
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -149,11 +153,48 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - NftCatalogView
 
 extension CatalogViewController: NftCatalogView {
+    
+    func showLoadingAlert(){
+        let alert = UIAlertController(
+            title: NSLocalizedString("error", comment: ""),
+            message: NSLocalizedString("alertMessage", comment: ""),
+            preferredStyle: .alert
+        )
+        
+        let repeatAction = UIAlertAction(
+            title: NSLocalizedString("repeat", comment: ""),
+            style: .default
+        ){ action in
+            self.presenter?.getCollections()
+        }
+        
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("close", comment: ""),
+            style: .cancel
+        )
+        
+        [ repeatAction, cancelAction ].forEach{
+            alert.addAction($0)
+        }
+        
+        alert.preferredAction = cancelAction
+        present(alert, animated: true)
+        
+    }
+    
+    func startLoadIndicator() {
+        ProgressHUD.show()
+    }
+    
+    func stopLoadIndicator() {
+        ProgressHUD.dismiss()
+    }
+    
     func update() {
         tableView.reloadData()
     }
 }
- 
+
 private enum Constants {
     static let openNftTitle = NSLocalizedString("Catalog.openNft", comment: "")
     static let testNftId = "22"

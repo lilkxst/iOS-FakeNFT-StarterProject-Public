@@ -14,7 +14,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     private var likeState: Bool = false
     var delegate: NftCellDelegate?
     private lazy var imageView: UIImageView = {
-       let img = UIImageView()
+        let img = UIImageView()
         img.image = UIImage(named: "Cover Collection")
         img.layer.cornerRadius = 12
         img.clipsToBounds = true
@@ -30,7 +30,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     private var ratingView = RatingView()
     
     private lazy var nameNFTLabel: UILabel = {
-       let label = UILabel()
+        let label = UILabel()
         label.text = "Archie"
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
@@ -38,15 +38,15 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
-         label.text = "1 ETH"
-         label.font = .systemFont(ofSize: 10, weight: .medium)
-         return label
-     }()
+        label.text = "1 ETH"
+        label.font = .systemFont(ofSize: 10, weight: .medium)
+        return label
+    }()
     
     private lazy var basketButton: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(named: "Cart"), for: .normal)
-         return btn
+        return btn
     }()
     
     private lazy var stackViewDescription: UIStackView = {
