@@ -44,7 +44,7 @@ final class CollectionNFTViewController: UIViewController {
         view.clipsToBounds = true
         return view
     }()
-
+    
     let stackViewDescriptionLabel: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -84,7 +84,7 @@ final class CollectionNFTViewController: UIViewController {
     }()
     
     private var spacerView: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return view
     }()
@@ -118,13 +118,18 @@ final class CollectionNFTViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
+        configNavBar()
         presenter?.view = self
         presenter?.load()
     }
     
     // MARK: - Functions
     
-    func configUI() {
+    private func configNavBar(){
+                navigationItem.backButtonTitle = ""
+    }
+    
+    private func configUI() {
         
         view.backgroundColor = .systemBackground
         view.addSubview(scrollView)
@@ -225,7 +230,7 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-         CGSize(width: 108, height: 192)
+        CGSize(width: 108, height: 192)
     }
     
     func collectionView(
@@ -269,7 +274,8 @@ extension CollectionNFTViewController: NftCollectionView {
     
     @objc
     func didTapAuthor(){
-        // TODO: Открываем Webview
+        let webView = WebView(url: presenter?.getAuthorURL())
+        navigationController?.pushViewController(webView, animated: true)
     }
 }
 

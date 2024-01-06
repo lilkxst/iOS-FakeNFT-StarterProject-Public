@@ -87,7 +87,36 @@ final class CatalogViewController: UIViewController {
 
     @objc
     private func addSorting(){
+        let alert = UIAlertController(
+            title: NSLocalizedString("sorting", comment: ""),
+            message: nil,
+            preferredStyle: .actionSheet
+        )
         
+        let nameSortAction = UIAlertAction(
+            title: NSLocalizedString("by name", comment: ""),
+            style: .default
+        ){ action in
+            self.presenter?.sortingByName()
+        }
+        
+        let countSortAction = UIAlertAction(
+            title: NSLocalizedString("by count", comment: ""),
+            style: .default
+        ){ action in
+            self.presenter?.sortingByCount()
+        }
+        
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("close", comment: ""),
+            style: .cancel
+        )
+        
+        [nameSortAction, countSortAction, cancelAction].forEach{
+            alert.addAction($0)
+        }
+        
+        present(alert, animated: true)
     }
 }
 

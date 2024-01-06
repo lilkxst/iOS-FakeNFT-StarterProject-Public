@@ -166,4 +166,5 @@ final class NftCatalogService: NftCatalogServiceProtocol {
     func basketState(for id:String) -> Bool {
        storage.finderInOrders(id)
     }
+    
 }

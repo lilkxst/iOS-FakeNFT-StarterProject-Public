@@ -15,6 +15,7 @@ protocol CollectionPresenterProtocol {
     func changeLikeState(for indexPath: IndexPath, state: Bool)
     func changeOrderState(for indexPath: IndexPath)
     func getContentSize() -> Double?
+    func getAuthorURL()-> URL?
 }
 
 
@@ -37,6 +38,11 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     }
     
     // MARK: - Functions
+    
+    func getAuthorURL()-> URL?{
+        let url = URL(string: "") //nfts[0].author
+        return url
+    }
     
     func getContentSize() -> Double? {
         guard let count = collection?.nfts.count else { return nil }

@@ -46,7 +46,6 @@ final class RatingView: UIView {
         let stars = Double(rating / 2)
         repeat {
             let view = UIImageView()
-            view.translatesAutoresizingMaskIntoConstraints = false
             starsStacView.addArrangedSubview(view)
             view.image = index < Int(round(stars)) ? UIImage(named: "goldStar") : UIImage(named: "grayStar")
             index += 1
@@ -54,14 +53,10 @@ final class RatingView: UIView {
     }
     
     func removeAllArrangedSubviews() {
-            
-        let removedSubviews = starsStacView.arrangedSubviews.reduce([]) { (allSubviews, subview) -> [UIView] in
-            self.starsStacView.removeArrangedSubview(subview)
-                return allSubviews + [subview]
-            }
-            
-            NSLayoutConstraint.deactivate(removedSubviews.flatMap({ $0.constraints }))
-            removedSubviews.forEach({ $0.removeFromSuperview() })
+        
+        starsStacView.arrangedSubviews.forEach {
+            starsStacView.removeArrangedSubview($0)
         }
+    }
     
 }
