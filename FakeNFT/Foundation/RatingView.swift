@@ -20,7 +20,6 @@ final class RatingView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupViews()
     }
     
@@ -42,14 +41,22 @@ final class RatingView: UIView {
     }
     
     func setStars(with rating: Int){
+        removeAllArrangedSubviews()
         var index = 0
+        let stars = Double(rating / 2)
         repeat {
             let view = UIImageView()
-            view.translatesAutoresizingMaskIntoConstraints = false
             starsStacView.addArrangedSubview(view)
-            view.image = index < rating ? UIImage(named: "goldStar") : UIImage(named: "grayStar")
+            view.image = index < Int(round(stars)) ? UIImage(named: "goldStar") : UIImage(named: "grayStar")
             index += 1
         } while index < 5
+    }
+    
+    func removeAllArrangedSubviews() {
+        
+        starsStacView.arrangedSubviews.forEach {
+            starsStacView.removeArrangedSubview($0)
+        }
     }
     
 }

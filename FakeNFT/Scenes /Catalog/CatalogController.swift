@@ -21,7 +21,8 @@ final class CatalogViewController: UIViewController {
     // MARK: - Initialization
     
     convenience init(servicesAssembly: ServicesAssembly){
-        self.init(servicesAssembly: servicesAssembly, presenter: CatalogPresenter(service: servicesAssembly.nftService))
+        let presenter = CatalogPresenter(service: servicesAssembly.nftCatalogService)
+        self.init(servicesAssembly: servicesAssembly, presenter: presenter)
     }
     
     init(servicesAssembly: ServicesAssembly, presenter: CatalogPresenterProtocol) {
@@ -43,6 +44,8 @@ final class CatalogViewController: UIViewController {
         view.backgroundColor = .systemBackground
         navBar()
         configUI()
+        presenter?.view = self
+        presenter?.getCollections()
     }
     
     
@@ -74,14 +77,46 @@ final class CatalogViewController: UIViewController {
         
     }
     
-   func showNFTCollection() {
-       let vc = CollectionNFTViewController(servicesAssembly: servicesAssembly)
-       navigationController?.pushViewController(vc, animated: true)
+    func showNFTCollection(indexPath: IndexPath) {
+       let viewController = CollectionNFTViewController(
+        servicesAssembly: servicesAssembly,
+        collection: presenter?.collectionsNFT[indexPath.row]
+       )
+       navigationController?.pushViewController(viewController, animated: true)
     }
 
     @objc
     private func addSorting(){
+        let alert = UIAlertController(
+            title: NSLocalizedString("sorting", comment: ""),
+            message: nil,
+            preferredStyle: .actionSheet
+        )
         
+        let nameSortAction = UIAlertAction(
+            title: NSLocalizedString("by name", comment: ""),
+            style: .default
+        ){ action in
+            self.presenter?.sortingByName()
+        }
+        
+        let countSortAction = UIAlertAction(
+            title: NSLocalizedString("by count", comment: ""),
+            style: .default
+        ){ action in
+            self.presenter?.sortingByCount()
+        }
+        
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("close", comment: ""),
+            style: .cancel
+        )
+        
+        [nameSortAction, countSortAction, cancelAction].forEach{
+            alert.addAction($0)
+        }
+        
+        present(alert, animated: true)
     }
 }
 
@@ -95,7 +130,7 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CatalogNFTCell = tableView.dequeueReusableCell()
-        guard let model = presenter?.collectionsNFT[indexPath.row] else { return cell }
+        guard let model = presenter?.getModel(for: indexPath) else { return cell }
         cell.config(with: model)
         cell.selectionStyle = .none
         return cell
@@ -107,9 +142,8 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //Переход на экран коллекции NFT
-        showNFTCollection()
+        showNFTCollection(indexPath: indexPath)
     }
-    
 }
 
 // MARK: - NftCatalogView

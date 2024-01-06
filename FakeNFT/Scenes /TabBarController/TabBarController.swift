@@ -63,7 +63,7 @@ final class TabBarController: UITabBarController {
         )
         basketController.tabBarItem = basketTabBarItem
 
-        viewControllers = [profileController, navController, basketController, statisticsController]
+        viewControllers = [navController]//[profileController, navController, basketController, statisticsController]
         tabBar.isTranslucent = false
         view.backgroundColor = .ypWhite
         tabBar.unselectedItemTintColor = .ypBlack

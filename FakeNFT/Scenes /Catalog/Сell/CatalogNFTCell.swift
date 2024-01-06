@@ -69,7 +69,7 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Functions
     
-    func configUI(){
+    private func configUI(){
         [imagePreview,stackViewLabel].forEach{
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -95,10 +95,9 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
     }
     
     func config(with model: CatalogNFTCellViewModel){
-       //Загрузка из сети setImage(imageURL: model.url)
-        imagePreview.image =  UIImage(named: "Cover Collection")
+        setImage(imageURL: model.url)
         nameNFT.text = model.nameNFT
-        countNFT.text = String(model.countNFT)
+        countNFT.text = "(\(model.countNFT))"
     }
     
     func setImage(imageURL:URL){
