@@ -10,3 +10,17 @@ struct UsersRequest: NetworkRequest {
         return components?.url
     }
 }
+
+struct NFTsRequest: NetworkRequest {
+    var endpoint: URL? {
+        return URL(string: "\(RequestConstants.baseURL)/api/v1/nft")
+    }
+}
+
+struct NFTDetailRequest: NetworkRequest {
+    var nftID: String
+
+    var endpoint: URL? {
+        return URL(string: "\(RequestConstants.baseURL)/api/v1/nft/\(nftID)")
+    }
+}

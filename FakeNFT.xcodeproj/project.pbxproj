@@ -43,6 +43,9 @@
 		3FC8C39129D2453B0081F015 /* StatScreenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39029D2453B0081F015 /* StatScreenRequest.swift */; };
 		3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */; };
 		699EBA3E2B291D26008EA6FF /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699EBA3D2B291D26008EA6FF /* RatingView.swift */; };
+		CC20A5F02B4714D60020A2A5 /* UserCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC20A5EF2B4714D60020A2A5 /* UserCollectionViewController.swift */; };
+		CC20A5F22B4715540020A2A5 /* UserCollectionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC20A5F12B4715540020A2A5 /* UserCollectionPresenter.swift */; };
+		CC20A5F72B4725A60020A2A5 /* NFTCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC20A5F62B4725A60020A2A5 /* NFTCollectionViewCell.swift */; };
 		CC2FA2592B39EA4A004EFA33 /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */; };
 		CC2FA25B2B39EB12004EFA33 /* UserInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */; };
 		CC2FA25D2B3CA575004EFA33 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA25C2B3CA575004EFA33 /* CustomTableViewCell.swift */; };
@@ -110,6 +113,9 @@
 		3FC8C39029D2453B0081F015 /* StatScreenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatScreenRequest.swift; sourceTree = "<group>"; };
 		3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatters+Presets.swift"; sourceTree = "<group>"; };
 		699EBA3D2B291D26008EA6FF /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		CC20A5EF2B4714D60020A2A5 /* UserCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionViewController.swift; sourceTree = "<group>"; };
+		CC20A5F12B4715540020A2A5 /* UserCollectionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionPresenter.swift; sourceTree = "<group>"; };
+		CC20A5F62B4725A60020A2A5 /* NFTCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollectionViewCell.swift; sourceTree = "<group>"; };
 		CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
 		CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoPresenter.swift; sourceTree = "<group>"; };
 		CC2FA25C2B3CA575004EFA33 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
@@ -355,6 +361,9 @@
 				CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */,
 				CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */,
 				CC2FA25C2B3CA575004EFA33 /* CustomTableViewCell.swift */,
+				CC20A5EF2B4714D60020A2A5 /* UserCollectionViewController.swift */,
+				CC20A5F12B4715540020A2A5 /* UserCollectionPresenter.swift */,
+				CC20A5F62B4725A60020A2A5 /* NFTCollectionViewCell.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -557,6 +566,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
+				CC20A5F72B4725A60020A2A5 /* NFTCollectionViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
 				CC2FA25B2B39EB12004EFA33 /* UserInfoPresenter.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
@@ -567,6 +577,7 @@
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				CCD998C52B2B0C2F002B9621 /* UserTableViewCell.swift in Sources */,
+				CC20A5F22B4715540020A2A5 /* UserCollectionPresenter.swift in Sources */,
 				CCD998C32B2A2341002B9621 /* StatisticsPresenter.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				CCD998C02B2A2159002B9621 /* Users.swift in Sources */,
@@ -591,6 +602,7 @@
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
+				CC20A5F02B4714D60020A2A5 /* UserCollectionViewController.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
