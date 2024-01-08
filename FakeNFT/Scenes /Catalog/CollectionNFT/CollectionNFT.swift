@@ -67,7 +67,7 @@ final class CollectionNFTViewController: UIViewController {
     
     private var authorLable: UILabel = {
         let label = UILabel()
-        label.text = "Автор коллекции:"
+        label.text = NSLocalizedString("author", comment: "")
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         return label

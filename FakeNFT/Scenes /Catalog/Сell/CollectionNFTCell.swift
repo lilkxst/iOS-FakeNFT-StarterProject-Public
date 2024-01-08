@@ -122,6 +122,8 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
         ratingView.setStars(with: model.rating)
         basketButton.setImage(setBasket(isInTheBasket: model.isInTheBasket), for: .normal)
         likeButton.setImage(setLike(isLiked: model.isLiked), for: .normal)
+        likeButton.isEnabled = true
+        basketButton.isEnabled = true
     }
     
     func setLike(isLiked: Bool) -> UIImage? {
@@ -136,12 +138,14 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     @objc
     private func didTapLike(){
         guard let indexPath else { return }
+        likeButton.isEnabled = false
         delegate?.changeLike(for: indexPath, state: likeState)
     }
     
     @objc
     private func didTapBasket(){
         guard let indexPath else { return }
+        basketButton.isEnabled = false
         delegate?.changeOrder(for: indexPath)
     }
 }

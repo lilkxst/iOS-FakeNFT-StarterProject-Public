@@ -122,6 +122,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
                 self?.view?.updateCell(indexPath: indexPath)
             case .failure(let error):
                 print(error)
+                self?.view?.updateCell(indexPath: indexPath)
             }
         })
         
@@ -136,6 +137,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
                 self?.view?.updateCell(indexPath: indexPath)
             case .failure(let error):
                 print(error)
+                self?.view?.updateCell(indexPath: indexPath)
             }
         })
     }
