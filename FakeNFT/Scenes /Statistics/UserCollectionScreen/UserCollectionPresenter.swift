@@ -18,20 +18,19 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
 
     private var nfts: [Nft] = []
     private let nftService: NftService
-   private var networkClient: NetworkClient?
-   private var loadedNFTsCount = 0
+    private var networkClient: NetworkClient?
+    private var loadedNFTsCount = 0
+    private var totalNFTsCount = 0
     weak var view: UserCollectionViewProtocol?
     var user: User?
 
     init(view: UserCollectionViewProtocol, nftService: NftService) {
-        print("Инициализация UserCollectionPresenter")
         self.view = view
         self.nftService = nftService
     }
 
     func viewDidLoad() {
         guard let nftsIDs = user?.nfts else {
-            print("Не найдены ID NFT для загрузки")
             return
         }
         loadUserNFTs(nfts: nftsIDs, likedNFTs: user?.likes ?? [])
@@ -42,30 +41,46 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     }
 
     func loadUserNFTs(nfts nftsIDs: [String], likedNFTs: [String]) {
-        print("Загрузка NFTs: \(nftsIDs)")
-        print("Лайки: \(likedNFTs)")
-        for nftID in nftsIDs {
-            nftService.loadNft(id: nftID) { [weak self] result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let nft):
-                        var updatedNft = nft
-                        updatedNft.isLiked = likedNFTs.contains(nft.id)
-                        self?.nfts.append(updatedNft)
-                    case .failure(let error):
-                        print("Ошибка при загрузке деталей NFT: \(error)")
-                    }
+           self.nfts.removeAll()
+           self.loadedNFTsCount = 0
+           self.totalNFTsCount = nftsIDs.count
 
-                    self?.loadedNFTsCount += 1
-                    print("Загружено \(self?.loadedNFTsCount ?? 0) из \(nftsIDs.count)")
-                    if self?.loadedNFTsCount == nftsIDs.count {
-                        self?.view?.refreshUI()
-                    }
-                }
-            }
-        }
-    }
+           for nftID in nftsIDs {
+               nftService.loadNft(id: nftID) { [weak self] result in
+                   DispatchQueue.main.async {
+                       switch result {
+                       case .success(var nft):
+                           nft.isLiked = likedNFTs.contains(nft.id)
+                           if let currencyId = nft.currencyId {
+                               self?.nftService.loadCurrency(id: currencyId) { currencyResult in
+                                   switch currencyResult {
+                                   case .success(let currency):
+                                       nft.currency = currency
+                                   case .failure(let error):
+                                       print("Ошибка при загрузке валюты: \(error)")
+                                   }
+                                   self?.nfts.append(nft)
+                                   self?.incrementAndCheckLoadedCount()
+                               }
+                           } else {
+                               self?.nfts.append(nft)
+                               self?.incrementAndCheckLoadedCount()
+                           }
+                       case .failure(let error):
+                           print("Ошибка при загрузке NFT: \(error)")
+                           self?.incrementAndCheckLoadedCount()
+                       }
+                   }
+               }
+           }
+       }
 
+       private func incrementAndCheckLoadedCount() {
+           loadedNFTsCount += 1
+           if loadedNFTsCount == totalNFTsCount {
+               view?.refreshUI()
+           }
+       }
     func item(at index: Int) -> Nft? {
         guard index >= 0 && index < nfts.count else { return nil }
         return nfts[index]

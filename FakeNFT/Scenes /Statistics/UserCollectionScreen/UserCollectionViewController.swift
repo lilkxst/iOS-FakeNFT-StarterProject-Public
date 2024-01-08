@@ -17,6 +17,8 @@ final class UserCollectionViewController: UIViewController {
     private let servicesAssembly: ServicesAssembly
     var presenter: UserCollectionPresenterProtocol?
     var user: User?
+    let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
+    let itemsPerRow: CGFloat = 3
 
     init(servicesAssembly: ServicesAssembly) {
         self.servicesAssembly = servicesAssembly
@@ -29,7 +31,6 @@ final class UserCollectionViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: view.frame.width / 2 - 16, height: view.frame.width / 2 - 16)
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
@@ -40,12 +41,9 @@ final class UserCollectionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("UserCollectionViewController viewDidLoad вызван")
-        print("Пользователь в UserCollectionViewController: \(String(describing: user))")
         setupCollectionView()
         presenter = UserCollectionPresenter(view: self, nftService: servicesAssembly.nftService)
         presenter?.viewDidLoad()
-        print("Presenter инициализирован: \(String(describing: presenter))")
         self.navigationItem.title = "Коллекция NFT"
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
             title: "",
@@ -55,7 +53,6 @@ final class UserCollectionViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .black
 
         if let nfts = user?.nfts {
-            print("Вызов loadUserNFTs с NFTs: \(nfts)")
             presenter?.loadUserNFTs(nfts: nfts, likedNFTs: user?.likes ?? [])
         } else {
             presenter?.viewDidLoad()
@@ -66,6 +63,10 @@ final class UserCollectionViewController: UIViewController {
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 8
+        layout.minimumInteritemSpacing = 10
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 8),
@@ -82,8 +83,12 @@ extension UserCollectionViewController: UICollectionViewDataSource {
         return presenter?.numberOfItems() ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NFTCollectionViewCell", for: indexPath) as? NFTCollectionViewCell,
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "NFTCollectionViewCell",
+            for: indexPath) as? NFTCollectionViewCell,
               let nft = presenter?.item(at: indexPath.row) else {
             return UICollectionViewCell()
         }
@@ -97,21 +102,24 @@ extension UserCollectionViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension UserCollectionViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let padding: CGFloat = 16
-        let collectionViewSize = collectionView.frame.size.width - padding
-
-        return CGSize(width: collectionViewSize/3, height: collectionViewSize/3)
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+        let availableWidth = view.frame.width - paddingSpace
+        let widthPerItem = availableWidth / itemsPerRow
+        let layout = UICollectionViewFlowLayout()
+        return CGSize(width: widthPerItem, height: widthPerItem)
     }
 }
 
 extension UserCollectionViewController: UserCollectionViewProtocol {
     func displayError(_ error: Error) {
-        print("Ошибка в UserCollectionViewController: \(error)")
     }
 
     func refreshUI() {
-        print("Обновление интерфейса UserCollectionViewController")
         collectionView.reloadData()
     }
 }

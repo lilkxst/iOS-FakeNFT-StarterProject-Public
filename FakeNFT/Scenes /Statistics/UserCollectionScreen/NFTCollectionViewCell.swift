@@ -98,9 +98,16 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
         nameLabel.text = nft.name
         priceLabel.text = "Цена: \(nft.price)"
+            if let currency = nft.currency {
+                priceLabel.text?.append(" \(currency.name)")
+            }
         ratingView.setRating(rating: nft.rating)
 
         likeButton.setImage(isLiked ? UIImage(named: "Favourites") : UIImage(named: "UnFavorites"), for: .normal)
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+
     }
+
+    @objc func likeButtonTapped () {}
 
 }

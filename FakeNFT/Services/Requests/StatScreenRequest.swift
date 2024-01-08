@@ -24,3 +24,18 @@ struct NFTsRequest: NetworkRequest {
         return URL(string: "\(RequestConstants.baseURL)/api/v1/nft")
     }
 }
+struct NFTRequest: NetworkRequest {
+
+    let id: String
+
+    var endpoint: URL? {
+        URL(string: "\(RequestConstants.baseURL)/api/v1/nft/\(id)")
+    }
+}
+struct CurrencyRequest: NetworkRequest {
+    let currencyId: String
+
+    var endpoint: URL? {
+        return URL(string: "\(RequestConstants.baseURL)/api/v1/currencies/\(currencyId)")
+    }
+}
