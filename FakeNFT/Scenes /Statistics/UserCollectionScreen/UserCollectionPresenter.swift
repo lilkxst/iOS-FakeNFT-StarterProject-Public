@@ -13,20 +13,18 @@ protocol UserCollectionPresenterProtocol {
     func item(at index: Int) -> Nft?
     func loadUserNFTs(nfts: [String], likedNFTs: [String])
 }
-protocol NFTServiceProtocol {
-    func loadNft(id: String, completion: @escaping (Result<Nft, Error>) -> Void)
-}
 
 final class UserCollectionPresenter: UserCollectionPresenterProtocol {
 
     private var nfts: [Nft] = []
-    private let nftService: NFTServiceProtocol
-    private var networkClient: NetworkClient?
-    private var loadedNFTsCount = 0
+    private let nftService: NftService
+   private var networkClient: NetworkClient?
+   private var loadedNFTsCount = 0
     weak var view: UserCollectionViewProtocol?
     var user: User?
 
-    init(view: UserCollectionViewProtocol, nftService: NFTServiceProtocol) {
+    init(view: UserCollectionViewProtocol, nftService: NftService) {
+        print("Инициализация UserCollectionPresenter")
         self.view = view
         self.nftService = nftService
     }
@@ -46,9 +44,6 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     func loadUserNFTs(nfts nftsIDs: [String], likedNFTs: [String]) {
         print("Загрузка NFTs: \(nftsIDs)")
         print("Лайки: \(likedNFTs)")
-        self.nfts.removeAll()
-        self.loadedNFTsCount = 0
-
         for nftID in nftsIDs {
             nftService.loadNft(id: nftID) { [weak self] result in
                 DispatchQueue.main.async {

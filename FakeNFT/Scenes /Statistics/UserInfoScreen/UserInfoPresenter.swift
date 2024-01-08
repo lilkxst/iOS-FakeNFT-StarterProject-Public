@@ -19,6 +19,7 @@ final class UserInfoPresenter {
     var user: User?
 
     init(networkClient: NetworkClient, userId: String) {
+        print("Инициализация UserCollectionPresenter")
         self.networkClient = networkClient
         self.userId = userId
     }

@@ -43,8 +43,9 @@ final class UserCollectionViewController: UIViewController {
         print("UserCollectionViewController viewDidLoad вызван")
         print("Пользователь в UserCollectionViewController: \(String(describing: user))")
         setupCollectionView()
-        presenter = UsersPresenter(servicesAssembly: servicesAssembly) as? UserCollectionPresenterProtocol
+        presenter = UserCollectionPresenter(view: self, nftService: servicesAssembly.nftService)
         presenter?.viewDidLoad()
+        print("Presenter инициализирован: \(String(describing: presenter))")
         self.navigationItem.title = "Коллекция NFT"
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
             title: "",
