@@ -352,18 +352,42 @@
 			path = Requests;
 			sourceTree = "<group>";
 		};
-		CC16F3862B36DB8800B2C8B7 /* Statistics */ = {
+		CC0260CF2B4ACF8900C5AE7F /* StatScreen */ = {
 			isa = PBXGroup;
 			children = (
-				CCD998C42B2B0C2F002B9621 /* UserTableViewCell.swift */,
-				CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */,
 				CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */,
+				CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */,
+				CCD998C42B2B0C2F002B9621 /* UserTableViewCell.swift */,
+			);
+			path = StatScreen;
+			sourceTree = "<group>";
+		};
+		CC0260D02B4ACFB800C5AE7F /* UserInfoScreen */ = {
+			isa = PBXGroup;
+			children = (
 				CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */,
 				CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */,
 				CC2FA25C2B3CA575004EFA33 /* CustomTableViewCell.swift */,
-				CC20A5EF2B4714D60020A2A5 /* UserCollectionViewController.swift */,
-				CC20A5F12B4715540020A2A5 /* UserCollectionPresenter.swift */,
+			);
+			path = UserInfoScreen;
+			sourceTree = "<group>";
+		};
+		CC0260D12B4ACFD100C5AE7F /* UserCollectionScreen */ = {
+			isa = PBXGroup;
+			children = (
 				CC20A5F62B4725A60020A2A5 /* NFTCollectionViewCell.swift */,
+				CC20A5F12B4715540020A2A5 /* UserCollectionPresenter.swift */,
+				CC20A5EF2B4714D60020A2A5 /* UserCollectionViewController.swift */,
+			);
+			path = UserCollectionScreen;
+			sourceTree = "<group>";
+		};
+		CC16F3862B36DB8800B2C8B7 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				CC0260D12B4ACFD100C5AE7F /* UserCollectionScreen */,
+				CC0260D02B4ACFB800C5AE7F /* UserInfoScreen */,
+				CC0260CF2B4ACF8900C5AE7F /* StatScreen */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";

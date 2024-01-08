@@ -73,7 +73,7 @@ extension UserCollectionViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        let isLiked = user?.likes.contains(nft.id) ?? false
+        let isLiked = user?.likes?.contains(nft.id) ?? false
                cell.configure(with: nft, isLiked: isLiked)
                return cell
     }

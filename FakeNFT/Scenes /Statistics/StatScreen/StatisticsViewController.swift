@@ -132,9 +132,22 @@ final class StatisticsViewController: UIViewController, UsersViewProtocol {
 
 // MARK: - UITableViewDelegate
 
+// extension StatisticsViewController: UITableViewDelegate {
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        presenter?.didSelectUser(at: indexPath.row)
+//    }
+// }
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        presenter?.didSelectUser(at: indexPath.row)
+        if let user = presenter?.users[indexPath.row] {
+            print("Переход к UserInfoViewController с userId: \(user.id)")
+            let networkClient = servicesAssembly.provideNetworkClient()
+            let userInfoPresenter = UserInfoPresenter(networkClient: networkClient, userId: user.id)
+            let userInfoVC = UserInfoViewController()
+            userInfoVC.presenter = userInfoPresenter
+            userInfoPresenter.view = userInfoVC
+            navigationController?.pushViewController(userInfoVC, animated: true)
+        }
     }
 }
 

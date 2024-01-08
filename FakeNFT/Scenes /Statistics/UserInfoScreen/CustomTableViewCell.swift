@@ -34,6 +34,7 @@ final class CustomTableViewCell: UITableViewCell {
     }
 
     func configure(with nftCount: Int) {
+        print("Configuring cell with NFT count: \(nftCount)")
         titleLabel.text = "Коллекция NFT (\(nftCount))"
         self.accessoryType = .disclosureIndicator
         self.selectionStyle = .none

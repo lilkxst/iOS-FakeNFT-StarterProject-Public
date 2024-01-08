@@ -88,7 +88,11 @@ final class UsersPresenter: UsersPresenterProtocol {
     private func sortUsers() {
         switch sortType {
         case .rating:
-            users.sort { (Int($0.rating) ?? 0) > (Int($1.rating) ?? 0) }
+            users.sort {
+                let rating1 = Int($0.rating ?? "0") ?? 0
+                let rating2 = Int($1.rating ?? "0") ?? 0
+                return rating1 > rating2
+            }
         case .alphabetical:
             users.sort { $0.name < $1.name }
         }

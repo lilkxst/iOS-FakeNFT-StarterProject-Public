@@ -4,6 +4,7 @@ typealias NftCompletion = (Result<Nft, Error>) -> Void
 
 protocol NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)
+
 }
 
 final class NftServiceImpl: NftService {
@@ -33,4 +34,5 @@ final class NftServiceImpl: NftService {
             }
         }
     }
+
 }

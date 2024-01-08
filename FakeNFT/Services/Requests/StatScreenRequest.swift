@@ -11,16 +11,16 @@ struct UsersRequest: NetworkRequest {
     }
 }
 
-struct NFTsRequest: NetworkRequest {
+struct UserProfileRequest: NetworkRequest {
+    let userId: String
+
     var endpoint: URL? {
-        return URL(string: "\(RequestConstants.baseURL)/api/v1/nft")
+        URL(string: "\(RequestConstants.baseURL)/api/v1/users/\(userId)")
     }
 }
 
-struct NFTDetailRequest: NetworkRequest {
-    var nftID: String
-
+struct NFTsRequest: NetworkRequest {
     var endpoint: URL? {
-        return URL(string: "\(RequestConstants.baseURL)/api/v1/nft/\(nftID)")
+        return URL(string: "\(RequestConstants.baseURL)/api/v1/nft")
     }
 }

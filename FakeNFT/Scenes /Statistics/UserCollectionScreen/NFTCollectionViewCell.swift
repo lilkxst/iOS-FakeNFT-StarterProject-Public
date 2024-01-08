@@ -89,9 +89,10 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
     func configure(with nft: Nft, isLiked: Bool) {
 
-        if let imageUrl = nft.images.first {
-              imageView.kf.setImage(with: imageUrl)
-          }
+        if let imageUrlString = nft.images.first, let imageUrl = URL(string: imageUrlString) {
+               imageView.kf.setImage(with: imageUrl)
+           }
+
         nameLabel.text = nft.name
         priceLabel.text = "Цена: \(nft.price)"
         ratingView.setRating(rating: nft.rating)

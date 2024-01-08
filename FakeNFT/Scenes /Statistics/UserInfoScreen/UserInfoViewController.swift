@@ -7,9 +7,10 @@
 
 import UIKit
 
-final class UserInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class UserInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UserInfoViewProtocol {
 
     var user: User?
+    var presenter: UserInfoPresenter?
 
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
@@ -60,6 +61,8 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        print("UserInfoViewController viewDidLoad called")
+        presenter?.viewDidLoad()
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
             title: "",
             style: .plain,
@@ -139,6 +142,22 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
     @objc private func websiteButtonTapped() {
 
     }
+
+    func displayUserInfo(_ user: User) {
+        self.user = user
+        nameLabel.text = user.name
+        descriptionLabel.text = user.description
+        if let imageUrl = URL(string: user.avatar) {
+            avatarImageView.kf.setImage(with: imageUrl)
+        }
+        customTableView.reloadData()
+    }
+
+    func displayError(error: Error) {
+           let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+           alert.addAction(UIAlertAction(title: "OK", style: .default))
+           present(alert, animated: true)
+       }
 
 }
 
