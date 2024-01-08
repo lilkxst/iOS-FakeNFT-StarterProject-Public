@@ -9,8 +9,18 @@ import UIKit
 
 final class UserInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UserInfoViewProtocol {
 
+    private let servicesAssembly: ServicesAssembly
     var user: User?
     var presenter: UserInfoPresenter?
+
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
@@ -61,7 +71,6 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        print("UserInfoViewController viewDidLoad called")
         presenter?.viewDidLoad()
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
             title: "",
@@ -163,7 +172,8 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
 
 extension UserInfoViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let userCollectionVC = UserCollectionViewController()
+        print("Переход к UserCollectionViewController с пользователем: \(String(describing: user))")
+        let userCollectionVC = UserCollectionViewController(servicesAssembly: servicesAssembly)
         userCollectionVC.user = self.user
         navigationController?.pushViewController(userCollectionVC, animated: true)
     }

@@ -18,7 +18,9 @@ final class NftServiceImpl: NftService {
     }
 
     func loadNft(id: String, completion: @escaping NftCompletion) {
+        print("Начинается запрос NFT с ID: \(id)")
         if let nft = storage.getNft(with: id) {
+            print("NFT \(id) найден в локальном хранилище")
             completion(.success(nft))
             return
         }
@@ -27,6 +29,7 @@ final class NftServiceImpl: NftService {
         networkClient.send(request: request, type: Nft.self) { [weak storage] result in
             switch result {
             case .success(let nft):
+                print("Успешный ответ от сервера для NFT")
                 storage?.saveNft(nft)
                 completion(.success(nft))
             case .failure(let error):

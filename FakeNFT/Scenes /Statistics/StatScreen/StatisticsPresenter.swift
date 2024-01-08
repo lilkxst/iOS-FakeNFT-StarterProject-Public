@@ -52,7 +52,6 @@ final class UsersPresenter: UsersPresenterProtocol {
 
     func loadUsers() {
         guard let networkClient = networkClient else {
-            print("NetworkClient is not set in UsersPresenter")
             return
         }
 

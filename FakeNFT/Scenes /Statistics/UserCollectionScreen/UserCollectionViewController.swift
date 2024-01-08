@@ -14,8 +14,18 @@ protocol UserCollectionViewProtocol: AnyObject {
 
 final class UserCollectionViewController: UIViewController {
 
+    private let servicesAssembly: ServicesAssembly
     var presenter: UserCollectionPresenterProtocol?
     var user: User?
+
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -30,7 +40,10 @@ final class UserCollectionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("UserCollectionViewController viewDidLoad вызван")
+        print("Пользователь в UserCollectionViewController: \(String(describing: user))")
         setupCollectionView()
+        presenter = UsersPresenter(servicesAssembly: servicesAssembly) as? UserCollectionPresenterProtocol
         presenter?.viewDidLoad()
         self.navigationItem.title = "Коллекция NFT"
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
@@ -41,10 +54,11 @@ final class UserCollectionViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .black
 
         if let nfts = user?.nfts {
-                    presenter?.loadUserNFTs(nfts: nfts, likedNFTs: user?.likes ?? [])
-                } else {
-                    presenter?.viewDidLoad()
-                }
+            print("Вызов loadUserNFTs с NFTs: \(nfts)")
+            presenter?.loadUserNFTs(nfts: nfts, likedNFTs: user?.likes ?? [])
+        } else {
+            presenter?.viewDidLoad()
+        }
     }
 
     private func setupCollectionView() {
@@ -74,9 +88,10 @@ extension UserCollectionViewController: UICollectionViewDataSource {
         }
 
         let isLiked = user?.likes?.contains(nft.id) ?? false
-               cell.configure(with: nft, isLiked: isLiked)
-               return cell
+        cell.configure(with: nft, isLiked: isLiked)
+        return cell
     }
+
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

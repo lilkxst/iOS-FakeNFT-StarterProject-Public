@@ -18,9 +18,9 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     }()
 
     private lazy var likeButton: UIButton = {
-          let btn = UIButton()
-          return btn
-      }()
+        let btn = UIButton()
+        return btn
+    }()
 
     private var ratingView = RatingView()
 
@@ -44,7 +44,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-           setupConstraints()
+        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -71,33 +71,36 @@ final class NFTCollectionViewCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
+
             ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
             ratingView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             ratingView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+
             nameLabel.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 5),
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+
             priceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
             priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            basketButton.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
+
+            basketButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 5),
             basketButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             basketButton.widthAnchor.constraint(equalToConstant: 30),
             basketButton.heightAnchor.constraint(equalTo: basketButton.widthAnchor)
         ])
-
     }
 
     func configure(with nft: Nft, isLiked: Bool) {
 
         if let imageUrlString = nft.images.first, let imageUrl = URL(string: imageUrlString) {
-               imageView.kf.setImage(with: imageUrl)
-           }
+            imageView.kf.setImage(with: imageUrl)
+        }
 
         nameLabel.text = nft.name
         priceLabel.text = "Цена: \(nft.price)"
         ratingView.setRating(rating: nft.rating)
 
-        likeButton.setImage(isLiked ? UIImage(named: "likedIcon") : UIImage(named: "unlikedIcon"), for: .normal)
+        likeButton.setImage(isLiked ? UIImage(named: "Favourites") : UIImage(named: "UnFavorites"), for: .normal)
     }
 
-    }
+}

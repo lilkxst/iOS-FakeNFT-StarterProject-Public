@@ -21,30 +21,25 @@ final class UserInfoPresenter {
     init(networkClient: NetworkClient, userId: String) {
         self.networkClient = networkClient
         self.userId = userId
-        print("UserInfoPresenter инициализирован с userId: \(userId)")
     }
 
     func viewDidLoad() {
-        print("UserInfoPresenter viewDidLoad called")
         fetchUserProfile()
     }
 
     private func fetchUserProfile() {
            let request = UserProfileRequest(userId: userId)
            if let url = request.endpoint {
-               print("Отправка запроса на URL: \(url.absoluteString)")
            } else {
-               print("Ошибка формирования URL запроса")
            }
 
            networkClient?.send(request: request, type: User.self) { [weak self] result in
                DispatchQueue.main.async {
                    switch result {
                    case .success(let user):
-                       print("Получен ответ: \(user)")
                        self?.view?.displayUserInfo(user)
                    case .failure(let error):
-                       print("Ошибка запроса: \(error)")
+
                        self?.view?.displayError(error: error)
                    }
                }
