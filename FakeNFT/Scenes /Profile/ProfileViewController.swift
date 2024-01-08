@@ -2,6 +2,7 @@ import UIKit
 
 protocol ProfileViewContrillerDelegate: AnyObject, LoadingView {
     func updateUI()
+    func showAlert(title: String, message: String)
 }
 
 final class ProfileViewController: UIViewController {
@@ -144,11 +145,18 @@ final class ProfileViewController: UIViewController {
             case .success(let profileNetworlModel):
                 self.presenter?.convertInUIModel(profileNetworkModel: profileNetworlModel)
             case .failure(let error):
-                print(error.localizedDescription)
+                self.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)
             }
         }
         let editingVC = EditingProfileViewController(presenter: presenter)
         present(editingVC, animated: true)
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
 }
 

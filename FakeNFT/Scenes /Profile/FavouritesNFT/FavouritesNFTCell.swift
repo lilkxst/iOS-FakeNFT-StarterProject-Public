@@ -66,6 +66,7 @@ final class FavouritesNFTCell: UICollectionViewCell, FavouritesNFTCellProtocol {
     var presenter: FavouritesNFTCellPresenterProtocol?
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         iconImageView.image = nil
     }
     
@@ -128,4 +129,5 @@ final class FavouritesNFTCell: UICollectionViewCell, FavouritesNFTCellProtocol {
     func setImage(data: Data) {
         iconImageView.image = UIImage(data: data)
     }
+    
 }

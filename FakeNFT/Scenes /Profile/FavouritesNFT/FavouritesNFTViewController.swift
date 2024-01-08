@@ -94,7 +94,6 @@ final class FavouritesNFTViewController: UICollectionViewController, FavouritesN
         present(alert, animated: true, completion: nil)
     }
 
-
     private func addSubviews() {
         view.addSubview(capLabel)
         view.addSubview(activityIndicator)

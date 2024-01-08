@@ -59,8 +59,8 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
                     self.delegate?.presenter?.likedNft = likedNftsSet
                     self.delegate?.presenter?.updateData(likesNft: likedNftsSet)
                     self.view?.updateLikeImage()
-                case .failure(_):
-                    break
+                case .failure(let error):
+                    self.delegate?.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)
                 }
             }
     }

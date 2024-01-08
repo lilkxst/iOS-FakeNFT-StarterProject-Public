@@ -6,6 +6,7 @@ protocol MyNFTViewControllerProtocol: AnyObject, LoadingView {
     func updateUI()
     func showCap()
     func hiddenCap()
+    func showAlert(title: String, message: String)
 }
 
 final class MyNFTViewController: UITableViewController, MyNFTViewControllerProtocol {
@@ -80,6 +81,13 @@ final class MyNFTViewController: UITableViewController, MyNFTViewControllerProto
     
     func updateUI() {
         tableView.reloadData()
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -67,11 +67,12 @@ final class MyNFTPresenter: MyNFTPresenterProtocol {
                             self.view?.updateUI()
                         }
                     }
-                case.failure(_):
+                case.failure(let error):
                     DispatchQueue.main.async {
                         self.view?.hideLoading()
+                        self.nfts.count > 0 ? self.view?.hiddenCap() : self.view?.showCap()
+                        self.view?.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)
                     }
-                    break
                 }
             }
         }

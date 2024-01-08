@@ -75,6 +75,9 @@ final class FavouritesNFTPresenter: FavouritesNFTPresenterProtocol {
             }
         }
         nftsID.remove(id)
+        if nfts.isEmpty {
+            view?.showCap()
+        }
     }
     
 }

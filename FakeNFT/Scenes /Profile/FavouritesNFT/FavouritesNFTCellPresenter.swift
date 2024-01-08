@@ -5,7 +5,6 @@ protocol FavouritesNFTCellPresenterProtocol: AnyObject {
     var nft: Nft? {get}
     var view: FavouritesNFTCellProtocol? {get}
     var delegate: FavouritesNFTViewControllerProtocol? { get set }
-    //var likedNfts: Set<String> { get }
     func loadImage()
     func likeButtonDidTapped()
 }
@@ -15,17 +14,14 @@ final class FavouritesNFTCellPresenter: FavouritesNFTCellPresenterProtocol {
     let nft: Nft?
     weak var view: FavouritesNFTCellProtocol?
     weak var delegate: FavouritesNFTViewControllerProtocol?
-    //var likedNfts: Set<String>
     let servicesAssembly: ServicesAssembly?
     
     init(nft: Nft?,
          view: FavouritesNFTCellProtocol?,
-         //likedNfts: Set<String>,
          servicesAssembly: ServicesAssembly?)
     {
         self.nft = nft
         self.view = view
-        //self.likedNfts = likedNfts
         self.servicesAssembly = servicesAssembly
     }
     
@@ -57,8 +53,8 @@ final class FavouritesNFTCellPresenter: FavouritesNFTCellPresenterProtocol {
                 switch result {
                 case .success(_):
                     self.delegate?.presenter?.removeNftFromLikes(withId: idLikedNFt)
-                case .failure(_):
-                    break
+                case .failure(let error):
+                    self.delegate?.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)
                 }
             }
     }

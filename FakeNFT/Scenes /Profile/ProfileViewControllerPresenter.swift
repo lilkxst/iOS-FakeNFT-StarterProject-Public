@@ -36,7 +36,7 @@ final class ProfileViewControllerPresenter: ProfileViewControllerPresenterProtoc
                 self?.convertInUIModel(profileNetworkModel: profileNetwork)
             case .failure(let error) :
                 self?.delegate?.hideLoading()
-                print(error.localizedDescription)
+                self?.delegate?.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)
             }
         }
     }

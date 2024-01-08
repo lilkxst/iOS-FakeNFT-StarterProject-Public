@@ -29,9 +29,17 @@ final class ProfileNetworkService: ProfileServiceProtocol {
             switch result {
             case .success(let profile):
                 profileStorage?.saveProfile(profile)
+                if let encodedData = try? JSONEncoder().encode(profile) {
+                    UserDefaults.standard.set(encodedData, forKey: "profileJSON")
+                }
                 completion(.success(profile))
             case .failure(let error):
-                completion(.failure(error))
+                if let encodedData = UserDefaults.standard.data(forKey: "profileJSON"),
+                   let profile = try? JSONDecoder().decode(ProfileModelNetwork.self, from: encodedData) {
+                    completion(.success(profile))
+                } else {
+                    completion(.failure(error))
+                }
             }
         }
     }
