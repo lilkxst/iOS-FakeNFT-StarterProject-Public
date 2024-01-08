@@ -24,6 +24,7 @@ final class CollectionNFTViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     private var presenter: CollectionPresenterProtocol?
+    private var loader = LoaderView()
     private var contentSize: CGSize {
         CGSize(width: view.frame.width, height: presenter?.getContentSize() ?? view.frame.height)
     }
@@ -162,6 +163,10 @@ final class CollectionNFTViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
+        //Добавляем лоадер
+        view.addSubview(loader)
+        loader.constraintCenters(to: view)
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -290,11 +295,13 @@ extension CollectionNFTViewController: NftCollectionView {
     }
     
     func startLoadIndicator() {
-        ProgressHUD.show()
+        loader.showLoading()
+       // ProgressHUD.show()
     }
     
     func stopLoadIndicator() {
-        ProgressHUD.dismiss()
+        loader.hideLoading()
+       // ProgressHUD.dismiss() 
     }
     
     func updateCell(indexPath: IndexPath) {

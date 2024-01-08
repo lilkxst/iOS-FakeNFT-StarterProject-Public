@@ -14,6 +14,7 @@ final class CatalogViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     private var presenter: CatalogPresenterProtocol?
+    private var loader = LoaderView()
     private let tableView: UITableView = {
         let table = UITableView()
         table.backgroundColor = .clear
@@ -71,6 +72,10 @@ final class CatalogViewController: UIViewController {
         tableView.dataSource = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(CatalogNFTCell.self)
+        
+        //Добавляем лоадер
+        view.addSubview(loader)
+        loader.constraintCenters(to: view)
         
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -183,11 +188,13 @@ extension CatalogViewController: NftCatalogView {
     }
     
     func startLoadIndicator() {
-        ProgressHUD.show()
+        loader.showLoading()
+       // ProgressHUD.show()
     }
     
     func stopLoadIndicator() {
-        ProgressHUD.dismiss()
+        loader.hideLoading()
+       // ProgressHUD.dismiss()
     }
     
     func update() {

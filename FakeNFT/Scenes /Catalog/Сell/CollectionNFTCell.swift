@@ -9,6 +9,7 @@ import UIKit
 
 final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     
+    private var loader = LoaderView()
     private var id: String?
     var indexPath: IndexPath?
     private var likeState: Bool = false
@@ -73,6 +74,8 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Functions
     
     private func configUI(){
+       
+        
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
         basketButton.addTarget(self, action: #selector(didTapBasket), for: .touchUpInside)
         
@@ -85,6 +88,9 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
             stackViewDescription.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        contentView.addSubview(loader)
+        loader.constraintCenters(to: self.contentView )
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -124,6 +130,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
         likeButton.setImage(setLike(isLiked: model.isLiked), for: .normal)
         likeButton.isEnabled = true
         basketButton.isEnabled = true
+        loader.hideLoading()
     }
     
     func setLike(isLiked: Bool) -> UIImage? {
@@ -138,6 +145,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     @objc
     private func didTapLike(){
         guard let indexPath else { return }
+        loader.showLoading()
         likeButton.isEnabled = false
         delegate?.changeLike(for: indexPath, state: likeState)
     }
@@ -145,6 +153,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     @objc
     private func didTapBasket(){
         guard let indexPath else { return }
+        loader.showLoading()
         basketButton.isEnabled = false
         delegate?.changeOrder(for: indexPath)
     }
