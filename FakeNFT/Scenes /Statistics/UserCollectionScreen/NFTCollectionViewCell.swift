@@ -13,31 +13,36 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFill
+        imgView.layer.cornerRadius = 12
         imgView.clipsToBounds = true
         return imgView
     }()
 
     private lazy var likeButton: UIButton = {
-        let btn = UIButton()
-        return btn
+        let button = UIButton()
+        button.setImage(UIImage(named: "Favourites"), for: .normal)
+        button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        return button
     }()
 
     private var ratingView = RatingView()
 
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         return label
     }()
 
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 10)
         return label
     }()
 
-    private let basketButton: UIButton = {
+    private lazy var basketButton: UIButton = {
         let button = UIButton()
+        button.setImage(UIImage(named: "Add"), for: .normal)
+        button.addTarget(self, action: #selector(basketButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -57,6 +62,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         addSubview(nameLabel)
         addSubview(priceLabel)
         addSubview(basketButton)
+        addSubview(likeButton)
     }
 
     private func setupConstraints() {
@@ -65,29 +71,34 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
         basketButton.translatesAutoresizingMaskIntoConstraints = false
+        likeButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
+                   imageView.topAnchor.constraint(equalTo: self.topAnchor),
+                   imageView.widthAnchor.constraint(equalToConstant: 108),
+                   imageView.heightAnchor.constraint(equalToConstant: 108),
+                   imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
 
-            ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
-            ratingView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            ratingView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+                   ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+                   ratingView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+                   ratingView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
 
-            nameLabel.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 5),
-            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+                   likeButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 0),
+                   likeButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 0),
 
-            priceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
-            priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+                   nameLabel.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 8),
+                   nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                   nameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 
-            basketButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 5),
-            basketButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            basketButton.widthAnchor.constraint(equalToConstant: 30),
-            basketButton.heightAnchor.constraint(equalTo: basketButton.widthAnchor)
-        ])
+                   priceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2),
+                   priceLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+
+                   basketButton.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 10),
+                   basketButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                   basketButton.widthAnchor.constraint(equalToConstant: 30),
+                   basketButton.heightAnchor.constraint(equalToConstant: 30)
+
+               ])
     }
 
     func configure(with nft: Nft, isLiked: Bool) {
@@ -103,11 +114,13 @@ final class NFTCollectionViewCell: UICollectionViewCell {
             }
         ratingView.setRating(rating: nft.rating)
 
-        likeButton.setImage(isLiked ? UIImage(named: "Favourites") : UIImage(named: "UnFavorites"), for: .normal)
-        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+    }
+
+    @objc func likeButtonTapped() {
 
     }
 
-    @objc func likeButtonTapped () {}
+    @objc func basketButtonTapped() {
+    }
 
 }

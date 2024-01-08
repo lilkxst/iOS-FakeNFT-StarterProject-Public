@@ -10,6 +10,5 @@ struct Nft: Decodable {
     let price: Float
     let author: String
     var isLiked: Bool?
-    let currencyId: String?
     var currency: Currency?
 }
