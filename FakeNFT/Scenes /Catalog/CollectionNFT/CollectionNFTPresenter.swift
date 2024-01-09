@@ -26,6 +26,11 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     // MARK: - Properties
     weak var view: NftCollectionView?
     private let service: ServicesAssembly
+    private let formatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
     var collection: NFTCollection?
     var profile: Profile?
     var nfts: [Nft] = []
@@ -46,7 +51,9 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     
     func getContentSize() -> Double? {
         guard let count = collection?.nfts.count else { return nil }
+        // считаем размер коллекции, умножаем размер ячейки и отступа на количество строк
         let lineSize = (Double(count) / 3).rounded(.up )*(192 + 8 )
+        //добавляем значения изображения и поисания коллекции, из макета
         let size = Double( 490 + lineSize)
         return size
     }
@@ -93,10 +100,17 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
     }
     
     func convertToViewModel(nft: Nft) -> CollectionNFTCellViewModel {
-        CollectionNFTCellViewModel(
+        var price: String
+        if let formattedValue = formatter.string(from: NSNumber(value: nft.price )) {
+            price = formattedValue
+        } else {
+            price = ""
+        }
+        
+        return CollectionNFTCellViewModel(
             id: nft.id,
             nameNFT: nft.name,
-            price: String(nft.price),
+            price: price,
             isLiked: service.nftCatalogService.likeState(for: nft.id),
             isInTheBasket: service.nftCatalogService.basketState(for: nft.id),
             rating: nft.rating,

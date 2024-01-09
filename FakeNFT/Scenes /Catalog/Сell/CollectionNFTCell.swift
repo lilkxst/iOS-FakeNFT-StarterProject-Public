@@ -10,6 +10,7 @@ import UIKit
 final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     
     private var loader = LoaderView()
+    private let currency = "ETH"
     private var id: String?
     var indexPath: IndexPath?
     private var likeState: Bool = false
@@ -124,7 +125,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
         self.id = model.id
         imageView.kf.setImage(with: model.url)
         nameNFTLabel.text = model.nameNFT.components(separatedBy: " ").first
-        priceLabel.text = model.price + " ETH"
+        priceLabel.text = model.price + " " + currency
         ratingView.setStars(with: model.rating)
         basketButton.setImage(setBasket(isInTheBasket: model.isInTheBasket), for: .normal)
         likeButton.setImage(setLike(isLiked: model.isLiked), for: .normal)
