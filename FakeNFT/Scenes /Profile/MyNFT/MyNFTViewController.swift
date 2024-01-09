@@ -6,6 +6,7 @@ protocol MyNFTViewControllerProtocol: AnyObject, LoadingView {
     func updateUI()
     func showCap()
     func hiddenCap()
+    func showAlert(title: String, message: String)
 }
 
 final class MyNFTViewController: UITableViewController, MyNFTViewControllerProtocol {
@@ -82,6 +83,13 @@ final class MyNFTViewController: UITableViewController, MyNFTViewControllerProto
         tableView.reloadData()
     }
     
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         presenter?.nfts.count ?? 0
     }
@@ -92,7 +100,6 @@ final class MyNFTViewController: UITableViewController, MyNFTViewControllerProto
         guard let nft = presenter?.nfts[indexPath.row] else { return UITableViewCell()}
         let presenter = MyNFTCellPresenter(view: cell,
                                             nft: nft,
-                                            likedNfts: presenter?.likedNft ?? Set(),
                                             servicesAssembly: presenter?.servicesAssembly )
         presenter.delegate = self
         cell.presenter = presenter

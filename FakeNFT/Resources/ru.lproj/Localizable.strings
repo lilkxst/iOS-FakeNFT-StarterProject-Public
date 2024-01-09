@@ -21,3 +21,6 @@
 "byRating" = "По рейтингу";
 "byName" = "По названию";
 "close" = "Закрыть";
+"FavouritesNFT.navigationItem.title" = "Избранные NFT";
+"FavouritesNFT.CapLabelText" = "У Вас еще нет избранных NFT";
+"titleAlertError" = "Ошибка при выполнении запроса";

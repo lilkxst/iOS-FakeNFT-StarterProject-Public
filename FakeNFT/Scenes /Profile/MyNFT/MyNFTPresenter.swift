@@ -7,7 +7,7 @@ protocol MyNFTPresenterProtocol: AnyObject {
     var view: MyNFTViewControllerProtocol? { get set }
     var nfts: [Nft] { get }
     var nftsID: Set<String> { get }
-    var likedNft: Set<String> { get }
+    var likedNft: Set<String> { get set }
     var completionHandler: (([String]) -> ())? { get set }
     func isLiked(nft: Nft) -> Bool
     func viewDidLoad()
@@ -67,11 +67,12 @@ final class MyNFTPresenter: MyNFTPresenterProtocol {
                             self.view?.updateUI()
                         }
                     }
-                case.failure(_):
+                case.failure(let error):
                     DispatchQueue.main.async {
                         self.view?.hideLoading()
+                        self.nfts.count > 0 ? self.view?.hiddenCap() : self.view?.showCap()
+                        self.view?.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)
                     }
-                    break
                 }
             }
         }

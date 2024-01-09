@@ -2,6 +2,7 @@ import UIKit
 
 protocol ProfileViewContrillerDelegate: AnyObject, LoadingView {
     func updateUI()
+    func showAlert(title: String, message: String)
 }
 
 final class ProfileViewController: UIViewController {
@@ -144,11 +145,18 @@ final class ProfileViewController: UIViewController {
             case .success(let profileNetworlModel):
                 self.presenter?.convertInUIModel(profileNetworkModel: profileNetworlModel)
             case .failure(let error):
-                print(error.localizedDescription)
+                self.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)
             }
         }
         let editingVC = EditingProfileViewController(presenter: presenter)
         present(editingVC, animated: true)
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -178,8 +186,13 @@ extension ProfileViewController: UITableViewDelegate {
         switch index {
         case 0:
             showMyNFT()
-        case 1: print(1) // TODO: Переход в Избранные NFT
-        case 2: print(2) // TODO: Переход на сраницу разработчика
+        case 1:
+            showFavouritesNFT()
+        case 2:
+            if let url = URL(string: linkTextView.text) {
+                let webVC = WebViewViewController(url: url)
+                navigationController?.pushViewController(webVC, animated: true)
+            }
         default:
             break
         }
@@ -194,10 +207,28 @@ extension ProfileViewController: UITableViewDelegate {
             [weak self] likedNfts in
             guard let self else { return }
             self.presenter?.profileModelUI?.likes = likedNfts
+            self.updateUI()
         }
         let myNFTViewController = MyNFTViewController(presenter: myNFTPresenter)
         myNFTViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(myNFTViewController, animated: true)
+    }
+    
+    private func showFavouritesNFT() {
+        guard let presenter else { return }
+        let favouritesNFTPresenter = FavouritesNFTPresenter(
+            servicesAssembly: presenter.servicesAssembly,
+            nftsID: presenter.profileModelUI?.likes ?? []
+        )
+        favouritesNFTPresenter.completionHandler = {
+            [weak self] likedNfts in
+            guard let self else { return }
+            self.presenter?.profileModelUI?.likes = likedNfts
+            self.updateUI()
+        }
+        let favouritesNFTViewController = FavouritesNFTViewController(presenter: favouritesNFTPresenter)
+        favouritesNFTViewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(favouritesNFTViewController, animated: true)
     }
 }
 
