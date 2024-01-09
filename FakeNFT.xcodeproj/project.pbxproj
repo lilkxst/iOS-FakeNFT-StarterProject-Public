@@ -130,6 +130,7 @@
 		1C70801D2B358B8F0026BF23 /* ProfileDetailInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailInfoCell.swift; sourceTree = "<group>"; };
 		1C70801F2B35D40F0026BF23 /* EditingProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingProfileViewController.swift; sourceTree = "<group>"; };
 		1C7080212B35F76D0026BF23 /* EditingProfileViewControllerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingProfileViewControllerPresenter.swift; sourceTree = "<group>"; };
+		1CB8DBA22B4D5859007AD8E4 /* READMEProfile.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = READMEProfile.md; sourceTree = "<group>"; };
 		1CB9E3942B3EDBDC003A6C2F /* MyNFTCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNFTCell.swift; sourceTree = "<group>"; };
 		1CB9E3962B3EFA3B003A6C2F /* MyNFTCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNFTCellPresenter.swift; sourceTree = "<group>"; };
 		1CD883F02B37209500AAF009 /* ProfilePutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePutRequest.swift; sourceTree = "<group>"; };
@@ -245,6 +246,7 @@
 		1C172A2D2B2C715500EA1425 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				1CB8DBA12B4D581A007AD8E4 /* Readme */,
 				1C39FF202B4855200063A757 /* FavouritesNFT */,
 				1C7080182B346E4E0026BF23 /* WebView */,
 				1C172A2E2B2C718C00EA1425 /* ProfileViewController.swift */,
@@ -303,6 +305,14 @@
 				1C7080212B35F76D0026BF23 /* EditingProfileViewControllerPresenter.swift */,
 			);
 			path = EditingProfile;
+			sourceTree = "<group>";
+		};
+		1CB8DBA12B4D581A007AD8E4 /* Readme */ = {
+			isa = PBXGroup;
+			children = (
+				1CB8DBA22B4D5859007AD8E4 /* READMEProfile.md */,
+			);
+			path = Readme;
 			sourceTree = "<group>";
 		};
 		1CD883F52B38C7A000AAF009 /* Docs */ = {
