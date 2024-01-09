@@ -10,6 +10,9 @@ import Kingfisher
 
 final class NFTCollectionViewCell: UICollectionViewCell {
 
+    var nftId: String?
+    weak var presenter: UserCollectionPresenterProtocol?
+
     private let imageView: UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFill
@@ -20,8 +23,15 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
     private lazy var likeButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Favourites"), for: .normal)
+        button.setImage(UIImage(named: "UnFavorites"), for: .normal)
         button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var basketButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Add"), for: .normal)
+        button.addTarget(self, action: #selector(basketButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -37,13 +47,6 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
         return label
-    }()
-
-    private lazy var basketButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Add"), for: .normal)
-        button.addTarget(self, action: #selector(basketButtonTapped), for: .touchUpInside)
-        return button
     }()
 
     override init(frame: CGRect) {
@@ -63,6 +66,8 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         addSubview(priceLabel)
         addSubview(basketButton)
         addSubview(likeButton)
+        basketButton.isUserInteractionEnabled = true
+        likeButton.isUserInteractionEnabled = true
     }
 
     private func setupConstraints() {
@@ -85,6 +90,8 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
                    likeButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 0),
                    likeButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 0),
+                   likeButton.widthAnchor.constraint(equalToConstant: 40),
+                   likeButton.heightAnchor.constraint(equalToConstant: 40),
 
                    nameLabel.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 8),
                    nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -93,22 +100,28 @@ final class NFTCollectionViewCell: UICollectionViewCell {
                    priceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2),
                    priceLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
 
-                   basketButton.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 10),
-                   basketButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-                   basketButton.widthAnchor.constraint(equalToConstant: 30),
-                   basketButton.heightAnchor.constraint(equalToConstant: 30)
-
-               ])
+                   basketButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
+                   basketButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+                   basketButton.widthAnchor.constraint(equalToConstant: 40),
+                   basketButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
     }
 
-    func configure(with nft: Nft, isLiked: Bool) {
+    func configure(with nft: Nft, isLiked: Bool, isInCart: Bool, presenter: UserCollectionPresenterProtocol?) {
+
+        self.presenter = presenter
+        self.nftId = nft.id
 
         if let imageUrlString = nft.images.first, let imageUrl = URL(string: imageUrlString) {
             imageView.kf.setImage(with: imageUrl)
         }
+        let likeImageName = isLiked ? "Favourites" : "UnFavorites"
+           likeButton.setImage(UIImage(named: likeImageName), for: .normal)
 
+           let basketImageName = isInCart ? "Delete" : "Add"
+           basketButton.setImage(UIImage(named: basketImageName), for: .normal)
         nameLabel.text = nft.name
-        priceLabel.text = "Цена: \(nft.price)"
+        priceLabel.text = "\(nft.price)"
             if let currency = nft.currency {
                 priceLabel.text?.append(" \(currency.name)")
             }
@@ -117,10 +130,19 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func likeButtonTapped() {
-
+        guard let nftId = nftId else { return }
+        likeButton.isEnabled = false
+        presenter?.toggleLikeStatus(for: nftId) {
+            self.likeButton.isEnabled = true
+        }
     }
 
     @objc func basketButtonTapped() {
+        guard let nftId = nftId else { return }
+        basketButton.isEnabled = false
+        presenter?.toggleCartStatus(for: nftId) {
+            self.basketButton.isEnabled = true
+        }
     }
 
 }

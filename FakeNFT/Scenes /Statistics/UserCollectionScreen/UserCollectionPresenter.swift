@@ -7,11 +7,15 @@
 
 import Foundation
 
-protocol UserCollectionPresenterProtocol {
+protocol UserCollectionPresenterProtocol: AnyObject {
     func viewDidLoad()
     func numberOfItems() -> Int
     func item(at index: Int) -> Nft?
-    func loadUserNFTs(nfts: [String], likedNFTs: [String])
+    func loadUserNFTs(nfts: [String])
+    func toggleLikeStatus(for nftId: String, completion: @escaping () -> Void)
+    func toggleCartStatus(for nftId: String, completion: @escaping () -> Void)
+    func isNftLiked(_ nftId: String) -> Bool
+    func isNftInCart(_ nftId: String) -> Bool
 }
 
 final class UserCollectionPresenter: UserCollectionPresenterProtocol {
@@ -21,6 +25,8 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     private var networkClient: NetworkClient?
     private var loadedNFTsCount = 0
     private var totalNFTsCount = 0
+    private var likedNFTsIds: [String] = []
+    private var cartNFTsIds: [String] = []
     weak var view: UserCollectionViewProtocol?
     var user: User?
 
@@ -33,14 +39,14 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         guard let nftsIDs = user?.nfts else {
             return
         }
-        loadUserNFTs(nfts: nftsIDs, likedNFTs: user?.likes ?? [])
+        loadUserNFTs(nfts: nftsIDs)
     }
 
     func numberOfItems() -> Int {
         return nfts.count
     }
 
-    func loadUserNFTs(nfts nftsIDs: [String], likedNFTs: [String]) {
+    func loadUserNFTs(nfts nftsIDs: [String]) {
         self.nfts.removeAll()
         self.loadedNFTsCount = 0
         self.totalNFTsCount = nftsIDs.count
@@ -50,7 +56,6 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(var nft):
-                        nft.isLiked = likedNFTs.contains(nft.id)
                         nft.currency = Currency(title: "Mock", name: "ETN", image: "", id: "1")
                         self?.nfts.append(nft)
                         self?.incrementAndCheckLoadedCount()
@@ -74,4 +79,46 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
         guard index >= 0 && index < nfts.count else { return nil }
         return nfts[index]
     }
+
+    func toggleLikeStatus(for nftId: String, completion: @escaping () -> Void) {
+        if likedNFTsIds.contains(nftId) {
+            likedNFTsIds.removeAll { $0 == nftId }
+        } else {
+            likedNFTsIds.append(nftId)
+        }
+        updateNftStatus(nftId: nftId, in: &likedNFTsIds)
+        completion()
+    }
+
+    func toggleCartStatus(for nftId: String, completion: @escaping () -> Void) {
+        if cartNFTsIds.contains(nftId) {
+            cartNFTsIds.removeAll { $0 == nftId }
+        } else {
+            cartNFTsIds.append(nftId)
+        }
+        updateNftStatus(nftId: nftId, in: &cartNFTsIds)
+        completion()
+    }
+
+    private func updateNftStatus(nftId: String, in array: inout [String]) {
+        if let index = nfts.firstIndex(where: { $0.id == nftId }) {
+            nfts[index].isLiked = array.contains(nftId)
+            view?.refreshUI()
+        }
+    }
+    func isNftLiked(_ nftId: String) -> Bool {
+        return likedNFTsIds.contains(nftId)
+    }
+
+    func isNftInCart(_ nftId: String) -> Bool {
+        return cartNFTsIds.contains(nftId)
+    }
+    func saveLikedNfts() {
+        UserDefaults.standard.set(likedNFTsIds, forKey: "likedNfts")
+    }
+
+    func loadLikedNfts() {
+        likedNFTsIds = UserDefaults.standard.stringArray(forKey: "likedNfts") ?? []
+    }
+
 }

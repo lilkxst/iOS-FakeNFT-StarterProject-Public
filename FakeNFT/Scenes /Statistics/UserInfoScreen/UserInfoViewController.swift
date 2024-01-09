@@ -172,7 +172,6 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
 
 extension UserInfoViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Переход к UserCollectionViewController с пользователем: \(String(describing: user))")
         let userCollectionVC = UserCollectionViewController(servicesAssembly: servicesAssembly)
         userCollectionVC.user = self.user
         navigationController?.pushViewController(userCollectionVC, animated: true)

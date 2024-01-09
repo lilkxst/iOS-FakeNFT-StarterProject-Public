@@ -50,7 +50,7 @@ final class UserCollectionViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .black
 
         if let nfts = user?.nfts {
-            presenter?.loadUserNFTs(nfts: nfts, likedNFTs: user?.likes ?? [])
+            presenter?.loadUserNFTs(nfts: nfts)
         } else {
             presenter?.viewDidLoad()
         }
@@ -97,12 +97,12 @@ extension UserCollectionViewController: UICollectionViewDataSource {
               let nft = presenter?.item(at: indexPath.row) else {
             return UICollectionViewCell()
         }
-
-        let isLiked = user?.likes?.contains(nft.id) ?? false
-        cell.configure(with: nft, isLiked: isLiked)
+        guard let presenter = presenter else { return UICollectionViewCell() }
+        let isLiked = presenter.isNftLiked(nft.id)
+        let isInCart = presenter.isNftInCart(nft.id)
+        cell.configure(with: nft, isLiked: isLiked, isInCart: isInCart, presenter: presenter)
         return cell
     }
-
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
