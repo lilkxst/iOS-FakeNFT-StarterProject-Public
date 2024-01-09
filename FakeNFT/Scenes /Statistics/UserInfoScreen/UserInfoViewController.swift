@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 final class UserInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UserInfoViewProtocol {
 
@@ -149,7 +150,10 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
     }
 
     @objc private func websiteButtonTapped() {
-
+        if let urlString = user?.website, let url = URL(string: urlString) {
+            let safariViewController = SFSafariViewController(url: url)
+            present(safariViewController, animated: true)
+        }
     }
 
     func displayUserInfo(_ user: User) {
@@ -174,6 +178,7 @@ extension UserInfoViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let userCollectionVC = UserCollectionViewController(servicesAssembly: servicesAssembly)
         userCollectionVC.user = self.user
+        userCollectionVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(userCollectionVC, animated: true)
     }
 }

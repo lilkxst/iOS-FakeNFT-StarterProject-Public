@@ -61,11 +61,11 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
     private func setupViews() {
         contentView.addSubview(imageView)
-          contentView.addSubview(ratingView)
-          contentView.addSubview(nameLabel)
-          contentView.addSubview(priceLabel)
-          contentView.addSubview(likeButton)
-          contentView.addSubview(basketButton)
+        contentView.addSubview(ratingView)
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(priceLabel)
+        contentView.addSubview(likeButton)
+        contentView.addSubview(basketButton)
         basketButton.isUserInteractionEnabled = true
         likeButton.isUserInteractionEnabled = true
         bringSubviewToFront(basketButton)
@@ -83,7 +83,8 @@ final class NFTCollectionViewCell: UICollectionViewCell {
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 108),
             imageView.heightAnchor.constraint(equalToConstant: 108),
-            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
             ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             ratingView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

@@ -17,7 +17,7 @@ final class UserCollectionViewController: UIViewController {
     private let servicesAssembly: ServicesAssembly
     var presenter: UserCollectionPresenterProtocol?
     var user: User?
-    let sectionInsets = UIEdgeInsets(top: 20.0, left: 16.0, bottom: 50.0, right: 16.0)
+    let sectionInsets = UIEdgeInsets(top: 20.0, left: 16, bottom: 50.0, right: 16)
     let itemsPerRow: CGFloat = 3
 
     init(servicesAssembly: ServicesAssembly) {
@@ -127,7 +127,6 @@ extension UserCollectionViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: widthPerItem, height: 192)
     }
 }
-
 
 extension UserCollectionViewController: UserCollectionViewProtocol {
     func displayError(_ error: Error) {

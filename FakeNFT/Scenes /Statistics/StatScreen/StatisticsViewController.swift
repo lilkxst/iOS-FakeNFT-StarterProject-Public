@@ -142,6 +142,7 @@ extension StatisticsViewController: UITableViewDelegate {
             let userInfoVC = UserInfoViewController(servicesAssembly: servicesAssembly)
             userInfoVC.presenter = userInfoPresenter
             userInfoPresenter.view = userInfoVC
+            userInfoVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(userInfoVC, animated: true)
         }
     }
