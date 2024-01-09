@@ -17,7 +17,7 @@ final class UserCollectionViewController: UIViewController {
     private let servicesAssembly: ServicesAssembly
     var presenter: UserCollectionPresenterProtocol?
     var user: User?
-    let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
+    let sectionInsets = UIEdgeInsets(top: 20.0, left: 16.0, bottom: 50.0, right: 16.0)
     let itemsPerRow: CGFloat = 3
 
     init(servicesAssembly: ServicesAssembly) {
@@ -31,7 +31,7 @@ final class UserCollectionViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView()
-        cv.backgroundColor = .white
+        cv.backgroundColor = .clear
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
@@ -59,8 +59,8 @@ final class UserCollectionViewController: UIViewController {
     private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 80
-        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 8
+        layout.minimumInteritemSpacing = 9
         layout.sectionInset = sectionInsets
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -106,19 +106,28 @@ extension UserCollectionViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-
 extension UserCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
-        let availableWidth = view.frame.width - paddingSpace
-        let widthPerItem = availableWidth / itemsPerRow
-        return CGSize(width: widthPerItem, height: widthPerItem)
+        let interitemSpacing: CGFloat
+
+        if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
+            interitemSpacing = flowLayout.minimumInteritemSpacing
+        } else {
+            interitemSpacing = 9
+        }
+
+        let totalSpacing = sectionInsets.left + sectionInsets.right + (interitemSpacing * (itemsPerRow - 1))
+        let availableWidth = collectionView.bounds.width - totalSpacing
+        let widthPerItem = floor(availableWidth / itemsPerRow)
+
+        return CGSize(width: widthPerItem, height: 192)
     }
 }
+
 
 extension UserCollectionViewController: UserCollectionViewProtocol {
     func displayError(_ error: Error) {

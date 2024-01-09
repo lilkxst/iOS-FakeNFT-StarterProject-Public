@@ -45,7 +45,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 10)
+        label.font = UIFont.systemFont(ofSize: 10, weight: .medium)
         return label
     }()
 
@@ -60,14 +60,15 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        addSubview(imageView)
-        addSubview(ratingView)
-        addSubview(nameLabel)
-        addSubview(priceLabel)
-        addSubview(basketButton)
-        addSubview(likeButton)
+        contentView.addSubview(imageView)
+          contentView.addSubview(ratingView)
+          contentView.addSubview(nameLabel)
+          contentView.addSubview(priceLabel)
+          contentView.addSubview(likeButton)
+          contentView.addSubview(basketButton)
         basketButton.isUserInteractionEnabled = true
         likeButton.isUserInteractionEnabled = true
+        bringSubviewToFront(basketButton)
     }
 
     private func setupConstraints() {
@@ -75,35 +76,37 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         ratingView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
-        basketButton.translatesAutoresizingMaskIntoConstraints = false
         likeButton.translatesAutoresizingMaskIntoConstraints = false
+        basketButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-                   imageView.topAnchor.constraint(equalTo: self.topAnchor),
-                   imageView.widthAnchor.constraint(equalToConstant: 108),
-                   imageView.heightAnchor.constraint(equalToConstant: 108),
-                   imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 108),
+            imageView.heightAnchor.constraint(equalToConstant: 108),
+            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 
-                   ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-                   ratingView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-                   ratingView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+            ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            ratingView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            ratingView.widthAnchor.constraint(equalToConstant: 68),
+            ratingView.heightAnchor.constraint(equalToConstant: 12),
 
-                   likeButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 0),
-                   likeButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 0),
-                   likeButton.widthAnchor.constraint(equalToConstant: 40),
-                   likeButton.heightAnchor.constraint(equalToConstant: 40),
+            likeButton.topAnchor.constraint(equalTo: imageView.topAnchor),
+            likeButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
+            likeButton.widthAnchor.constraint(equalToConstant: 40),
+            likeButton.heightAnchor.constraint(equalToConstant: 40),
 
-                   nameLabel.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 8),
-                   nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-                   nameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            nameLabel.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-                   priceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2),
-                   priceLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            priceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2),
+            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            priceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-                   basketButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
-                   basketButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-                   basketButton.widthAnchor.constraint(equalToConstant: 40),
-                   basketButton.heightAnchor.constraint(equalToConstant: 40)
+            basketButton.topAnchor.constraint(equalTo: ratingView.bottomAnchor),
+            basketButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            basketButton.widthAnchor.constraint(equalToConstant: 40),
+            basketButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 
@@ -116,15 +119,15 @@ final class NFTCollectionViewCell: UICollectionViewCell {
             imageView.kf.setImage(with: imageUrl)
         }
         let likeImageName = isLiked ? "Favourites" : "UnFavorites"
-           likeButton.setImage(UIImage(named: likeImageName), for: .normal)
+        likeButton.setImage(UIImage(named: likeImageName), for: .normal)
 
-           let basketImageName = isInCart ? "Delete" : "Add"
-           basketButton.setImage(UIImage(named: basketImageName), for: .normal)
+        let basketImageName = isInCart ? "Delete" : "Add"
+        basketButton.setImage(UIImage(named: basketImageName), for: .normal)
         nameLabel.text = nft.name
         priceLabel.text = "\(nft.price)"
-            if let currency = nft.currency {
-                priceLabel.text?.append(" \(currency.name)")
-            }
+        if let currency = nft.currency {
+            priceLabel.text?.append(" \(currency.name)")
+        }
         ratingView.setRating(rating: nft.rating)
 
     }
