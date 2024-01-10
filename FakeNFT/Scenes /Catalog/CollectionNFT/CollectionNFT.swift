@@ -24,7 +24,7 @@ final class CollectionNFTViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     private var presenter: CollectionPresenterProtocol?
-    private var loader = LoaderView()
+    private let loader = LoaderView()
     private var contentSize: CGSize {
         CGSize(width: view.frame.width, height: presenter?.getContentSize() ?? view.frame.height)
     }
@@ -138,7 +138,8 @@ final class CollectionNFTViewController: UIViewController {
     
     private func configUI() {
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .ypWhite
+        collectionView.backgroundColor = .ypWhite
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -276,8 +277,8 @@ extension CollectionNFTViewController: NftCollectionView {
         let repeatAction = UIAlertAction(
             title: NSLocalizedString("repeat", comment: ""),
             style: .default
-        ){ action in
-            self.presenter?.getNFTs()
+        ){ [weak self] action in
+            self?.presenter?.getNFTs()
         }
         
         let cancelAction = UIAlertAction(
@@ -296,12 +297,10 @@ extension CollectionNFTViewController: NftCollectionView {
     
     func startLoadIndicator() {
         loader.showLoading()
-       // ProgressHUD.show()
     }
     
     func stopLoadIndicator() {
         loader.hideLoading()
-       // ProgressHUD.dismiss() 
     }
     
     func updateCell(indexPath: IndexPath) {

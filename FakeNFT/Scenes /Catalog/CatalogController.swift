@@ -14,7 +14,7 @@ final class CatalogViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     private var presenter: CatalogPresenterProtocol?
-    private var loader = LoaderView()
+    private let loader = LoaderView()
     private let tableView: UITableView = {
         let table = UITableView()
         table.backgroundColor = .clear
@@ -67,6 +67,8 @@ final class CatalogViewController: UIViewController {
     
     func configUI(){
         
+        view.backgroundColor = .ypWhite
+        tableView.backgroundColor = .ypWhite
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -142,6 +144,7 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
         guard let model = presenter?.getModel(for: indexPath) else { return cell }
         cell.config(with: model)
         cell.selectionStyle = .none
+        cell.backgroundColor = .ypWhite
         return cell
     }
     
@@ -169,8 +172,8 @@ extension CatalogViewController: NftCatalogView {
         let repeatAction = UIAlertAction(
             title: NSLocalizedString("repeat", comment: ""),
             style: .default
-        ){ action in
-            self.presenter?.getCollections()
+        ){ [weak self] action in
+            self?.presenter?.getCollections()
         }
         
         let cancelAction = UIAlertAction(

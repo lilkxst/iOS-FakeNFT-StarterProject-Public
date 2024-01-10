@@ -46,7 +46,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     }()
     
     private lazy var basketButton: UIButton = {
-        let btn = UIButton()
+        let btn = UIButton(type: .system)
         btn.setImage(UIImage(named: "Cart"), for: .normal)
         return btn
     }()
@@ -127,7 +127,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
         nameNFTLabel.text = model.nameNFT.components(separatedBy: " ").first
         priceLabel.text = model.price + " " + currency
         ratingView.setStars(with: model.rating)
-        basketButton.setImage(setBasket(isInTheBasket: model.isInTheBasket), for: .normal)
+        basketButton.setImage(setBasket(isInTheBasket: model.isInTheBasket)?.withTintColor(.ypBlack, renderingMode: .alwaysOriginal), for: .normal)
         likeButton.setImage(setLike(isLiked: model.isLiked), for: .normal)
         likeButton.isEnabled = true
         basketButton.isEnabled = true

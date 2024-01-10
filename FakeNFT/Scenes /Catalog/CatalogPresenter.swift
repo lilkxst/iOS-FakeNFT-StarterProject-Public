@@ -75,7 +75,7 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     
     private func checkSorting(){
         //Проверяем сохранена ли сортировка
-        guard let sorting = sortingStorage.getSorting() else { return }
+        let sorting = sortingStorage.getSorting()
         switch sorting {
         case .byName:
             sortingByName()
@@ -92,7 +92,7 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     
     func sortingByName(){
         sortingStorage.saveSorting(.byName)
-        collectionsNFT = collectionsNFT.sorted{ $0.author < $1.author }
+        collectionsNFT = collectionsNFT.sorted{ $0.name < $1.name }
         view?.update()
     }
     
