@@ -14,7 +14,7 @@ protocol CartDeletePresenterProtocol {
 
 final class CartDeletePresenter: CartDeletePresenterProtocol {
     
-    private var viewController: CartDeleteControllerProtocol?
+    private weak var viewController: CartDeleteControllerProtocol?
     private var orderService: OrderService?
     private var nftIdForDelete: String
     private (set) var nftImage: UIImage

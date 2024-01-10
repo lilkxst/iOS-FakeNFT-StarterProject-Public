@@ -79,6 +79,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         super.viewDidLoad()
         
         setupViews()
+        setupConstraints()
         presenter = CartPresenter(viewController: self, orderService: servicesAssembly.orderService, nftByIdService: servicesAssembly.nftByIdService)
         cartTable.register(CartTableViewCell.self, forCellReuseIdentifier: "CartTableViewCell")
         cartTable.delegate = self
@@ -103,6 +104,15 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         bottomView.addSubview(paymentButton)
         view.addSubview(placeholderLabel)
         
+        cartTable.translatesAutoresizingMaskIntoConstraints = false
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        countNftInCartLabel.translatesAutoresizingMaskIntoConstraints = false
+        totalPriceLabel.translatesAutoresizingMaskIntoConstraints = false
+        paymentButton.translatesAutoresizingMaskIntoConstraints = false
+        placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             cartTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             cartTable.bottomAnchor.constraint(equalTo: bottomView.topAnchor),
@@ -130,12 +140,6 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
             placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
-        cartTable.translatesAutoresizingMaskIntoConstraints = false
-        bottomView.translatesAutoresizingMaskIntoConstraints = false
-        countNftInCartLabel.translatesAutoresizingMaskIntoConstraints = false
-        totalPriceLabel.translatesAutoresizingMaskIntoConstraints = false
-        paymentButton.translatesAutoresizingMaskIntoConstraints = false
-        placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
     func showPlaceholder() {
@@ -154,7 +158,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         }
     }
     
-    @objc func didTapSortButton() {
+    @objc private func didTapSortButton() {
         let alert = UIAlertController(title: NSLocalizedString("CartFilter.filter", comment: ""), message: nil, preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: NSLocalizedString("CartFilter.byPrice", comment: ""), style: .default, handler: { [weak self] (UIAlertAction) in
