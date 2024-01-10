@@ -48,7 +48,6 @@
 		CC2FA2592B39EA4A004EFA33 /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */; };
 		CC2FA25B2B39EB12004EFA33 /* UserInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */; };
 		CC2FA25D2B3CA575004EFA33 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA25C2B3CA575004EFA33 /* CustomTableViewCell.swift */; };
-		CC3650812B4C5F67005D2C10 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3650802B4C5F67005D2C10 /* Currency.swift */; };
 		CCD998BC2B2A1E3E002B9621 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */; };
 		CCD998C02B2A2159002B9621 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998BF2B2A2159002B9621 /* Users.swift */; };
 		CCD998C32B2A2341002B9621 /* StatisticsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */; };
@@ -118,7 +117,6 @@
 		CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
 		CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoPresenter.swift; sourceTree = "<group>"; };
 		CC2FA25C2B3CA575004EFA33 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
-		CC3650802B4C5F67005D2C10 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		CCD998BF2B2A2159002B9621 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsPresenter.swift; sourceTree = "<group>"; };
@@ -307,7 +305,6 @@
 			children = (
 				CCD998BF2B2A2159002B9621 /* Users.swift */,
 				0CFCB7412A78013E0009A829 /* Nft.swift */,
-				CC3650802B4C5F67005D2C10 /* Currency.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -585,7 +582,6 @@
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				CCD998C52B2B0C2F002B9621 /* UserTableViewCell.swift in Sources */,
-				CC3650812B4C5F67005D2C10 /* Currency.swift in Sources */,
 				CC20A5F22B4715540020A2A5 /* UserCollectionPresenter.swift in Sources */,
 				CCD998C32B2A2341002B9621 /* StatisticsPresenter.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,

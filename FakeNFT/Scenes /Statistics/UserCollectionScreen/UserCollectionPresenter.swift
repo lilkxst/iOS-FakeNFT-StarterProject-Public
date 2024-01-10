@@ -56,7 +56,6 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(var nft):
-                        nft.currency = Currency(title: "Mock", name: "ETN", image: "", id: "1")
                         self?.nfts.append(nft)
                         self?.incrementAndCheckLoadedCount()
                     case .failure(let error):
@@ -101,10 +100,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     }
 
     private func updateNftStatus(nftId: String, in array: inout [String]) {
-        if let index = nfts.firstIndex(where: { $0.id == nftId }) {
-            nfts[index].isLiked = array.contains(nftId)
-            view?.refreshUI()
-        }
+        view?.refreshUI()
     }
     func isNftLiked(_ nftId: String) -> Bool {
         return likedNFTsIds.contains(nftId)

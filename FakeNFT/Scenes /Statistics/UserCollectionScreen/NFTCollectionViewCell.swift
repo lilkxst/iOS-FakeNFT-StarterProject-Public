@@ -116,19 +116,17 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         self.presenter = presenter
         self.nftId = nft.id
 
-        if let imageUrlString = nft.images.first, let imageUrl = URL(string: imageUrlString) {
-            imageView.kf.setImage(with: imageUrl)
-        }
-        let likeImageName = isLiked ? "Favourites" : "UnFavorites"
-        likeButton.setImage(UIImage(named: likeImageName), for: .normal)
+        if let imageUrl = nft.images.first {
+                imageView.kf.setImage(with: imageUrl)
+            }
+        let isLiked = presenter?.isNftLiked(nft.id) ?? false
+            let likeImageName = isLiked ? "Favourites" : "UnFavorites"
+            likeButton.setImage(UIImage(named: likeImageName), for: .normal)
 
         let basketImageName = isInCart ? "Delete" : "Add"
         basketButton.setImage(UIImage(named: basketImageName), for: .normal)
         nameLabel.text = nft.name
-        priceLabel.text = "\(nft.price)"
-        if let currency = nft.currency {
-            priceLabel.text?.append(" \(currency.name)")
-        }
+        priceLabel.text = "\(nft.price) ETN"
         ratingView.setRating(rating: nft.rating)
 
     }
