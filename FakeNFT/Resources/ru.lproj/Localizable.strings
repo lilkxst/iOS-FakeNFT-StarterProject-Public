@@ -8,3 +8,12 @@
 "Cart.emptyCart" = "Корзина пуста";
 "Cart.paymentButton" = "К оплате";
 "CartCell.price" = "Цена";
+"CartDelete.questionLabel" = "Вы уверены, что хотите удалить объект из корзины?";
+"CartFilter.byPrice" = "По цене";
+"CartFilter.byRating" = "По рейтингу";
+"CartFilter.byTitle" = "По названию";
+"CartFilter.filter" = "Сортировка";
+"CartFilter.close" = "Закрыть";
+"Alert.title" = "Что-то пошло не так";
+"Alert.again" = "Еще раз";
+"Alert.cancel" = "Отменить";

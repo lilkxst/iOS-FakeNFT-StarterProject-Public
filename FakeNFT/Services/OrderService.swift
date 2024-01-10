@@ -8,10 +8,12 @@
 import Foundation
 
 typealias OrderCompletion = (Result<OrderDataModel, Error>) -> Void
+typealias RemoveOrderCompletion = (Result<[String], Error>) -> Void
 
 protocol OrderService {
     var nftsStorage: [NftDataModel] { get }
     func loadOrder(completion: @escaping OrderCompletion)
+    func removeNftFromStorage(id: String, completion: @escaping RemoveOrderCompletion)
 }
 
 final class OrderServiceImpl: OrderService {
@@ -55,5 +57,26 @@ final class OrderServiceImpl: OrderService {
                 completion(.failure(error))
             }
         }
+    }
+    
+    func removeNftFromStorage(id: String, completion: @escaping RemoveOrderCompletion) {
+        var newIdsStorage = idsStorage
+        newIdsStorage.removeAll(where: { $0 == id } )
+        
+        let request = ChangeOrderRequest(nfts: newIdsStorage)
+        networkClient.send(request: request, type: ChangedOrderDataModel.self) { result in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                switch result {
+                case let .success(data):
+                    self.idsStorage.removeAll(where: { $0 == id } )
+                    self.nftsStorage.removeAll(where: { $0.id == id } )
+                    completion(.success(data.nfts))
+                case let .failure(error):
+                    completion(.failure(error))
+                }
+            }
+        }
+        return
     }
 }

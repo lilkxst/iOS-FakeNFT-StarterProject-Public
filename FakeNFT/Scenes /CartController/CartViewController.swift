@@ -22,6 +22,12 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private lazy var sortButton: UIBarButtonItem = {
+        let sortButton = UIBarButtonItem()
+        sortButton.image = UIImage(named: "sortButton")
+        return sortButton
+    }()
+    
     private lazy var cartTable: UITableView = {
         let cartTable = UITableView()
         cartTable.separatorStyle = .none
@@ -82,6 +88,13 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         showPlaceholder()
     }
     
+    private func setupNavigationBar() {
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        let rightButton = UIBarButtonItem(image: UIImage(named: "SortButton"), style: .plain, target: self, action: #selector(didTapSortButton))
+        rightButton.tintColor = .ypBlack
+        navigationBar.topItem?.setRightBarButton(rightButton, animated: false)
+    }
+    
     private func setupViews() {
         view.addSubview(cartTable)
         view.addSubview(bottomView)
@@ -130,6 +143,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
             placeholderLabel.isHidden = false
             bottomView.isHidden = true
         } else {
+            setupNavigationBar()
             guard let count = presenter?.count() else { return }
             guard let totalPrice = presenter?.totalPrice() else { return }
             countNftInCartLabel.text = "\(count) NFT"
@@ -138,6 +152,33 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
             bottomView.isHidden = false
             cartTable.reloadData()
         }
+    }
+    
+    @objc func didTapSortButton() {
+        let alert = UIAlertController(title: NSLocalizedString("CartFilter.filter", comment: ""), message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("CartFilter.byPrice", comment: ""), style: .default, handler: { [weak self] (UIAlertAction) in
+            guard let self = self else { return }
+            self.presenter?.sortCart(filter: .price)
+            self.cartTable.reloadData()
+        } ))
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("CartFilter.byRating", comment: ""), style: .default, handler: { [weak self] (UIAlertAction) in
+            guard let self = self else { return }
+            self.presenter?.sortCart(filter: .rating)
+            self.cartTable.reloadData()
+        } ))
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("CartFilter.byTitle", comment: ""), style: .default, handler: { [weak self] (UIAlertAction) in
+            guard let self = self else { return }
+            self.presenter?.sortCart(filter: .title)
+            self.cartTable.reloadData()
+        } ))
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("CartFilter.close", comment: ""), style: .cancel, handler: { (UIAlertAction) in
+        } ))
+        
+        self.present(alert, animated: true)
     }
 }
 
@@ -150,6 +191,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = cartTable.dequeueReusableCell(withIdentifier: "CartTableViewCell", for: indexPath) as? CartTableViewCell else { return UITableViewCell() }
         guard let model = presenter?.getModel(indexPath: indexPath) else { return cell }
+        cell.delegate = self
         cell.updateCell(with: model)
         return cell
     }
@@ -158,5 +200,13 @@ extension CartViewController: UITableViewDataSource {
 extension CartViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
+    }
+}
+
+extension CartViewController: CartTableViewCellDelegate {
+    func didTapDeleteButton(id: String, image: UIImage) {
+        let deleteViewController = CartDeleteViewController(servicesAssembly: servicesAssembly, nftImage: image, idForDelete: id)
+        deleteViewController.modalPresentationStyle = .overCurrentContext
+        self.tabBarController?.present(deleteViewController, animated: true)
     }
 }

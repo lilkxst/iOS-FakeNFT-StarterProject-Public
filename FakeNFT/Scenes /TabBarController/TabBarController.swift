@@ -36,9 +36,11 @@ final class TabBarController: UITabBarController {
         let cartController = CartViewController(
             servicesAssembly: servicesAssembly
         )
+        let cartNavigationController = UINavigationController(rootViewController: cartController)
+        
         cartController.tabBarItem = cartTabBarItem
 
-        viewControllers = [catalogController, cartController]
+        viewControllers = [catalogController, cartNavigationController]
 
         view.backgroundColor = .systemBackground
     }

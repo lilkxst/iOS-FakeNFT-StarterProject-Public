@@ -8,3 +8,14 @@
 "Cart.emptyCart" = "Shopping cart is empty";
 "Cart.paymentButton" = "To pay";
 "CartCell.price" = "Price";
+"CartDelete.questionLabel" = "Are you sure you want to remove the object from the cart?";
+"CartDelete.deleteButton" = "Delete";
+"CartDelete.returnButton" = "Return";
+"CartFilter.byPrice" = "By a price";
+"CartFilter.byRating" = "By a rating";
+"CartFilter.byTitle" = "By a title";
+"CartFilter.filter" = "Sorting";
+"CartFilter.close" = "Close";
+"Alert.title" = "Something went wrong";
+"Alert.again" = "Once again";
+"Alert.cancel" = "Cancel";
