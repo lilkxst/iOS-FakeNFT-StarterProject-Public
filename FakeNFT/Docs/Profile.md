@@ -4,6 +4,8 @@
 <br /> Эпик: Профиль
 <br /> Ссылка: https://github.com/users/lilkxst/projects/8
 
+Архитектура - MVP
+
 # Profile Flow Decomposition
 
 ## Module 1:
@@ -26,23 +28,23 @@
 
 ## Module 2:
 #### Верстка экрана "Мои NFT"  
-- Nav Bar с кнопкой и тайтлом (est: 20 min, fact: x min)
-- Верстка таблицы и ячеек (est: 90 min; fact: x min).
-- Верстка экрана для кейса когда данных нет (est: 30 min, fact: x min)
+- Nav Bar с кнопкой и тайтлом (est: 20 min, fact: 30 min)
+- Верстка таблицы и ячеек (est: 90 min; fact: 180 min).
+- Верстка экрана для кейса когда данных нет (est: 30 min, fact: 30 min)
 
 #### Логика
-- Получение данных с бэка (est: 60 min; fact: x min).
-- Сортировка данных по кнопке (est: 60 min; fact: x min).
+- Получение данных с бэка (est: 60 min; fact: 180 min).
+- Сортировка данных по кнопке (est: 60 min; fact: 60 min).
 
-`Total:` est: 260 min; fact: x min.
+`Total:` est: 260 min; fact: 480 min.
 
 ## Module 3:
 #### Верстка экрана "Избранные NFT"   
-- Верстка коллекции и ячеек (est: 90 min, fact: x min)
-- Верстка экрана для кейса когда данных нет (est: 30 min, fact: x min)
+- Верстка коллекции и ячеек (est: 90 min, fact: 270 min)
+- Верстка экрана для кейса когда данных нет (est: 30 min, fact: 15 min)
 
 #### Логика
-- Получение данных с бэка (est: 60 min; fact: x min).
-- Удаление из избранного по нажатию на кнопку с сердечком (est: 60 min; fact: x min).
+- Получение данных с бэка (est: 60 min; fact: 30 min).
+- Удаление из избранного по нажатию на кнопку с сердечком (est: 60 min; fact: 120 min).
 
-`Total:` est: 240 min; fact: x min.
+`Total:` est: 240 min; fact: 435 min.
