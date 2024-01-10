@@ -1,4 +1,3 @@
-
 import Foundation
 
 protocol EditingProfilePresenterProtocol {
@@ -11,13 +10,13 @@ protocol EditingProfilePresenterProtocol {
 }
 
 final class EditingProfilePresenter: EditingProfilePresenterProtocol {
-    
+
     var profile: ProfileModelUI?
     private var profileService: ProfileServiceProtocol?
     var newLinkPhoto: String
     var completionHandler: ProfileCompletion?
     weak var view: EditingProfileViewControllerProtocol?
-    
+
     init(profile: ProfileModelUI?,
          profileService: ProfileServiceProtocol?,
          completionHandler: ProfileCompletion?
@@ -27,7 +26,7 @@ final class EditingProfilePresenter: EditingProfilePresenterProtocol {
         newLinkPhoto = profile?.urlAvatar ?? ""
         self.completionHandler = completionHandler
     }
-    
+
     func viewWillDisappear(name: String, description: String, website: String) {
         saveProfile(newProfile: ProfileModelUI(
             id: profile?.id ?? "",
@@ -39,29 +38,29 @@ final class EditingProfilePresenter: EditingProfilePresenterProtocol {
             nfts: profile?.nfts ?? [],
             likes: profile?.likes ?? []))
     }
-    
+
     func viewDidLoad() {
         guard let profile else { return }
         view?.updateUI(profile: profile)
     }
-    
+
     private func saveProfile(newProfile: ProfileModelUI) {
         guard let profile else {return}
-        
+
         let name = newProfile.name == profile.name ? nil : newProfile.name
         let avatar = newProfile.urlAvatar == profile.urlAvatar ? nil : newProfile.urlAvatar
         let description = newProfile.description == profile.description ? nil : newProfile.description
         let website = newProfile.website == profile.website ? nil : newProfile.website
-        
+
         let profileModelEditing = ProfileModelEditing(name: name,
                                                       avatar: avatar,
                                                       description: description,
                                                       website: website,
                                                       likes: [])
-        
+
         profileService?.saveProfile(
             profileEditing: profileModelEditing,
             completion: completionHandler)
     }
-    
+
 }

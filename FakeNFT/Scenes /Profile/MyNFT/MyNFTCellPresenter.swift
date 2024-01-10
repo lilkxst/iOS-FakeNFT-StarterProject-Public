@@ -13,23 +13,22 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
 
     weak var view: MyNFTCellView?
     let servicesAssembly: ServicesAssembly?
-    
+
     let nft: Nft?
     weak var delegate: MyNFTViewControllerProtocol?
-    
+
     init(view: MyNFTCellView? = nil,
          nft: Nft?,
-         servicesAssembly: ServicesAssembly?)
-    {
+         servicesAssembly: ServicesAssembly?) {
         self.view = view
         self.nft = nft
         self.servicesAssembly = servicesAssembly
     }
-    
+
     func loadImage() {
         guard let url = nft?.images.first else { return }
         view?.showLoading()
-        URLSession.shared.dataTask(with: URLRequest(url: url)) { [weak self] data, response, error in
+        URLSession.shared.dataTask(with: URLRequest(url: url)) { [weak self] data, _, error in
             guard let data = data, error == nil else { return }
             DispatchQueue.main.async {
                 guard let self else { return }
@@ -38,7 +37,7 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
             }
         }.resume()
     }
-    
+
     func likeButtonDidTapped() {
         view?.unenabledLikeButton()
         view?.showLoading()
@@ -55,7 +54,7 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
                 self.view?.enabledLikeButton()
                 self.view?.hideLoading()
                 switch result {
-                case .success(_):
+                case .success:
                     self.delegate?.presenter?.likedNft = likedNftsSet
                     self.delegate?.presenter?.updateData(likesNft: likedNftsSet)
                     self.view?.updateLikeImage()
@@ -64,10 +63,10 @@ final class MyNFTCellPresenter: MyNFTCellPresenterProtocol {
                 }
             }
     }
-    
+
     func isLiked() -> Bool {
         guard let id = nft?.id, let likedNft = delegate?.presenter?.likedNft else { return false }
         return likedNft.contains(id)
     }
-    
+
 }

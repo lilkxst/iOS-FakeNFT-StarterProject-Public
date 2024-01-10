@@ -1,4 +1,3 @@
-
 import Foundation
 
 struct ProfileModelEditing {
@@ -7,13 +6,12 @@ struct ProfileModelEditing {
     let description: String?
     let website: String?
     let likes: [String]
-    
+
     init(name: String? = nil,
          avatar: String? = nil,
          description: String? = nil,
          website: String? = nil,
-         likes: [String] = [])
-    {
+         likes: [String] = []) {
         self.name = name
         self.avatar = avatar
         self.description = description

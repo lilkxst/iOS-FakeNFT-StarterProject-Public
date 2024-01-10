@@ -1,4 +1,3 @@
-
 import Foundation
 
 protocol MyNFTPresenterProtocol: AnyObject {
@@ -8,7 +7,7 @@ protocol MyNFTPresenterProtocol: AnyObject {
     var nfts: [Nft] { get }
     var nftsID: Set<String> { get }
     var likedNft: Set<String> { get set }
-    var completionHandler: (([String]) -> ())? { get set }
+    var completionHandler: (([String]) -> Void)? { get set }
     func isLiked(nft: Nft) -> Bool
     func viewDidLoad()
     func updateData(likesNft: Set<String>)
@@ -27,19 +26,19 @@ final class MyNFTPresenter: MyNFTPresenterProtocol {
     let servicesAssembly: ServicesAssembly
     var nftsID: Set<String>
     var likedNft: Set<String>
-    
+
     var nfts: [Nft] = []
-    var completionHandler: (([String]) -> ())?
-    
+    var completionHandler: (([String]) -> Void)?
+
     weak var view: MyNFTViewControllerProtocol?
-    
+
     init(servicesAssembly: ServicesAssembly, nftsID: [String], likes: [String]) {
         self.servicesAssembly = servicesAssembly
         self.nftService = servicesAssembly.nftService
         self.nftsID = Set(nftsID)
         self.likedNft = Set(likes)
     }
-    
+
     func viewDidLoad() {
         if nftsID.count > 0 {
             loadNfts()
@@ -47,11 +46,11 @@ final class MyNFTPresenter: MyNFTPresenterProtocol {
             view?.showCap()
         }
     }
-    
+
     func isLiked(nft: Nft) -> Bool {
         likedNft.contains(nft.id)
     }
-    
+
     private func loadNfts() {
         view?.showLoading()
         for id in nftsID {
@@ -77,15 +76,15 @@ final class MyNFTPresenter: MyNFTPresenterProtocol {
             }
         }
     }
-    
+
     func updateData(likesNft: Set<String>) {
         self.likedNft = likesNft
     }
-    
+
     func viewWillDisappear() {
         completionHandler?(Array(likedNft))
     }
-    
+
     func sortNFT(typeSorting: TypeSorting) {
         if typeSorting == .byName {
             nfts.sort { $0.name.first ?? Character("") < $1.name.first ?? Character("") }
@@ -97,4 +96,3 @@ final class MyNFTPresenter: MyNFTPresenterProtocol {
         view?.updateUI()
     }
 }
-
