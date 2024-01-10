@@ -1,10 +1,9 @@
-
 import UIKit
 
 final class ProfileDetailInfoCell: UITableViewCell {
-    
+
     static let cellID = "cellID"
-    
+
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -12,7 +11,7 @@ final class ProfileDetailInfoCell: UITableViewCell {
         label.textColor = UIColor.ypBlack
         return label
     }()
-    
+
     private lazy var imageImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -22,22 +21,22 @@ final class ProfileDetailInfoCell: UITableViewCell {
         imageView.tintColor = UIColor.ypBlack
         return imageView
     }()
-    
+
     func configureCell(name: String) {
         nameLabel.text = name
         selectionStyle = .none
         addSubviews()
     }
-    
+
     private func addSubviews() {
         contentView.addSubview(nameLabel)
         contentView.addSubview(imageImageView)
-        
+
         NSLayoutConstraint.activate([
             imageImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             imageImageView.widthAnchor.constraint(equalToConstant: 7.98),
             imageImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            
+
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nameLabel.trailingAnchor.constraint(equalTo: imageImageView.leadingAnchor, constant: 8),
             nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)

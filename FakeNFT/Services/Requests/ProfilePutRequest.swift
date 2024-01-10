@@ -1,12 +1,12 @@
 import Foundation
 
 struct ProfilePutRequest: NetworkRequest {
-    
-    //let dto: Encodable?
+
+    // let dto: Encodable?
     let httpMethod: HttpMethod = .put
-    
+
     let profileModelEditing: ProfileModelEditing
-    
+
     var endpoint: URL? {
         var urlComponents = URLComponents(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
         var components: [URLQueryItem] = []

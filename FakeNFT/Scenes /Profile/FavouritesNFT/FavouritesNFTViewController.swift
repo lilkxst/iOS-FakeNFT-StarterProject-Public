@@ -1,4 +1,3 @@
-
 import UIKit
 
 protocol FavouritesNFTViewControllerProtocol: AnyObject, LoadingView {
@@ -32,7 +31,7 @@ final class FavouritesNFTViewController: UICollectionViewController, FavouritesN
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = NSLocalizedString("FavouritesNFT.CapLabelText", comment: "")
-        label.font = UIFont(name: "SFProText-Bold", size: 17);
+        label.font = UIFont(name: "SFProText-Bold", size: 17)
         label.isHidden = true
         return label
     }()
@@ -43,16 +42,16 @@ final class FavouritesNFTViewController: UICollectionViewController, FavouritesN
         self.presenter = presenter
         self.collectionView.collectionViewLayout = layout
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.register(FavouritesNFTCell.self, forCellWithReuseIdentifier: FavouritesNFTCell.idCell)
         presenter?.view = self
-        
+
         navigationItem.leftBarButtonItem = backButton
         navigationItem.leftBarButtonItem?.tintColor = UIColor.ypBlack
         navigationItem.title = NSLocalizedString("FavouritesNFT.navigationItem.title", comment: "")
@@ -61,7 +60,7 @@ final class FavouritesNFTViewController: UICollectionViewController, FavouritesN
 
         presenter?.viewDidLoad()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         presenter?.viewWillDisappear()
@@ -74,7 +73,7 @@ final class FavouritesNFTViewController: UICollectionViewController, FavouritesN
     func updateUI() {
         collectionView.reloadData()
     }
-    
+
     func removeItem(at row: Int) {
         collectionView.deleteItems(at: [IndexPath(row: row, section: 0)])
     }
@@ -86,7 +85,7 @@ final class FavouritesNFTViewController: UICollectionViewController, FavouritesN
     func hiddenCap() {
         capLabel.isHidden = true
     }
-    
+
     func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
@@ -128,31 +127,28 @@ extension FavouritesNFTViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let minimumInteritemSpacing = 7
         let leftInset = 16
         let rightInset = 16
         let width = (Int(collectionView.bounds.width) - minimumInteritemSpacing - leftInset - rightInset) / 2
         return CGSize(width: width, height: 80)
     }
-    
+
     func collectionView(
             _ collectionView: UICollectionView,
             layout collectionViewLayout: UICollectionViewLayout,
-            minimumLineSpacingForSectionAt section: Int) -> CGFloat
-    {
+            minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 20
     }
-    
+
     func collectionView(
             _ collectionView: UICollectionView,
             layout collectionViewLayout: UICollectionViewLayout,
-            minimumInteritemSpacingForSectionAt section: Int) -> CGFloat
-    {
+            minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 7
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {

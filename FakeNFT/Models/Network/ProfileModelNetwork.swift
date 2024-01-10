@@ -1,6 +1,5 @@
-
 import Foundation
- 
+
 struct ProfileModelNetwork: Codable {
     let id: String
     let name: String

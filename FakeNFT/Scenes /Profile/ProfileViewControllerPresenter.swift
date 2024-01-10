@@ -1,7 +1,6 @@
-
 import Foundation
-  
-protocol ProfileViewControllerPresenterProtocol: AnyObject{
+
+protocol ProfileViewControllerPresenterProtocol: AnyObject {
     var profileModelUI: ProfileModelUI? { get set }
     var delegate: ProfileViewContrillerDelegate? { get set }
     var profileService: ProfileServiceProtocol { get }
@@ -11,30 +10,30 @@ protocol ProfileViewControllerPresenterProtocol: AnyObject{
 }
 
 final class ProfileViewControllerPresenter: ProfileViewControllerPresenterProtocol {
-    
+
     // TODO: Сервер возвращает пустой массив
     private let mockMyIDNFT = ["739e293c-1067-43e5-8f1d-4377e744ddde",
                                "77c9aa30-f07a-4bed-886b-dd41051fade2",
                                "ca34d35a-4507-47d9-9312-5ea7053994c0"]
-    
+
     let profileService: ProfileServiceProtocol
     let servicesAssembly: ServicesAssembly
     weak var delegate: ProfileViewContrillerDelegate?
-    var profileModelUI: ProfileModelUI? = nil
-    
+    var profileModelUI: ProfileModelUI?
+
     init(servicesAssembly: ServicesAssembly) {
         self.profileService = servicesAssembly.profileService
         self.servicesAssembly = servicesAssembly
     }
-    
+
     func fetchProfile() {
         delegate?.showLoading()
-        profileService.getProfile() {[weak self] result in
+        profileService.getProfile {[weak self] result in
             switch result {
             case .success(let profileNetwork):
                 self?.delegate?.hideLoading()
                 self?.convertInUIModel(profileNetworkModel: profileNetwork)
-            case .failure(let error) :
+            case .failure(let error):
                 self?.delegate?.hideLoading()
                 self?.delegate?.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)
             }
@@ -43,8 +42,8 @@ final class ProfileViewControllerPresenter: ProfileViewControllerPresenterProtoc
 
     func convertInUIModel(profileNetworkModel: ProfileModelNetwork) {
         DispatchQueue.global(qos: .utility).async { [weak self] in
-            
-            var imageData: Data? = nil
+
+            var imageData: Data?
             if let urlStr = profileNetworkModel.avatar,
                 let url = URL(string: urlStr) {
                 imageData = try? Data(contentsOf: url)
@@ -56,7 +55,7 @@ final class ProfileViewControllerPresenter: ProfileViewControllerPresenterProtoc
                 urlAvatar: profileNetworkModel.avatar,
                 description: profileNetworkModel.description,
                 website: profileNetworkModel.website,
-                //nfts: profileNetworkModel.nfts,
+                // nfts: profileNetworkModel.nfts,
                 nfts: self?.mockMyIDNFT ?? [],           // TODO:
                 likes: profileNetworkModel.likes
             )

@@ -1,4 +1,3 @@
-
 import Foundation
 
 protocol FavouritesNFTPresenterProtocol: AnyObject {
@@ -6,25 +5,25 @@ protocol FavouritesNFTPresenterProtocol: AnyObject {
     var view: FavouritesNFTViewControllerProtocol? { get set }
     var nfts: [Nft] { get }
     var nftsID: Set<String> { get }
-    var completionHandler: (([String]) -> ())? { get set }
+    var completionHandler: (([String]) -> Void)? { get set }
     func viewDidLoad()
     func removeNftFromLikes(withId id: String)
     func viewWillDisappear()
 }
 
 final class FavouritesNFTPresenter: FavouritesNFTPresenterProtocol {
-    
+
     let servicesAssembly: ServicesAssembly
     var nfts: [Nft] = []
     var nftsID: Set<String>
-    var completionHandler: (([String]) -> ())?
+    var completionHandler: (([String]) -> Void)?
     weak var view: FavouritesNFTViewControllerProtocol?
-    
+
     init(servicesAssembly: ServicesAssembly, nftsID: [String]) {
         self.servicesAssembly = servicesAssembly
         self.nftsID = Set(nftsID)
     }
-    
+
     func viewDidLoad() {
         if nftsID.count > 0 {
             loadNfts()
@@ -32,11 +31,11 @@ final class FavouritesNFTPresenter: FavouritesNFTPresenterProtocol {
             view?.showCap()
         }
     }
-    
+
     func viewWillDisappear() {
         completionHandler?(Array(nftsID))
     }
-    
+
     private func loadNfts() {
         view?.showLoading()
         var nftsIDCount = nftsID.count
@@ -60,12 +59,12 @@ final class FavouritesNFTPresenter: FavouritesNFTPresenterProtocol {
                         self.nfts.count > 0 ? self.view?.hiddenCap() : self.view?.showCap()
                         self.view?.updateUI()
                     }
-                    view?.showAlert(title: "Ошибка при получении NFT по id", message: "По id \(id) не удалось получить NFT  по причине \(error)")
+                    self.view?.showAlert(title: "Ошибка при получении NFT по id", message: "По id \(id) не удалось получить NFT  по причине \(error)")
                 }
             }
         }
     }
-    
+
     func removeNftFromLikes(withId id: String) {
         for index in 0..<nfts.count {
             if nfts[index].id == id {
@@ -79,5 +78,5 @@ final class FavouritesNFTPresenter: FavouritesNFTPresenterProtocol {
             view?.showCap()
         }
     }
-    
+
 }

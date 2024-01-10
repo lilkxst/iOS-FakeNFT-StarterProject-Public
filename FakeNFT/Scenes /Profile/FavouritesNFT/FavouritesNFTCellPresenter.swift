@@ -1,4 +1,3 @@
-
 import Foundation
 
 protocol FavouritesNFTCellPresenterProtocol: AnyObject {
@@ -10,26 +9,25 @@ protocol FavouritesNFTCellPresenterProtocol: AnyObject {
 }
 
 final class FavouritesNFTCellPresenter: FavouritesNFTCellPresenterProtocol {
-    
+
     let nft: Nft?
     weak var view: FavouritesNFTCellProtocol?
     weak var delegate: FavouritesNFTViewControllerProtocol?
     let servicesAssembly: ServicesAssembly?
-    
+
     init(nft: Nft?,
          view: FavouritesNFTCellProtocol?,
-         servicesAssembly: ServicesAssembly?)
-    {
+         servicesAssembly: ServicesAssembly?) {
         self.nft = nft
         self.view = view
         self.servicesAssembly = servicesAssembly
     }
-    
+
     func loadImage() {
         let url = nft?.images.first
         guard let url else { return }
         view?.showLoading()
-        URLSession.shared.dataTask(with: URLRequest(url: url)) { [weak self] data, response, error in
+        URLSession.shared.dataTask(with: URLRequest(url: url)) { [weak self] data, _, error in
             guard let data = data, error == nil else { return }
             DispatchQueue.main.async {
                 guard let self else { return }
@@ -38,7 +36,7 @@ final class FavouritesNFTCellPresenter: FavouritesNFTCellPresenterProtocol {
             }
         }.resume()
     }
-    
+
     func likeButtonDidTapped() {
         view?.unenabledLikeButton()
         view?.showLoading()
@@ -51,7 +49,7 @@ final class FavouritesNFTCellPresenter: FavouritesNFTCellPresenterProtocol {
                 self.view?.enabledLikeButton()
                 self.view?.hideLoading()
                 switch result {
-                case .success(_):
+                case .success:
                     self.delegate?.presenter?.removeNftFromLikes(withId: idLikedNFt)
                 case .failure(let error):
                     self.delegate?.showAlert(title: NSLocalizedString("titleAlertError", comment: ""), message: error.localizedDescription)

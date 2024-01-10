@@ -10,9 +10,9 @@ protocol MyNFTCellView: AnyObject, LoadingView {
 }
 
 final class MyNFTCell: UITableViewCell, MyNFTCellView {
-    
+
     static let cellID = "cellID"
-    
+
     private lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -20,7 +20,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         imageView.clipsToBounds = true
         return imageView
     }()
-    
+
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +28,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         label.numberOfLines = 2
         return label
     }()
-    
+
     private lazy var autorLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -36,13 +36,13 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         label.numberOfLines = 2
         return label
     }()
-    
+
     private lazy var ratingView: RatingView = {
         let view = RatingView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private lazy var centralStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -50,13 +50,13 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         stack.spacing = 4
         return stack
     }()
-    
+
     internal lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
-    
+
     private lazy var priceTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +65,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -73,7 +73,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var priceStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +81,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         stack.spacing = 2
         return stack
     }()
-    
+
     private lazy var stack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -89,7 +89,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         stack.spacing = 20
         return stack
     }()
-    
+
     private lazy var likeButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -98,16 +98,16 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
     }()
 
     var presenter: MyNFTCellPresenterProtocol?
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         iconImageView.image = nil
     }
-    
+
     func configereCell() {
         selectionStyle = .none
         addSubviews()
-        
+
         nameLabel.text = presenter?.nft?.name
         autorLabel.text = "от John Doe" // TODO: Поменять когда сервер начнет отдавать нормальные данные
         ratingView.setRating(rating: presenter?.nft?.rating ?? 0 / 2)
@@ -116,23 +116,23 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         updateLikeImage()
         presenter?.loadImage()
     }
-    
+
     func setImage(data: Data) {
         iconImageView.image = UIImage(data: data)
     }
-    
+
     @objc func likeButtonDidTapped() {
         presenter?.likeButtonDidTapped()
     }
-    
+
     func enabledLikeButton() {
         likeButton.isEnabled = true
     }
-    
+
     func unenabledLikeButton() {
         likeButton.isEnabled = false
     }
-    
+
     func updateLikeImage() {
         var colorLikeButton = UIColor.ypwhiteUniversal
         if presenter?.isLiked() ?? false {
@@ -140,7 +140,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
         }
         likeButton.setImage(UIImage(systemName: "heart.fill")?.withTintColor(colorLikeButton, renderingMode: .alwaysOriginal), for: .normal)
     }
-    
+
     private func addSubviews() {
         contentView.addSubview(iconImageView)
         iconImageView.addSubview(activityIndicator)
@@ -164,7 +164,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
 
             activityIndicator.centerXAnchor.constraint(equalTo: iconImageView.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: iconImageView.centerYAnchor),
-            
+
             likeButton.trailingAnchor.constraint(equalTo: iconImageView.trailingAnchor),
             likeButton.topAnchor.constraint(equalTo: iconImageView.topAnchor),
             likeButton.heightAnchor.constraint(equalToConstant: 42),
@@ -180,7 +180,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
             priceStack.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -39),
             priceStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-        
+
     }
-    
+
 }

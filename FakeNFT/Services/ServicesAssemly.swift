@@ -23,7 +23,7 @@ final class ServicesAssembly {
     func provideNetworkClient() -> NetworkClient {
            return networkClient
        }
-    
+
     var profileService: ProfileServiceProtocol {
         ProfileNetworkService(
             networkClient: networkClient,

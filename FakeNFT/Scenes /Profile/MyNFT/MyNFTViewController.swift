@@ -1,4 +1,3 @@
-
 import UIKit
 
 protocol MyNFTViewControllerProtocol: AnyObject, LoadingView {
@@ -10,9 +9,9 @@ protocol MyNFTViewControllerProtocol: AnyObject, LoadingView {
 }
 
 final class MyNFTViewController: UITableViewController, MyNFTViewControllerProtocol {
-    
+
     var presenter: MyNFTPresenterProtocol?
-    
+
     private lazy var backButton: UIBarButtonItem = {
         let button = UIBarButtonItem()
         button.image = UIImage(systemName: "chevron.backward")
@@ -20,7 +19,7 @@ final class MyNFTViewController: UITableViewController, MyNFTViewControllerProto
         button.target = self
         return button
     }()
-    
+
     private lazy var sortButton: UIBarButtonItem = {
         let button = UIBarButtonItem()
         button.image = UIImage(named: "sortImage")?.withTintColor(UIColor.ypBlack, renderingMode: .alwaysOriginal)
@@ -28,72 +27,72 @@ final class MyNFTViewController: UITableViewController, MyNFTViewControllerProto
         button.target = self
         return button
     }()
-    
+
     private lazy var capLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = NSLocalizedString("myNFT.CapLabelText", comment: "")
-        label.font = UIFont(name: "SFProText-Bold", size: 17);
+        label.font = UIFont(name: "SFProText-Bold", size: 17)
         label.isHidden = true
         return label
     }()
-    
+
     internal lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
-    
+
     init(presenter: MyNFTPresenter) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.view = self
         view.backgroundColor = UIColor.ypWhite
-        
+
         tableView.separatorStyle = .none
         tableView.register(MyNFTCell.self, forCellReuseIdentifier: MyNFTCell.cellID)
-        
+
         navigationItem.leftBarButtonItem = backButton
         navigationItem.leftBarButtonItem?.tintColor = UIColor.ypBlack
         navigationItem.title = NSLocalizedString("myNFT.navigationItem.title", comment: "")
         navigationItem.rightBarButtonItem = sortButton
-        
+
         addSubviews()
-        
+
         presenter?.viewDidLoad()
     }
-    
+
     func showCap() {
         capLabel.isHidden = false
     }
-    
+
     func hiddenCap() {
         capLabel.isHidden = true
     }
-    
+
     func updateUI() {
         tableView.reloadData()
     }
-    
+
     func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         presenter?.nfts.count ?? 0
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MyNFTCell.cellID, for: indexPath) as? MyNFTCell
         else { return UITableViewCell()}
@@ -106,16 +105,16 @@ final class MyNFTViewController: UITableViewController, MyNFTViewControllerProto
         cell.configereCell()
         return cell
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         presenter?.viewWillDisappear()
     }
-    
+
     @objc private func goBack() {
         navigationController?.popViewController(animated: true)
     }
-    
+
     @objc private func sortButtonDidTapped() {
         let alertController = UIAlertController(
             title: NSLocalizedString("sort", comment: ""),
@@ -140,22 +139,22 @@ final class MyNFTViewController: UITableViewController, MyNFTViewControllerProto
             title: NSLocalizedString("close", comment: ""),
             style: .cancel,
             handler: nil)
-        
+
         alertController.addAction(actionByPrice)
         alertController.addAction(actionByRating)
         alertController.addAction(actionByName)
         alertController.addAction(сloseAction)
         present(alertController, animated: true)
     }
-    
+
     private func addSubviews() {
         view.addSubview(capLabel)
         view.addSubview(activityIndicator)
-        
+
         NSLayoutConstraint.activate([
             capLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             capLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            
+
             activityIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
