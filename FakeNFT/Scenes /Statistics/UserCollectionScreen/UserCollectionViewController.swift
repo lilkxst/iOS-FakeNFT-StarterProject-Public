@@ -128,6 +128,7 @@ extension UserCollectionViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - UserCollectionViewProtocol
 extension UserCollectionViewController: UserCollectionViewProtocol {
     func displayError(_ error: Error) {
     }

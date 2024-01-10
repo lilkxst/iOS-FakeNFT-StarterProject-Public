@@ -133,7 +133,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
     }
 
-    @objc func likeButtonTapped() {
+    @objc private func likeButtonTapped() {
         guard let nftId = nftId else { return }
         likeButton.isEnabled = false
         presenter?.toggleLikeStatus(for: nftId) {
@@ -141,12 +141,11 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    @objc func basketButtonTapped() {
+    @objc private func basketButtonTapped() {
         guard let nftId = nftId else { return }
         basketButton.isEnabled = false
         presenter?.toggleCartStatus(for: nftId) {
             self.basketButton.isEnabled = true
         }
     }
-
 }

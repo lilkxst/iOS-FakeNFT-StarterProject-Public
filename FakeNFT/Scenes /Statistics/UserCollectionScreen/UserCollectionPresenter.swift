@@ -27,7 +27,7 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     private var totalNFTsCount = 0
     private var likedNFTsIds: [String] = []
     private var cartNFTsIds: [String] = []
-    weak var view: UserCollectionViewProtocol?
+    private weak var view: UserCollectionViewProtocol?
     var user: User?
 
     init(view: UserCollectionViewProtocol, nftService: NftService) {
@@ -113,12 +113,4 @@ final class UserCollectionPresenter: UserCollectionPresenterProtocol {
     func isNftInCart(_ nftId: String) -> Bool {
         return cartNFTsIds.contains(nftId)
     }
-    func saveLikedNfts() {
-        UserDefaults.standard.set(likedNFTsIds, forKey: "likedNfts")
-    }
-
-    func loadLikedNfts() {
-        likedNFTsIds = UserDefaults.standard.stringArray(forKey: "likedNfts") ?? []
-    }
-
 }
