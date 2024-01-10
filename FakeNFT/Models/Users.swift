@@ -6,6 +6,7 @@ struct User: Decodable {
     let description: String
     let website: String
     let nfts: [String]
-    let rating: String
+    let rating: String?
+    let likes: [String]?
     let id: String
 }

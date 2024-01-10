@@ -6,10 +6,22 @@
 //
 
 import UIKit
+import SafariServices
 
-final class UserInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class UserInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UserInfoViewProtocol {
 
+    private let servicesAssembly: ServicesAssembly
     var user: User?
+    var presenter: UserInfoPresenter?
+
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
@@ -60,8 +72,12 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-
-        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        presenter?.viewDidLoad()
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
+            title: "",
+            style: .plain,
+            target: nil,
+            action: nil)
         navigationController?.navigationBar.tintColor = .black
     }
 
@@ -134,7 +150,34 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
     }
 
     @objc private func websiteButtonTapped() {
-
+        if let urlString = user?.website, let url = URL(string: urlString) {
+            let safariViewController = SFSafariViewController(url: url)
+            present(safariViewController, animated: true)
+        }
     }
 
+    func displayUserInfo(_ user: User) {
+        self.user = user
+        nameLabel.text = user.name
+        descriptionLabel.text = user.description
+        if let imageUrl = URL(string: user.avatar) {
+            avatarImageView.kf.setImage(with: imageUrl)
+        }
+        customTableView.reloadData()
+    }
+
+    func displayError(error: Error) {
+        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+}
+
+extension UserInfoViewController {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let userCollectionVC = UserCollectionViewController(servicesAssembly: servicesAssembly)
+        userCollectionVC.user = self.user
+        userCollectionVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(userCollectionVC, animated: true)
+    }
 }

@@ -45,10 +45,12 @@ final class StatisticsViewController: UIViewController, UsersViewProtocol {
            }
 
         presenter?.onUserSelected = { [weak self] user in
-               let userInfoVC = UserInfoViewController()
-               userInfoVC.user = user
-               self?.navigationController?.pushViewController(userInfoVC, animated: true)
-           }
+            if let servicesAssembly = self?.servicesAssembly {
+                let userInfoVC = UserInfoViewController(servicesAssembly: servicesAssembly)
+                userInfoVC.user = user
+                self?.navigationController?.pushViewController(userInfoVC, animated: true)
+            }
+        }
 
     }
 
@@ -134,7 +136,15 @@ final class StatisticsViewController: UIViewController, UsersViewProtocol {
 
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        presenter?.didSelectUser(at: indexPath.row)
+        if let user = presenter?.users[indexPath.row] {
+            let networkClient = servicesAssembly.provideNetworkClient()
+            let userInfoPresenter = UserInfoPresenter(networkClient: networkClient, userId: user.id)
+            let userInfoVC = UserInfoViewController(servicesAssembly: servicesAssembly)
+            userInfoVC.presenter = userInfoPresenter
+            userInfoPresenter.view = userInfoVC
+            userInfoVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(userInfoVC, animated: true)
+        }
     }
 }
 
