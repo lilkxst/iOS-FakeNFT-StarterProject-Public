@@ -12,6 +12,7 @@ final class RatingView: UIView {
     private lazy var starImage: UIImageView = {
         let starImage = UIImageView()
         starImage.backgroundColor = .clear
+        starImage.contentMode = .scaleAspectFit
         return starImage
     }()
 
