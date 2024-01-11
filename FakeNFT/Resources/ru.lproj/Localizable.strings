@@ -9,6 +9,8 @@
 "Cart.paymentButton" = "К оплате";
 "CartCell.price" = "Цена";
 "CartDelete.questionLabel" = "Вы уверены, что хотите удалить объект из корзины?";
+"CartDelete.deleteButton" = "Удалить";
+"CartDelete.returnButton" = "Вернуться";
 "CartFilter.byPrice" = "По цене";
 "CartFilter.byRating" = "По рейтингу";
 "CartFilter.byTitle" = "По названию";
