@@ -114,7 +114,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
             isLiked: service.nftCatalogService.likeState(for: nft.id),
             isInTheBasket: service.nftCatalogService.basketState(for: nft.id),
             rating: nft.rating,
-            url: URL(string: nft.images[0])!
+            url: nft.images[0] 
         )
     }
     
