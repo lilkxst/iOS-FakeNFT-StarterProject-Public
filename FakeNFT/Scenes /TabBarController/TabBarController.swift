@@ -66,6 +66,7 @@ final class TabBarController: UITabBarController {
         viewControllers = [navController]//[profileController, navController, basketController, statisticsController]
         tabBar.isTranslucent = false
         view.backgroundColor = .ypWhite
+        tabBar.barTintColor = .ypWhite
         tabBar.unselectedItemTintColor = .ypBlack
     }
     

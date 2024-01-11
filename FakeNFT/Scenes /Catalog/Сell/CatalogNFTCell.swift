@@ -44,7 +44,7 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
     }()
     
     private var spacerView: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return view
     }()
@@ -64,7 +64,7 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-       contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0))
     }
     
     // MARK: - Functions
@@ -74,12 +74,12 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-
+        
         [nameNFT, countNFT, spacerView].forEach{
             stackViewLabel.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-      
+        
         NSLayoutConstraint.activate([
             imagePreview.heightAnchor.constraint(equalToConstant: 140),
             imagePreview.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
@@ -103,5 +103,5 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
     func setImage(imageURL:URL){
         imagePreview.kf.setImage(with: imageURL)
     }
-   
+    
 }

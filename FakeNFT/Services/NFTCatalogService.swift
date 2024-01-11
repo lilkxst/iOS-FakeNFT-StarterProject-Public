@@ -22,20 +22,24 @@ protocol NftCatalogServiceProtocol {
 }
 
 final class NftCatalogService: NftCatalogServiceProtocol {
-
+    
     private let networkClient: NetworkClient
     private let storage: CatalogStorageProtocol
-
+    
+    // MARK: - Initialization
+    
     init(networkClient: NetworkClient, storage: CatalogStorageProtocol) {
         self.storage = storage
         self.networkClient = networkClient
         loadProfile{ _ in }
         loadOrders { _ in }
     }
-
+    
+    // MARK: - Functions
+    
     func loadNft( completion: @escaping NftCollectionsCompletion) {
-      
-       let request = CollectionsRequest()
+        
+        let request = CollectionsRequest()
         
         networkClient.send(request: request, type: [NFTCollection].self) { result in
             switch result {
@@ -48,8 +52,8 @@ final class NftCatalogService: NftCatalogServiceProtocol {
     }
     
     func loadProfile( completion: @escaping ProfileCompletion) {
-      
-       let request = ProfileRequest()
+        
+        let request = ProfileRequest()
         
         networkClient.send(request: request, type: Profile.self) { [weak self] result in
             switch result {
@@ -69,8 +73,8 @@ final class NftCatalogService: NftCatalogServiceProtocol {
     }
     
     func loadOrders( completion: @escaping OrdersCompletion) {
-      
-       let request = OrdersGetRequest()
+        
+        let request = OrdersGetRequest()
         
         networkClient.send(request: request, type: Orders.self) { [weak self] result in
             switch result {
@@ -104,7 +108,7 @@ final class NftCatalogService: NftCatalogServiceProtocol {
         }
         
         let request = LikeRequest(likes: likes)
-      
+        
         networkClient.send(request: request, type: Profile.self) { [weak self] result in
             switch result {
             case .success(let profile):
@@ -160,11 +164,11 @@ final class NftCatalogService: NftCatalogServiceProtocol {
     }
     
     func likeState(for id:String) -> Bool {
-       storage.getNft(with: id) != nil
+        storage.getNft(with: id) != nil
     }
     
     func basketState(for id:String) -> Bool {
-       storage.finderInOrders(id)
+        storage.finderInOrders(id)
     }
     
 }

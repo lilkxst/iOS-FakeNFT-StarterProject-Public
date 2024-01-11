@@ -6,11 +6,16 @@
 //
 
 import UIKit
+import ProgressHUD
+
 
 protocol NftCollectionView: AnyObject {
     func setup(name: String, cover: String, author: String, description: String)
     func updateCollection()
     func updateCell(indexPath: IndexPath)
+    func showLoadingAlert()
+    func startLoadIndicator()
+    func stopLoadIndicator()
 }
 
 final class CollectionNFTViewController: UIViewController {
@@ -19,6 +24,7 @@ final class CollectionNFTViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     private var presenter: CollectionPresenterProtocol?
+    private let loader = LoaderView()
     private var contentSize: CGSize {
         CGSize(width: view.frame.width, height: presenter?.getContentSize() ?? view.frame.height)
     }
@@ -62,7 +68,7 @@ final class CollectionNFTViewController: UIViewController {
     
     private var authorLable: UILabel = {
         let label = UILabel()
-        label.text = "Автор коллекции:"
+        label.text = NSLocalizedString("author", comment: "")
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         return label
@@ -121,6 +127,7 @@ final class CollectionNFTViewController: UIViewController {
         configNavBar()
         presenter?.view = self
         presenter?.load()
+        presenter?.getNFTs()
     }
     
     // MARK: - Functions
@@ -131,7 +138,8 @@ final class CollectionNFTViewController: UIViewController {
     
     private func configUI() {
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .ypWhite
+        collectionView.backgroundColor = .ypWhite
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -155,6 +163,10 @@ final class CollectionNFTViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        //Добавляем лоадер
+        view.addSubview(loader)
+        loader.constraintCenters(to: view)
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
@@ -254,6 +266,42 @@ extension CollectionNFTViewController: UICollectionViewDelegateFlowLayout {
 //MARK: - NftCollectionView
 
 extension CollectionNFTViewController: NftCollectionView {
+    
+    func showLoadingAlert(){
+        let alert = UIAlertController(
+            title: NSLocalizedString("error", comment: ""),
+            message: NSLocalizedString("alertMessageNFT", comment: ""),
+            preferredStyle: .alert
+        )
+        
+        let repeatAction = UIAlertAction(
+            title: NSLocalizedString("repeat", comment: ""),
+            style: .default
+        ){ [weak self] action in
+            self?.presenter?.getNFTs()
+        }
+        
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("close", comment: ""),
+            style: .cancel
+        )
+        
+        [ repeatAction, cancelAction ].forEach{
+            alert.addAction($0)
+        }
+        
+        alert.preferredAction = cancelAction
+        present(alert, animated: true)
+        
+    }
+    
+    func startLoadIndicator() {
+        loader.showLoading()
+    }
+    
+    func stopLoadIndicator() {
+        loader.hideLoading()
+    }
     
     func updateCell(indexPath: IndexPath) {
         collectionView.reloadItems(at: [indexPath])

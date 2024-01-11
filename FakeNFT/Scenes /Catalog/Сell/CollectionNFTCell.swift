@@ -9,12 +9,14 @@ import UIKit
 
 final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     
+    private var loader = LoaderView()
+    private let currency = "ETH"
     private var id: String?
     var indexPath: IndexPath?
     private var likeState: Bool = false
     var delegate: NftCellDelegate?
     private lazy var imageView: UIImageView = {
-       let img = UIImageView()
+        let img = UIImageView()
         img.image = UIImage(named: "Cover Collection")
         img.layer.cornerRadius = 12
         img.clipsToBounds = true
@@ -30,7 +32,7 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     private var ratingView = RatingView()
     
     private lazy var nameNFTLabel: UILabel = {
-       let label = UILabel()
+        let label = UILabel()
         label.text = "Archie"
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
@@ -38,15 +40,15 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
-         label.text = "1 ETH"
-         label.font = .systemFont(ofSize: 10, weight: .medium)
-         return label
-     }()
+        label.text = "1 ETH"
+        label.font = .systemFont(ofSize: 10, weight: .medium)
+        return label
+    }()
     
     private lazy var basketButton: UIButton = {
-        let btn = UIButton()
+        let btn = UIButton(type: .system)
         btn.setImage(UIImage(named: "Cart"), for: .normal)
-         return btn
+        return btn
     }()
     
     private lazy var stackViewDescription: UIStackView = {
@@ -73,6 +75,8 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Functions
     
     private func configUI(){
+       
+        
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
         basketButton.addTarget(self, action: #selector(didTapBasket), for: .touchUpInside)
         
@@ -85,6 +89,9 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
             stackViewDescription.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        contentView.addSubview(loader)
+        loader.constraintCenters(to: self.contentView )
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -118,10 +125,13 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
         self.id = model.id
         imageView.kf.setImage(with: model.url)
         nameNFTLabel.text = model.nameNFT.components(separatedBy: " ").first
-        priceLabel.text = model.price + " ETH"
+        priceLabel.text = model.price + " " + currency
         ratingView.setStars(with: model.rating)
-        basketButton.setImage(setBasket(isInTheBasket: model.isInTheBasket), for: .normal)
+        basketButton.setImage(setBasket(isInTheBasket: model.isInTheBasket)?.withTintColor(.ypBlack, renderingMode: .alwaysOriginal), for: .normal)
         likeButton.setImage(setLike(isLiked: model.isLiked), for: .normal)
+        likeButton.isEnabled = true
+        basketButton.isEnabled = true
+        loader.hideLoading()
     }
     
     func setLike(isLiked: Bool) -> UIImage? {
@@ -136,12 +146,16 @@ final class CollectionNFTCell: UICollectionViewCell, ReuseIdentifying {
     @objc
     private func didTapLike(){
         guard let indexPath else { return }
+        loader.showLoading()
+        likeButton.isEnabled = false
         delegate?.changeLike(for: indexPath, state: likeState)
     }
     
     @objc
     private func didTapBasket(){
         guard let indexPath else { return }
+        loader.showLoading()
+        basketButton.isEnabled = false
         delegate?.changeOrder(for: indexPath)
     }
 }

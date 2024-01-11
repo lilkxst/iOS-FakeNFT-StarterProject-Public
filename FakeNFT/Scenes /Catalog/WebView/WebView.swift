@@ -30,9 +30,10 @@ final class WebView: UIViewController {
         super.viewDidLoad()
         configUI()
         load()
+        view.backgroundColor = .ypWhite
     }
     
-   private func configUI(){
+    private func configUI(){
         view.addSubview(webView)
         
         NSLayoutConstraint.activate([
