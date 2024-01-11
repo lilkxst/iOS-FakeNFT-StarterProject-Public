@@ -61,7 +61,7 @@ final class NftCatalogService: NftCatalogServiceProtocol {
                 //Проверяем не пустой ли массив лайков
                 if !profile.likes.isEmpty{
                     //Сохраняем массив лайков пользователя
-                    profile.likes[0].components(separatedBy: ",").forEach{
+                    profile.likes.forEach{
                         self?.storage.saveNft($0)
                     }
                 }
@@ -84,7 +84,7 @@ final class NftCatalogService: NftCatalogServiceProtocol {
                 //Сохраняем nft в заказе
                 if !orders.nfts.isEmpty{
                     //Сохраняем массив nft пользователя
-                    orders.nfts[0].components(separatedBy: ",").forEach{
+                    orders.nfts.forEach{
                         self?.storage.saveOrders($0)
                     }
                 }
@@ -114,11 +114,10 @@ final class NftCatalogService: NftCatalogServiceProtocol {
             case .success(let profile):
                 //очищаем старый массив
                 self?.storage.likes.removeAll()
-                
                 // сохранить новый массив лайков
                 if !profile.likes.isEmpty{
                     //Сохраняем массив nft пользователя
-                    profile.likes[0].components(separatedBy: ",").forEach{
+                    profile.likes.forEach{
                         self?.storage.saveNft($0)
                     }
                 }
@@ -152,7 +151,7 @@ final class NftCatalogService: NftCatalogServiceProtocol {
                 //Сохраняем nft в заказе
                 if !orders.nfts.isEmpty{
                     //Сохраняем массив nft пользователя
-                    orders.nfts[0].components(separatedBy: ",").forEach{
+                    orders.nfts.forEach{
                         self?.storage.saveOrders($0)
                     }
                 }

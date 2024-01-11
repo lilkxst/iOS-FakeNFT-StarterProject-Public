@@ -60,7 +60,7 @@ struct OrdersPutRequest: NetworkRequest {
                     
                     //Проверяем на разделитель
                     if index != orders.count-1 {
-                        ordersString += ","
+                        ordersString += "&\(CatalogRequestConstants.orders)="
                     }
                 }
             }
@@ -104,10 +104,11 @@ struct LikeRequest: NetworkRequest {
                 
                 //Проверяем на разделитель
                 if index != likes.count-1 {
-                    likeString += ","
+                    likeString += "&\(CatalogRequestConstants.likes)="
                 }
             }
         }
+        print(likeString)
         return likeString
     }
     

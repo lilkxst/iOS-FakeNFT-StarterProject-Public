@@ -31,6 +31,7 @@ final class CatalogStorage: CatalogStorageProtocol {
     func saveNft(_ nft: String) {
         syncQueue.async { [weak self] in
             self?.likes.insert(nft)
+            print("id - \(nft)")
         }
     }
     
@@ -49,6 +50,7 @@ final class CatalogStorage: CatalogStorageProtocol {
     func saveOrderId(orderId: String){
         syncQueue.async { [weak self] in
             self?.orderId = orderId
+            print("id - \(orderId)")
         }
     }
     
