@@ -8,7 +8,14 @@
 import UIKit
 import Kingfisher
 
+protocol CartTableViewCellDelegate: AnyObject {
+    func didTapDeleteButton(id: String, image: UIImage)
+}
+
 final class CartTableViewCell: UITableViewCell {
+    
+    weak var delegate: CartTableViewCellDelegate?
+    private var id: String?
     
     private lazy var fieldView: UIView = {
         let fieldView = UIView()
@@ -49,6 +56,7 @@ final class CartTableViewCell: UITableViewCell {
     private lazy var deleteButton: UIButton = {
         let deleteButton = UIButton()
         deleteButton.setImage(UIImage(named: "DeleteFromCart"), for: .normal)
+        deleteButton.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         return deleteButton
     }()
     
@@ -111,5 +119,12 @@ final class CartTableViewCell: UITableViewCell {
         imageNft.kf.setImage(with: URL(string: model.images[0]))
         ratingView.setRating(rating: model.rating)
         priceValue.text = "\(model.price) ETH"
+        self.id = model.id
+    }
+    
+    @objc private func didTapDeleteButton() {
+        guard let id = self.id else { return }
+        guard let image = imageNft.image else { return }
+        delegate?.didTapDeleteButton(id: id, image: image)
     }
 }

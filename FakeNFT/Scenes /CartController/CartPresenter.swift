@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol CartPresenterProtocol {
     func totalPrice() -> Float
@@ -14,13 +15,25 @@ protocol CartPresenterProtocol {
     func getNftById(id: String)
     func setOrder()
     func getModel(indexPath: IndexPath) -> NftDataModel
+    func sortCart(filter: CartFilter.FilterBy)
 }
 
 final class CartPresenter: CartPresenterProtocol {
     
-    private var viewController: CartViewControllerProtocol?
+    private weak var viewController: CartViewControllerProtocol?
     private var orderService: OrderService?
     private var nftByIdService: NftByIdService?
+    private var userDefaults = UserDefaults.standard
+    private let filterKey = "filter"
+    private var currentFilter: CartFilter.FilterBy {
+        get {
+            let id = userDefaults.integer(forKey: filterKey)
+            return CartFilter.FilterBy(rawValue: id) ?? .id
+        }
+        set {
+            userDefaults.setValue(newValue.rawValue, forKey: filterKey)
+        }
+    }
     
     var cartContent: [NftDataModel] = []
     var orderIds: [String] = []
@@ -54,9 +67,13 @@ final class CartPresenter: CartPresenterProtocol {
                 switch result {
                 case .success(let order):
                     self.order = order
-                    self.orderIds = order.nfts
-                    for nftsIds in self.orderIds {
-                        self.getNftById(id: nftsIds)
+                    if !order.nfts.isEmpty {
+                        order.nfts[0].components(separatedBy: ",").forEach { data in
+                            self.orderIds.append(data)
+                        }
+                        for nftsIds in self.orderIds {
+                            self.getNftById(id: nftsIds)
+                        }
                     }
                 case .failure(let error):
                     print(error)
@@ -90,5 +107,10 @@ final class CartPresenter: CartPresenterProtocol {
     func getModel(indexPath: IndexPath) -> NftDataModel {
         let model = cartContent[indexPath.row]
         return model
+    }
+    
+    func sortCart(filter: CartFilter.FilterBy) {
+        currentFilter = filter
+        cartContent = cartContent.sorted(by: CartFilter.filter[currentFilter] ?? CartFilter.filterById)
     }
 }
