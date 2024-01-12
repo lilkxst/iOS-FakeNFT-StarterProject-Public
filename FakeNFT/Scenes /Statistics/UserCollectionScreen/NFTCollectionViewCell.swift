@@ -127,7 +127,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         basketButton.setImage(UIImage(named: basketImageName), for: .normal)
         nameLabel.text = nft.name
         priceLabel.text = "\(nft.price) ETN"
-        ratingView.setRating(rating: nft.rating)
+        ratingView.setStars(with: nft.rating)
 
     }
 

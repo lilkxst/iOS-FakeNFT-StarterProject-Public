@@ -12,6 +12,7 @@ protocol NetworkRequest {
     var httpMethod: HttpMethod { get }
     var dto: Encodable? { get }
     var token: String? { get }
+    var body: Data? { get }
 }
 
 // default values
@@ -19,4 +20,5 @@ extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Encodable? { nil }
     var token: String? { Tokens.toketForAPIYP }
+    var body: Data? { nil }
 }

@@ -105,13 +105,23 @@ final class StatisticsViewController: UIViewController, UsersViewProtocol {
     }
 
     @objc private func filterTapped() {
-        let alertController = UIAlertController(title: nil, message: "Сортировка", preferredStyle: .actionSheet)
+        let alertController = UIAlertController(
+            title: nil,
+            message: NSLocalizedString("sort", comment: ""),
+            preferredStyle: .actionSheet
+        )
 
-        let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
+        let sortByRatingAction = UIAlertAction(
+            title: NSLocalizedString("byRating", comment: ""),
+            style: .default
+        ) { [weak self] _ in
             self?.presenter?.changeSortType(.rating)
         }
 
-        let sortAlphabeticallyAction = UIAlertAction(title: "По алфавиту", style: .default) { [weak self] _ in
+        let sortAlphabeticallyAction = UIAlertAction(
+            title: NSLocalizedString("byName", comment: ""),
+            style: .default
+        ) { [weak self] _ in
             self?.presenter?.changeSortType(.alphabetical)
         }
 

@@ -75,7 +75,7 @@ final class FavouritesNFTCell: UICollectionViewCell, FavouritesNFTCellProtocol {
         likeButton.setImage(UIImage(systemName: "heart.fill")?.withTintColor(UIColor.ypRedUniversal, renderingMode: .alwaysOriginal), for: .normal)
         nameLabel.text = presenter?.nft?.name
 
-        ratingView.setRating(rating: presenter?.nft?.rating ?? 0 / 2)
+        ratingView.setStars(with: presenter?.nft?.rating ?? 0)
         priceLabel.text = "\(presenter?.nft?.price ?? 0) ETN"
 
         presenter?.loadImage()

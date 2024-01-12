@@ -2,7 +2,7 @@ import Foundation
 
 struct UsersRequest: NetworkRequest {
     var endpoint: URL? {
-        var components = URLComponents(string: "\(RequestConstants.baseURL)/api/v1/users")
+        var components = URLComponents(string: "https://\(RequestConstants.baseURL)/api/v1/users")
         components?.queryItems = [
             URLQueryItem(name: "sortBy", value: "rating"),
             URLQueryItem(name: "order", value: "desc")
@@ -15,27 +15,20 @@ struct UserProfileRequest: NetworkRequest {
     let userId: String
 
     var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/users/\(userId)")
+        URL(string: "https://\(RequestConstants.baseURL)/api/v1/users/\(userId)")
     }
 }
 
 struct NFTsRequest: NetworkRequest {
     var endpoint: URL? {
-        return URL(string: "\(RequestConstants.baseURL)/api/v1/nft")
+        return URL(string: "https://\(RequestConstants.baseURL)/api/v1/nft")
     }
 }
-struct NFTRequest: NetworkRequest {
 
-    let id: String
-
-    var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/nft/\(id)")
-    }
-}
 struct CurrencyRequest: NetworkRequest {
     let currencyId: String
 
     var endpoint: URL? {
-        return URL(string: "\(RequestConstants.baseURL)/api/v1/currencies/\(currencyId)")
+        return URL(string: "https://\(RequestConstants.baseURL)/api/v1/currencies/\(currencyId)")
     }
 }

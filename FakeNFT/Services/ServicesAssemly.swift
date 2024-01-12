@@ -3,15 +3,18 @@ final class ServicesAssembly {
     private let networkClient: NetworkClient
     private let nftStorage: NftStorage
     private let profileStorage: ProfileStorage
+    private let catalogStorage: CatalogStorageProtocol
 
     init(
         networkClient: NetworkClient,
         nftStorage: NftStorage,
-        profileStorage: ProfileStorage
+        profileStorage: ProfileStorage,
+        catalogStorage: CatalogStorageProtocol
     ) {
         self.networkClient = networkClient
         self.nftStorage = nftStorage
         self.profileStorage = profileStorage
+        self.catalogStorage = catalogStorage
     }
 
     var nftService: NftService {
@@ -20,6 +23,7 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+
     func provideNetworkClient() -> NetworkClient {
            return networkClient
        }
@@ -30,4 +34,12 @@ final class ServicesAssembly {
             profileStorage: profileStorage
         )
     }
+    
+    var nftCatalogService: NftCatalogServiceProtocol {
+        NftCatalogService(
+            networkClient: networkClient,
+            storage: catalogStorage
+        )
+    }
+
 }

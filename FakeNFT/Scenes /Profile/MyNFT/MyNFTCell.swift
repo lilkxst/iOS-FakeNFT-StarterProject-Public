@@ -110,7 +110,7 @@ final class MyNFTCell: UITableViewCell, MyNFTCellView {
 
         nameLabel.text = presenter?.nft?.name
         autorLabel.text = "от John Doe" // TODO: Поменять когда сервер начнет отдавать нормальные данные
-        ratingView.setRating(rating: presenter?.nft?.rating ?? 0 / 2)
+        ratingView.setStars(with: presenter?.nft?.rating ?? 0 )
         priceLabel.text = "\(presenter?.nft?.price ?? 0) ETN"
 
         updateLikeImage()

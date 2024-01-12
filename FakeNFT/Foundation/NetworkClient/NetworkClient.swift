@@ -117,6 +117,7 @@ struct DefaultNetworkClient: NetworkClient {
 
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
+
         if let dto = request.dto,
            let dtoEncoded = try? encoder.encode(dto) {
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -128,6 +129,12 @@ struct DefaultNetworkClient: NetworkClient {
         if let token = request.token {
             urlRequest.setValue(token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         }
+
+        if let body = request.body {
+            // Для запросов эпика Каталог
+            urlRequest.httpBody = body
+        }
+
         return urlRequest
     }
 
