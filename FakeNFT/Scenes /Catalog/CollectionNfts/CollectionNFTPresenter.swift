@@ -30,7 +30,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
         return formatter
     }()
     var collection: NFTCollection?
-    var profile: Profile?
+    var profile: ProfileModelNetwork?
     var nfts: [Nft] = []
 
     // MARK: - Init

@@ -24,8 +24,41 @@ final class ProfileViewControllerPresenter: ProfileViewControllerPresenterProtoc
     init(servicesAssembly: ServicesAssembly) {
         self.profileService = servicesAssembly.profileService
         self.servicesAssembly = servicesAssembly
+        addObserver()
     }
+    
+    deinit{
+        removeObserver()
+    }
+    
 
+    func addObserver(){
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateProfile(notification:)),
+            name: CatalogStorage.DidChangeProfileNotification,
+            object: nil
+        )
+        
+    }
+    
+    func removeObserver(){
+        NotificationCenter.default.removeObserver(
+                    self,
+                    name: CatalogStorage.DidChangeProfileNotification,
+                    object: nil)
+    }
+    
+    @objc
+    func updateProfile(notification: Notification){
+        
+        guard
+                   let userInfo = notification.userInfo,
+                   let profile = userInfo["Profile"] as? ProfileModelNetwork
+               else { return }
+        convertInUIModel(profileNetworkModel: profile)
+    }
+    
     func fetchProfile() {
         delegate?.showLoading()
         profileService.getProfile {[weak self] result in

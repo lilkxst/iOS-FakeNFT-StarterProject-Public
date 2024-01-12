@@ -10,9 +10,9 @@ protocol ProfileServiceProtocol {
 final class ProfileNetworkService: ProfileServiceProtocol {
 
     private let networkClient: NetworkClient
-    private let profileStorage: ProfileStorage
+    private let profileStorage: ProfileStorageProtocol
 
-    init(networkClient: NetworkClient, profileStorage: ProfileStorage) {
+    init(networkClient: NetworkClient, profileStorage: ProfileStorageProtocol) {
         self.networkClient = networkClient
         self.profileStorage = profileStorage
     }

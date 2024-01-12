@@ -8,7 +8,7 @@
 import Foundation
 
 typealias NftCollectionsCompletion = (Result< [NFTCollection], Error>) -> Void
-typealias ProfileCatCompletion = (Result< Profile, Error>) -> Void
+typealias ProfileCatCompletion = (Result< ProfileModelNetwork, Error>) -> Void
 typealias OrdersCompletion = (Result< Orders, Error>) -> Void
 
 protocol NftCatalogServiceProtocol {
@@ -24,7 +24,7 @@ protocol NftCatalogServiceProtocol {
 final class NftCatalogService: NftCatalogServiceProtocol {
 
     private let networkClient: NetworkClient
-    private let storage: CatalogStorageProtocol
+    private let storage: CatalogStorageProtocol 
 
     // MARK: - Initialization
 
@@ -55,7 +55,7 @@ final class NftCatalogService: NftCatalogServiceProtocol {
 
         let request = ProfileRequest()
 
-        networkClient.send(request: request, type: Profile.self) { [weak self] result in
+        networkClient.send(request: request, type: ProfileModelNetwork.self) { [weak self] result in
             switch result {
             case .success(let profile):
                 // Проверяем не пустой ли массив лайков
@@ -97,7 +97,6 @@ final class NftCatalogService: NftCatalogServiceProtocol {
 
     func setLike(id: String, completion: @escaping ProfileCatCompletion) {
         var likes = storage.likes
-
         // Проверка на наличие nft во множестве лайков
         if let _ = storage.getNft(with: id) {
             // нужно удалить nft, убираем лайк
@@ -109,16 +108,18 @@ final class NftCatalogService: NftCatalogServiceProtocol {
 
         let request = LikeRequest(likes: likes)
 
-        networkClient.send(request: request, type: Profile.self) { [weak self] result in
+        networkClient.send(request: request, type: ProfileModelNetwork.self) { [weak storage] result in
             switch result {
             case .success(let profile):
+                //Сохраняем профайл новый
+               CatalogStorage.shared.saveProfile(profile)
                 // очищаем старый массив
-                self?.storage.likes.removeAll()
+                storage?.likes.removeAll()
                 // сохранить новый массив лайков
                 if !profile.likes.isEmpty {
                     // Сохраняем массив nft пользователя
                     profile.likes.forEach {
-                        self?.storage.saveNft($0)
+                        storage?.saveNft($0)
                     }
                 }
                 completion(.success(profile))
@@ -141,18 +142,18 @@ final class NftCatalogService: NftCatalogServiceProtocol {
 
         let request = OrdersPutRequest(id: storage.orderId ?? "", orders: orders)
 
-        networkClient.send(request: request, type: Orders.self) { [weak self] result in
+        networkClient.send(request: request, type: Orders.self) { [weak storage] result in
             switch result {
             case .success(let orders):
                 // Сохраняем id заказа
-                self?.storage.saveOrderId(orderId: orders.id)
+                storage?.saveOrderId(orderId: orders.id)
                 // очищаем старый заказ
-                self?.storage.orders.removeAll()
+                storage?.orders.removeAll()
                 // Сохраняем nft в заказе
                 if !orders.nfts.isEmpty {
                     // Сохраняем массив nft пользователя
                     orders.nfts.forEach {
-                        self?.storage.saveOrders($0)
+                        storage?.saveOrders($0)
                     }
                 }
                 completion(.success(orders))

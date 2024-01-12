@@ -21,9 +21,20 @@ protocol CatalogStorageProtocol: AnyObject {
 }
 
 final class CatalogStorage: CatalogStorageProtocol {
+    
+    static var shared = CatalogStorage()
     var likes: Set<String> = []
     var orders: Set<String> = []
     var orderId: String?
+    static let DidChangeProfileNotification = Notification.Name(rawValue: "ProfileDidChange")
+    private var profile: ProfileModelNetwork? {
+        didSet{
+            NotificationCenter.default.post(
+                name: CatalogStorage.DidChangeProfileNotification,
+                object: self,
+                userInfo: ["Profile" : profile ])
+        }
+    }
 
     private let syncQueue = DispatchQueue(label: "sync-nft-queue")
 
@@ -66,5 +77,22 @@ final class CatalogStorage: CatalogStorageProtocol {
     func finderInOrders(_ nft: String) -> Bool {
         orders.contains(nft)
     }
+    
 
+}
+
+extension CatalogStorage: ProfileStorageProtocol {
+    
+    func saveProfile(_ profile: ProfileModelNetwork) {
+        syncQueue.async { [weak self] in
+            self?.profile = profile
+        }
+    }
+
+    func getProfile() -> ProfileModelNetwork? {
+        syncQueue.sync { [weak self] in
+            return self?.profile
+        }
+    }
+    
 }
