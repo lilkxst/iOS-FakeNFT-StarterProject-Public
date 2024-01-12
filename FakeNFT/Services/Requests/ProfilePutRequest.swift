@@ -8,7 +8,7 @@ struct ProfilePutRequest: NetworkRequest {
     let profileModelEditing: ProfileModelEditing
 
     var endpoint: URL? {
-        var urlComponents = URLComponents(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
+        var urlComponents = URLComponents(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1")
         var components: [URLQueryItem] = []
         if let name = profileModelEditing.name {
             components.append(URLQueryItem(name: "name", value: name))
