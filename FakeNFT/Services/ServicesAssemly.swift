@@ -34,7 +34,7 @@ final class ServicesAssembly {
             profileStorage: profileStorage
         )
     }
-    
+
     var nftCatalogService: NftCatalogServiceProtocol {
         NftCatalogService(
             networkClient: networkClient,

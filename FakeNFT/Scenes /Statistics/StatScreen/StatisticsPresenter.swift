@@ -88,13 +88,24 @@ final class UsersPresenter: UsersPresenterProtocol {
         switch sortType {
         case .rating:
             users.sort {
-                let rating1 = Int($0.rating ?? "0") ?? 0
-                let rating2 = Int($1.rating ?? "0") ?? 0
+                let rating1 = convertRating($0.rating)
+                let rating2 = convertRating($1.rating)
                 return rating1 > rating2
             }
         case .alphabetical:
             users.sort { $0.name < $1.name }
         }
+    }
+
+    private func convertRating(_ ratingString: String?) -> Double {
+        if let ratingString = ratingString {
+            if let ratingInt = Int(ratingString) {
+                return Double(ratingInt)
+            } else if let ratingDouble = Double(ratingString) {
+                return ratingDouble
+            }
+        }
+        return 0.0
     }
 
 }

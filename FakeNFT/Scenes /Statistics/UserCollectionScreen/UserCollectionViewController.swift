@@ -41,7 +41,7 @@ final class UserCollectionViewController: UIViewController {
         setupCollectionView()
         presenter = UserCollectionPresenter(view: self, nftService: servicesAssembly.nftService)
         presenter?.viewDidLoad()
-        self.navigationItem.title = "Коллекция NFT"
+        self.navigationItem.title = NSLocalizedString("NftCollectionTitle", comment: "")
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
             title: "",
             style: .plain,

@@ -8,7 +8,7 @@
 import UIKit
 
 final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
-    
+
     private var imagePreview: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "Cover Collection")
@@ -16,7 +16,7 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
         view.clipsToBounds = true
         return view
     }()
-    
+
     let stackViewLabel: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
@@ -25,8 +25,7 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
         sv.distribution = .fill
         return sv
     }()
-    
-    
+
     private var nameNFT: UILabel = {
         let label = UILabel()
         label.text = "Peach"
@@ -34,7 +33,7 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         return label
     }()
-    
+
     private var countNFT: UILabel = {
         let label = UILabel()
         label.text = "(11)"
@@ -42,50 +41,48 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         return label
     }()
-    
+
     private var spacerView: UIView = {
         let view = UIView()
         view.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return view
     }()
-    
-    
+
     // MARK: - Initialization
-    
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0))
     }
-    
+
     // MARK: - Functions
-    
-    private func configUI(){
-        [imagePreview,stackViewLabel].forEach{
+
+    private func configUI() {
+        [imagePreview, stackViewLabel].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
-        [nameNFT, countNFT, spacerView].forEach{
+
+        [nameNFT, countNFT, spacerView].forEach {
             stackViewLabel.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+
         NSLayoutConstraint.activate([
             imagePreview.heightAnchor.constraint(equalToConstant: 140),
             imagePreview.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             imagePreview.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
             imagePreview.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
-            
+
             stackViewLabel.heightAnchor.constraint(equalToConstant: 22),
             stackViewLabel.topAnchor.constraint(equalTo: imagePreview.bottomAnchor, constant: 4),
             stackViewLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -13),
@@ -93,15 +90,15 @@ final class CatalogNFTCell: UITableViewCell, ReuseIdentifying {
             stackViewLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0)
         ])
     }
-    
-    func config(with model: CatalogNFTCellViewModel){
+
+    func config(with model: CatalogNFTCellViewModel) {
         setImage(imageURL: model.url)
         nameNFT.text = model.nameNFT
         countNFT.text = "(\(model.countNFT))"
     }
-    
-    func setImage(imageURL:URL){
+
+    func setImage(imageURL: URL) {
         imagePreview.kf.setImage(with: imageURL)
     }
-    
+
 }

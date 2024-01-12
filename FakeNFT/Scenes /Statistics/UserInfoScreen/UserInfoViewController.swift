@@ -49,7 +49,7 @@ final class UserInfoViewController: UIViewController, UITableViewDelegate, UITab
     private lazy var websiteButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Перейти на сайт пользователя", for: .normal)
+        button.setTitle(NSLocalizedString("site", comment: ""), for: .normal)
         button.addTarget(self, action: #selector(websiteButtonTapped), for: .touchUpInside)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)

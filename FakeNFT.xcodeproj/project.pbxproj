@@ -93,6 +93,7 @@
 		CC2FA2592B39EA4A004EFA33 /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */; };
 		CC2FA25B2B39EB12004EFA33 /* UserInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */; };
 		CC2FA25D2B3CA575004EFA33 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2FA25C2B3CA575004EFA33 /* CustomTableViewCell.swift */; };
+		CC64C8E62B514769000D7363 /* READMEStatmd.md in Resources */ = {isa = PBXBuildFile; fileRef = CC64C8E52B514769000D7363 /* READMEStatmd.md */; };
 		CCD998BC2B2A1E3E002B9621 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */; };
 		CCD998C02B2A2159002B9621 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998BF2B2A2159002B9621 /* Users.swift */; };
 		CCD998C32B2A2341002B9621 /* StatisticsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */; };
@@ -208,6 +209,7 @@
 		CC2FA2582B39EA4A004EFA33 /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
 		CC2FA25A2B39EB12004EFA33 /* UserInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoPresenter.swift; sourceTree = "<group>"; };
 		CC2FA25C2B3CA575004EFA33 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		CC64C8E52B514769000D7363 /* READMEStatmd.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = READMEStatmd.md; sourceTree = "<group>"; };
 		CCD998BB2B2A1E3E002B9621 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		CCD998BF2B2A2159002B9621 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		CCD998C22B2A2341002B9621 /* StatisticsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsPresenter.swift; sourceTree = "<group>"; };
@@ -622,11 +624,20 @@
 		CC16F3862B36DB8800B2C8B7 /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
+				CC64C8E42B514745000D7363 /* Readme */,
 				CC0260D12B4ACFD100C5AE7F /* UserCollectionScreen */,
 				CC0260D02B4ACFB800C5AE7F /* UserInfoScreen */,
 				CC0260CF2B4ACF8900C5AE7F /* StatScreen */,
 			);
 			path = Statistics;
+			sourceTree = "<group>";
+		};
+		CC64C8E42B514745000D7363 /* Readme */ = {
+			isa = PBXGroup;
+			children = (
+				CC64C8E52B514769000D7363 /* READMEStatmd.md */,
+			);
+			path = Readme;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
@@ -774,6 +785,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC64C8E62B514769000D7363 /* READMEStatmd.md in Resources */,
 				3F6806A329CBBAF200B4F915 /* LaunchScreen.storyboard in Resources */,
 				1C647BB82B3B615200A9FE0F /* SFProText-Regular.ttf in Resources */,
 				1C172A2A2B287B2D00EA1425 /* Localizable.strings in Resources */,

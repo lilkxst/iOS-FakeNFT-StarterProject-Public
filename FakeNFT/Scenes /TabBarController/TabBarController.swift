@@ -40,28 +40,28 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let servicesAssembly else { return }
-        
+
         let catalogController = CatalogViewController(
             servicesAssembly: servicesAssembly
         )
         let navController = UINavigationController(rootViewController: catalogController)
         setNavigationController(controller: navController)
         catalogController.tabBarItem = catalogTabBarItem
-        
+
         let profilePresenter = ProfileViewControllerPresenter(servicesAssembly: servicesAssembly)
         let profileController = ProfileViewController(presenter: profilePresenter)
         profileController.tabBarItem = profileTabBarItem
-        
+
         let statisticsController = StatisticsViewController(
             servicesAssembly: servicesAssembly
         )
         statisticsController.tabBarItem = statisticsTabBarItem
-        
+
         let basketController = CatalogViewController(
             servicesAssembly: servicesAssembly
         )
         basketController.tabBarItem = basketTabBarItem
-        
+
         let navProfileController = UINavigationController(rootViewController: profileController)
         let navBasketController = UINavigationController(rootViewController: basketController)
         let navStatisticsController = UINavigationController(rootViewController: statisticsController)
@@ -72,8 +72,8 @@ final class TabBarController: UITabBarController {
         tabBar.barTintColor = .ypWhite
         tabBar.unselectedItemTintColor = .ypBlack
     }
-    
-    func setNavigationController(controller: UINavigationController){
+
+    func setNavigationController(controller: UINavigationController) {
         controller.navigationBar.setBackgroundImage(UIImage(), for: .default)
         controller.navigationBar.shadowImage = UIImage()
         controller.navigationBar.isTranslucent = true

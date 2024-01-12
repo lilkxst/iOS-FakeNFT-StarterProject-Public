@@ -8,7 +8,7 @@
 import UIKit
 
 final class RatingView: UIView {
-  
+
     private lazy var starsStacView: UIStackView = {
        let view = UIStackView()
         view.axis = .horizontal
@@ -36,11 +36,11 @@ final class RatingView: UIView {
             starsStacView.leadingAnchor.constraint(equalTo: leadingAnchor),
             starsStacView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
-        
+
         starsStacView.translatesAutoresizingMaskIntoConstraints = false
     }
-    
-    func setStars(with rating: Int){
+
+    func setStars(with rating: Int) {
         removeAllArrangedSubviews()
         var index = 0
         let stars = Double(rating / 2)
@@ -51,12 +51,12 @@ final class RatingView: UIView {
             index += 1
         } while index < 5
     }
-    
+
     func removeAllArrangedSubviews() {
-        
+
         starsStacView.arrangedSubviews.forEach {
             starsStacView.removeArrangedSubview($0)
         }
     }
-    
+
 }
