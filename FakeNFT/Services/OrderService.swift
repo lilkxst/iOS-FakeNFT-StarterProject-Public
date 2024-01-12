@@ -9,11 +9,14 @@ import Foundation
 
 typealias OrderCompletion = (Result<OrderDataModel, Error>) -> Void
 typealias RemoveOrderCompletion = (Result<[String], Error>) -> Void
+typealias RemoveAllNftCompletion = (Result<Int, Error>) -> Void
 
 protocol OrderService {
+    var orderSorted: NSNotification.Name { get }
     var nftsStorage: [NftDataModel] { get }
     func loadOrder(completion: @escaping OrderCompletion)
     func removeNftFromStorage(id: String, completion: @escaping RemoveOrderCompletion)
+    func removeAllNftFromStorage(completion: @escaping RemoveAllNftCompletion)
 }
 
 final class OrderServiceImpl: OrderService {
@@ -23,6 +26,7 @@ final class OrderServiceImpl: OrderService {
     private let nftByIdService: NftByIdService
     private let nftStorage: NftByIdStorage
     private var idsStorage: [String] = []
+    let orderSorted = Notification.Name("CartUpdated")
     var nftsStorage: [NftDataModel] = []
     
     init(networkClietn: NetworkClient, orderStorage: OrderStorage, nftByIdService: NftByIdService, nftStorage: NftByIdStorage) {
@@ -72,6 +76,25 @@ final class OrderServiceImpl: OrderService {
                     self.idsStorage.removeAll(where: { $0 == id } )
                     self.nftsStorage.removeAll(where: { $0.id == id } )
                     completion(.success(data.nfts))
+                case let .failure(error):
+                    completion(.failure(error))
+                }
+            }
+        }
+        return
+    }
+    
+    func removeAllNftFromStorage(completion: @escaping RemoveAllNftCompletion) {
+        let request = EmptyOrderRequest(nfts: [])
+        
+        networkClient.send(request: request, type: ChangedOrderDataModel.self) { result in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                switch result {
+                case let .success(data):
+                    self.idsStorage.removeAll()
+                    self.nftsStorage.removeAll()
+                    completion(.success(data.nfts.count))
                 case let .failure(error):
                     completion(.failure(error))
                 }

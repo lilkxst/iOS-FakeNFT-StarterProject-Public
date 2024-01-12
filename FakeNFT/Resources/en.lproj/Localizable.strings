@@ -21,3 +21,8 @@
 "Alert.cancel" = "Cancel";
 "PaymentController.title" = "Choose a payment method";
 "PaymentController.pay" = "Pay";
+"SuccessPaymentController.text" = "Success! Payment passed, congratulations on your purchase!";
+"SuccessPaymentController.catalogButton" = "Bacl to catalog";
+"PaymentAlert.title" = "Payment could not be made";
+"PaymentAlert.cancel" = "Cancel";
+"PaymentAlert.repeat" = "Repeat";

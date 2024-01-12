@@ -76,6 +76,8 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         return paymentButton
     }()
     
+    private var loaderView = LoaderView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -104,6 +106,8 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         bottomView.addSubview(totalPriceLabel)
         bottomView.addSubview(paymentButton)
         view.addSubview(placeholderLabel)
+        view.addSubview(loaderView)
+        loaderView.constraintCenters(to: view)
         
         cartTable.translatesAutoresizingMaskIntoConstraints = false
         bottomView.translatesAutoresizingMaskIntoConstraints = false
@@ -157,6 +161,18 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
             bottomView.isHidden = false
             cartTable.reloadData()
         }
+    }
+    
+    func updateCartTable() {
+        cartTable.reloadData()
+    }
+    
+    func startLoadIndicator() {
+        loaderView.showLoading()
+    }
+    
+    func stopLoadIndicator() {
+        loaderView.hideLoading()
     }
     
     @objc private func didTapSortButton() {

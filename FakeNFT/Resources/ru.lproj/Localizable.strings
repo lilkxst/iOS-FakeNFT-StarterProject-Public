@@ -21,3 +21,8 @@
 "Alert.cancel" = "Отменить";
 "PaymentController.title" = "Выберите способ оплаты";
 "PaymentController.pay" = "Оплатить";
+"SuccessPaymentController.text" = "Успех! Оплата прошла, поздравляем с покупкой!";
+"SuccessPaymentController.catalogButton" = "Вернуться в каталог";
+"PaymentAlert.title" = "Не удалось произвести оплату";
+"PaymentAlert.cancel" = "Отмена";
+"PaymentAlert.repeat" = "Повторить";

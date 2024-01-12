@@ -63,12 +63,15 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
             imageFieldView.widthAnchor.constraint(equalToConstant: 36),
             imageFieldView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
             imageFieldView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            
             currencyImage.centerXAnchor.constraint(equalTo: imageFieldView.centerXAnchor),
             currencyImage.centerYAnchor.constraint(equalTo: imageFieldView.centerYAnchor),
             currencyImage.heightAnchor.constraint(equalToConstant: 31.5),
             currencyImage.widthAnchor.constraint(equalToConstant: 31.5),
+            
             currencyNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
             currencyNameLabel.leadingAnchor.constraint(equalTo: imageFieldView.trailingAnchor, constant: 4),
+            
             currencyShortNameLabel.topAnchor.constraint(equalTo: currencyNameLabel.bottomAnchor),
             currencyShortNameLabel.leadingAnchor.constraint(equalTo: currencyNameLabel.leadingAnchor)
         ])
@@ -85,7 +88,6 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         currencyShortNameLabel.text = currency.name
         let image = URL(string: currency.image)
         currencyImage.kf.setImage(with: image, placeholder: UIImage(named: "close"))
-        print("CURRENCY \(currency)")
     }
     
     func selectedCell(wasSelected: Bool) {

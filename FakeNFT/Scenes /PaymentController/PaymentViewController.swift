@@ -7,9 +7,18 @@
 
 import UIKit
 
-final class PaymentViewController: UIViewController {
+protocol PaymentViewControllerProtocol: AnyObject {
+    func updateCurrencyList()
+    func didSelectCurrency(isEnable: Bool)
+    func didPayment(paymentResult: Bool)
+    func startLoadIndicator()
+    func stopLoadIndicator()
+}
+
+final class PaymentViewController: UIViewController, PaymentViewControllerProtocol {
     
     private var presenter: PaymentPresenterProtocol?
+    private let termsUrl = URL(string: "https://yandex.ru/legal/practicum_termsofuse/")
     
     private let servicesAssembly: ServicesAssembly
     
@@ -23,7 +32,7 @@ final class PaymentViewController: UIViewController {
     }
     
     private lazy var currencyList: UICollectionView = {
-        let colletionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+        let colletionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         colletionView.backgroundColor = .ypWhite
         colletionView.allowsMultipleSelection = false
         return colletionView
@@ -40,6 +49,27 @@ final class PaymentViewController: UIViewController {
     
     private lazy var termsTextView: UITextView = {
         let textView = UITextView()
+        
+        let attributedString = NSMutableAttributedString(string: "Совершая покупку, вы соглашаетесь с условиями" + " " + "Пользовательского соглашения")
+        
+
+        let startPosition = "Совершая покупку, вы соглашаетесь с условиями".count + 1
+        let lenOfLink = "Пользовательского соглашения".count
+        attributedString.setAttributes([.font: UIFont.caption2], range: NSMakeRange(0, attributedString.length))
+        attributedString.setAttributes([.link: termsUrl], range: NSMakeRange(startPosition, lenOfLink))
+
+        textView.backgroundColor = .clear
+        textView.attributedText = attributedString
+        textView.isUserInteractionEnabled = true
+        textView.isEditable = false
+        textView.translatesAutoresizingMaskIntoConstraints = false
+
+        textView.linkTextAttributes = [
+            .foregroundColor: UIColor.ypBlueUniversal,
+            .font: UIFont.caption2
+        ]
+        
+        textView.delegate = self
         return textView
     }()
     
@@ -49,14 +79,18 @@ final class PaymentViewController: UIViewController {
         button.layer.masksToBounds = true
         button.backgroundColor = .ypBlack
         button.setTitle(NSLocalizedString("PaymentController.pay", comment: ""), for: .normal)
+        button.addTarget(self, action: #selector(didTapPayButton), for: .touchUpInside)
         return button
     }()
+    
+    private let loaderView = LoaderView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = PaymentPresenter(paymentService: servicesAssembly.paymentService)
+        presenter = PaymentPresenter(paymentController: self, paymentService: servicesAssembly.paymentService, orderService: servicesAssembly.orderService)
         setupViews()
+        currencyList.register(CurrencyCollectionViewCell.self, forCellWithReuseIdentifier: "CurrencyCell")
         currencyList.dataSource = self
         currencyList.delegate = self
         presenter?.getCurrencies()
@@ -72,6 +106,9 @@ final class PaymentViewController: UIViewController {
         view.addSubview(bottomView)
         bottomView.addSubview(termsTextView)
         bottomView.addSubview(paymentButton)
+        paymentButton.isEnabled = false
+        view.addSubview(loaderView)
+        loaderView.constraintCenters(to: view)
         
         NSLayoutConstraint.activate([
             currencyList.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -96,22 +133,69 @@ final class PaymentViewController: UIViewController {
         bottomView.translatesAutoresizingMaskIntoConstraints = false
         termsTextView.translatesAutoresizingMaskIntoConstraints = false
         paymentButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        currencyList.register(CurrencyCollectionViewCell.self, forCellWithReuseIdentifier: "CurrencyCell")
+    }
+    
+    @objc private func didTapPayButton() {
+        presenter?.payOrder()
+    }
+    
+    func updateCurrencyList() {
+        currencyList.reloadData()
+    }
+    
+    func didSelectCurrency(isEnable: Bool) {
+        paymentButton.isEnabled = isEnable
+        paymentButton.backgroundColor = isEnable ? .ypBlack : .ypLightGrey
+    }
+    
+    func didPayment(paymentResult: Bool) {
+        didSelectCurrency(isEnable: true)
+        if paymentResult {
+            let successPayController = SuccessPayController()
+            successPayController.modalPresentationStyle = .fullScreen
+            present(successPayController, animated: true) {
+                    self.navigationController?.popViewController(animated: true)
+                    self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers?[0]
+            }
+        } else {
+            showPaymentError()
+        }
+    }
+    
+    func startLoadIndicator() {
+        loaderView.showLoading()
+    }
+    
+    func stopLoadIndicator() {
+        loaderView.hideLoading()
+    }
+    
+    func showPaymentError() {
+        let alert = UIAlertController(title: "", message: NSLocalizedString("PaymentAlert.title", comment: ""), preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("PaymentAlert.cancel", comment: ""), style: .default) { _ in
+            self.dismiss(animated: true)
+        }
+        let repeatAction = UIAlertAction(title: NSLocalizedString("PaymentAlert.repeat", comment: ""), style: .default) { result in
+            self.presenter?.payOrder()
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(repeatAction)
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
 extension PaymentViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let count = presenter?.count() else { return 0 }
         return count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = currencyList.dequeueReusableCell(withReuseIdentifier: "CurrencyCell", for: indexPath) as? CurrencyCollectionViewCell else { return UICollectionViewCell() }
-        guard let model = presenter?.getModel(indexPath: indexPath) else { return cell }
-        cell.updateCell(currency: model)
-        return cell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CurrencyCell", for: indexPath) as? CurrencyCollectionViewCell else { return UICollectionViewCell() }
+            guard let model = presenter?.getModel(indexPath: indexPath) else { return cell }
+            cell.updateCell(currency: model)
+            return cell
     }
 }
 
@@ -119,6 +203,8 @@ extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = currencyList.cellForItem(at: indexPath) as? CurrencyCollectionViewCell
         cell?.selectedCell(wasSelected: true)
+        didSelectCurrency(isEnable: true)
+        presenter?.selectedCurrency = cell?.currency
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -142,5 +228,14 @@ extension PaymentViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 20, left: 16, bottom: 10, right: 16)
+    }
+}
+
+extension PaymentViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        let termsOfUseVC = WebViewController(url: termsUrl)
+        navigationItem.title = ""
+        navigationController?.pushViewController(termsOfUseVC, animated: true)
+        return false
     }
 }
