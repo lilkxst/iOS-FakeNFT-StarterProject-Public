@@ -19,3 +19,5 @@
 "Alert.title" = "Что-то пошло не так";
 "Alert.again" = "Еще раз";
 "Alert.cancel" = "Отменить";
+"PaymentController.title" = "Выберите способ оплаты";
+"PaymentController.pay" = "Оплатить";

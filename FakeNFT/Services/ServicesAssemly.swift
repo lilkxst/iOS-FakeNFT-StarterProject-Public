@@ -37,4 +37,9 @@ final class ServicesAssembly {
             networkClient: networkClient,
             storage: nftByIdStorage)
     }
+    
+    var paymentService: PaymentService {
+        PaymentServiceImpl(
+            networkClient: networkClient)
+    }
 }

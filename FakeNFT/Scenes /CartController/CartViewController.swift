@@ -72,6 +72,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         paymentButton.setTitleColor(.white, for: .normal)
         paymentButton.titleLabel?.font = .bodyBold
         paymentButton.setTitle(NSLocalizedString("Cart.paymentButton", comment: ""), for: .normal)
+        paymentButton.addTarget(self, action: #selector(didTapPaymentButton), for: .touchUpInside)
         return paymentButton
     }()
     
@@ -183,6 +184,13 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         } ))
         
         self.present(alert, animated: true)
+    }
+    
+    @objc private func didTapPaymentButton() {
+        let paymentController = PaymentViewController(servicesAssembly: servicesAssembly)
+        paymentController.hidesBottomBarWhenPushed = true
+        navigationItem.backButtonTitle = ""
+        navigationController?.pushViewController(paymentController, animated: true)
     }
 }
 

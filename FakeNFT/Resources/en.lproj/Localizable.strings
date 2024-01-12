@@ -19,3 +19,5 @@
 "Alert.title" = "Something went wrong";
 "Alert.again" = "Once again";
 "Alert.cancel" = "Cancel";
+"PaymentController.title" = "Choose a payment method";
+"PaymentController.pay" = "Pay";
