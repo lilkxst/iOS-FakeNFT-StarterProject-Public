@@ -5,7 +5,6 @@
 //  Created by Dolnik Nikolay on 08.01.2024.
 //
 
-import Foundation
 import UIKit
 
 final class LoaderView: UIView, LoadingView {

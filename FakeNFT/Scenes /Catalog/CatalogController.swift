@@ -13,7 +13,7 @@ final class CatalogViewController: UIViewController {
     // MARK: - Properties
 
     private let servicesAssembly: ServicesAssembly
-    private var presenter: CatalogPresenterProtocol?
+    private var presenter: CatalogPresenterProtocol
     private let loader = LoaderView()
     private let tableView: UITableView = {
         let table = UITableView()
@@ -48,8 +48,8 @@ final class CatalogViewController: UIViewController {
         view.backgroundColor = .systemBackground
         navBar()
         configUI()
-        presenter?.view = self
-        presenter?.getCollections()
+        presenter.view = self
+        presenter.getCollections()
     }
 
     // MARK: - Functions
@@ -89,7 +89,7 @@ final class CatalogViewController: UIViewController {
     func showNFTCollection(indexPath: IndexPath) {
         let viewController = CollectionNFTViewController(
             servicesAssembly: servicesAssembly,
-            collection: presenter?.collectionsNFT[indexPath.row]
+            collection: presenter.collectionsNFT[indexPath.row]
         )
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -105,15 +105,15 @@ final class CatalogViewController: UIViewController {
         let nameSortAction = UIAlertAction(
             title: NSLocalizedString("byTitle", comment: ""),
             style: .default
-        ) { _ in
-            self.presenter?.sortingByName()
+        ) { [weak self] _ in
+            self?.presenter.sortingByName()
         }
 
         let countSortAction = UIAlertAction(
             title: NSLocalizedString("byCount", comment: ""),
             style: .default
-        ) { _ in
-            self.presenter?.sortingByCount()
+        ) { [weak self] _ in
+            self?.presenter.sortingByCount()
         }
 
         let cancelAction = UIAlertAction(
@@ -134,12 +134,12 @@ final class CatalogViewController: UIViewController {
 extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        presenter?.collectionsNFT.count ?? 0
+        presenter.collectionsNFT.count 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CatalogNFTCell = tableView.dequeueReusableCell()
-        guard let model = presenter?.getModel(for: indexPath) else { return cell }
+        let model = presenter.getModel(for: indexPath)
         cell.config(with: model)
         cell.selectionStyle = .none
         cell.backgroundColor = .ypWhite
@@ -171,7 +171,7 @@ extension CatalogViewController: NftCatalogView {
             title: NSLocalizedString("repeat", comment: ""),
             style: .default
         ) { [weak self] _ in
-            self?.presenter?.getCollections()
+            self?.presenter.getCollections()
         }
 
         let cancelAction = UIAlertAction(
@@ -190,12 +190,10 @@ extension CatalogViewController: NftCatalogView {
 
     func startLoadIndicator() {
         loader.showLoading()
-       // ProgressHUD.show()
     }
 
     func stopLoadIndicator() {
         loader.hideLoading()
-       // ProgressHUD.dismiss()
     }
 
     func update() {

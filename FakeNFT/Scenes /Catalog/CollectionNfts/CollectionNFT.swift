@@ -319,7 +319,7 @@ extension CollectionNFTViewController: NftCollectionView {
     }
 
     @objc
-    func didTapAuthor() {
+    private func didTapAuthor() {
         let webView = WebView(url: presenter?.getAuthorURL())
         navigationController?.pushViewController(webView, animated: true)
     }

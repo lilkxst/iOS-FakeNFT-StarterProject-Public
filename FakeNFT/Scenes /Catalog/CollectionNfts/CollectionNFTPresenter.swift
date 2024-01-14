@@ -22,6 +22,9 @@ protocol CollectionPresenterProtocol {
 final class CollectionNFTPresenter: CollectionPresenterProtocol {
 
     // MARK: - Properties
+    var collection: NFTCollection?
+    var profile: ProfileModelNetwork?
+    var nfts: [Nft] = []
     weak var view: NftCollectionView?
     private let service: ServicesAssembly
     private let formatter: NumberFormatter = {
@@ -29,10 +32,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
         formatter.numberStyle = .decimal
         return formatter
     }()
-    var collection: NFTCollection?
-    var profile: ProfileModelNetwork?
-    var nfts: [Nft] = []
-
+   
     // MARK: - Init
 
     init(service: ServicesAssembly, collection: NFTCollection?) {
@@ -73,10 +73,9 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
                     self?.nfts.append(nft)
                     self?.view?.stopLoadIndicator()
                     self?.view?.updateCollection()
-                case .failure(let error):
+                case .failure:
                     self?.view?.stopLoadIndicator()
                     self?.view?.showLoadingAlert()
-                    print(error)
                 }
             })
         }
@@ -116,10 +115,9 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
         )
     }
 
-    func convertAuthor() -> String {
+    private func convertAuthor() -> String {
         let names = collection?.author.components(separatedBy: "_")
-        let name = (names?[0] ?? "") + " " + (names?[1] ?? "")
-        return name.capitalized
+        return names?.count != 0 ? ((names?[0] ?? "") + " " + (names?[1] ?? "")).capitalized : "Имя автора не известно"
     }
 
     // MARK: - Cells Functions
@@ -132,8 +130,7 @@ final class CollectionNFTPresenter: CollectionPresenterProtocol {
                 self?.profile = profile
                 // обновить ячейку
                 self?.view?.updateCell(indexPath: indexPath)
-            case .failure(let error):
-                print(error)
+            case .failure:
                 self?.view?.updateCell(indexPath: indexPath)
             }
         })

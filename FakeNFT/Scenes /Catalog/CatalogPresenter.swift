@@ -19,10 +19,10 @@ protocol CatalogPresenterProtocol {
 final class CatalogPresenter: CatalogPresenterProtocol {
 
     // MARK: - Properties
+    var collectionsNFT: [NFTCollection] = []
     weak var view: NftCatalogView?
     private let service: NftCatalogServiceProtocol
     private let sortingStorage: SortingNftStorage
-    var collectionsNFT: [NFTCollection] = []
 
     // MARK: - Init
     convenience init(service: NftCatalogServiceProtocol ) {
@@ -48,7 +48,6 @@ final class CatalogPresenter: CatalogPresenterProtocol {
                 self?.view?.stopLoadIndicator()
                 self?.view?.update()
             case .failure(let error):
-                print(error)
                 self?.view?.stopLoadIndicator()
                 self?.view?.showLoadingAlert()
             }

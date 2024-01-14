@@ -33,6 +33,50 @@ final class NftCatalogService: NftCatalogServiceProtocol {
         self.networkClient = networkClient
         loadProfile { _ in }
         loadOrders { _ in }
+        addObserver()
+    }
+    
+    
+    // MARK: - Observer
+    
+    deinit{
+        removeObserver()
+    }
+    
+    func addObserver(){
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateProfile(notification:)),
+            name: CatalogStorage.DidChangeProfileNotification,
+            object: nil
+        )
+        
+    }
+    
+    func removeObserver(){
+        NotificationCenter.default.removeObserver(
+                    self,
+                    name: CatalogStorage.DidChangeProfileNotification,
+                    object: nil)
+    }
+    
+    @objc
+    func updateProfile(notification: Notification){
+        
+        guard
+                   let userInfo = notification.userInfo,
+                   let profile = userInfo["Profile"] as? ProfileModelNetwork
+               else { return }
+        
+        // очищаем старый массив
+        storage.likes.removeAll()
+        //проверяем пустой массив лайков
+        if !profile.likes.isEmpty {
+            // Сохраняем массив лайков пользователя
+            profile.likes.forEach {
+                storage.saveNft($0)
+            }
+        }
     }
 
     // MARK: - Functions
