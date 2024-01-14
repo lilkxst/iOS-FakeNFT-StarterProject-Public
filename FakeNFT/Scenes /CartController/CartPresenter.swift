@@ -73,14 +73,15 @@ final class CartPresenter: CartPresenterProtocol {
                 case .success(let order):
                     self.order = order
                     if !order.nfts.isEmpty {
-                        order.nfts[0].components(separatedBy: ",").forEach { data in
-                            self.orderIds.append(data)
+                        order.nfts.forEach {
+                            self.orderIds.append($0)
                         }
                         for nftsIds in self.orderIds {
                             self.getNftById(id: nftsIds)
                         }
                         viewController?.updateCartTable()
                     }
+                    sortCart(filter: currentFilter)
                     viewController?.stopLoadIndicator()
                 case .failure(let error):
                     print(error)
@@ -123,6 +124,7 @@ final class CartPresenter: CartPresenterProtocol {
     
     func sortCart(filter: CartFilter.FilterBy) {
         currentFilter = filter
+        
         cartContent = cartContent.sorted(by: CartFilter.filter[currentFilter] ?? CartFilter.filterById)
     }
     

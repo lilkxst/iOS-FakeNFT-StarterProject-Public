@@ -27,7 +27,13 @@ final class OrderServiceImpl: OrderService {
     private let nftStorage: NftByIdStorage
     private var idsStorage: [String] = []
     let orderSorted = Notification.Name("CartUpdated")
-    var nftsStorage: [NftDataModel] = []
+    private (set) var nftsStorage: [NftDataModel] = [] {
+        didSet {
+            if !nftsStorage.isEmpty {
+                NotificationCenter.default.post(name: self.orderSorted, object: nil)
+            }
+        }
+    }
     
     init(networkClietn: NetworkClient, orderStorage: OrderStorage, nftByIdService: NftByIdService, nftStorage: NftByIdStorage) {
         self.networkClient = networkClietn
