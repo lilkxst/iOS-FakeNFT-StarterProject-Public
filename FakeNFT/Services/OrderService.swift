@@ -12,7 +12,6 @@ typealias RemoveOrderCompletion = (Result<[String], Error>) -> Void
 typealias RemoveAllNftCompletion = (Result<Int, Error>) -> Void
 
 protocol OrderService {
-    var orderSorted: NSNotification.Name { get }
     var nftsStorage: [NftDataModel] { get }
     func loadOrder(completion: @escaping OrderCompletion)
     func removeNftFromStorage(id: String, completion: @escaping RemoveOrderCompletion)
@@ -26,14 +25,7 @@ final class OrderServiceImpl: OrderService {
     private let nftByIdService: NftByIdService
     private let nftStorage: NftByIdStorage
     private var idsStorage: [String] = []
-    let orderSorted = Notification.Name("CartUpdated")
-    private (set) var nftsStorage: [NftDataModel] = [] {
-        didSet {
-            if !nftsStorage.isEmpty {
-                NotificationCenter.default.post(name: self.orderSorted, object: nil)
-            }
-        }
-    }
+    var nftsStorage: [NftDataModel] = []
     
     init(networkClietn: NetworkClient, orderStorage: OrderStorage, nftByIdService: NftByIdService, nftStorage: NftByIdStorage) {
         self.networkClient = networkClietn

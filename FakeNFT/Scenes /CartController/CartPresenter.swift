@@ -44,10 +44,6 @@ final class CartPresenter: CartPresenterProtocol {
         self.viewController = viewController
         self.orderService = orderService
         self.nftByIdService = nftByIdService
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didCartSorted(_:)),
-                                               name: self.orderService?.orderSorted,
-                                               object: nil)
     }
         
     func totalPrice() -> Float {
@@ -103,6 +99,7 @@ final class CartPresenter: CartPresenterProtocol {
                     self.cartContent.append(self.nftById!)
                     viewController?.showPlaceholder()
                     viewController?.stopLoadIndicator()
+                    sortCart(filter: currentFilter)
                 case .failure(let error):
                     print(error)
                     viewController?.stopLoadIndicator()
@@ -124,8 +121,8 @@ final class CartPresenter: CartPresenterProtocol {
     
     func sortCart(filter: CartFilter.FilterBy) {
         currentFilter = filter
-        
         cartContent = cartContent.sorted(by: CartFilter.filter[currentFilter] ?? CartFilter.filterById)
+        viewController?.updateCartTable()
     }
     
     @objc private func didCartSorted(_ notification: Notification) {
