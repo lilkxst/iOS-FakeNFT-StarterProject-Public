@@ -7,13 +7,25 @@ final class TabBarController: UITabBarController {
     private let catalogTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.catalog", comment: ""),
         image: UIImage(systemName: "square.stack.3d.up.fill"),
+        tag: 1
+    )
+    
+    private let profileTabBarItem = UITabBarItem(
+        title: NSLocalizedString("Tab.profile", comment: ""),
+        image: UIImage(named: "Profile"),
         tag: 0
     )
     
     private let cartTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.cart", comment: ""),
         image: UIImage(named: "TabCart"),
-        tag: 1
+        tag: 2
+    )
+    
+    private let statisticsTabBarItem = UITabBarItem(
+        title: NSLocalizedString("Tab.statistics", comment: ""),
+        image: UIImage(named: "tabBarStatImages"),
+        tag: 3
     )
 
     init(servicesAssembly: ServicesAssembly) {
@@ -28,6 +40,7 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let servicesAssembly else { return }
+        
         let catalogController = TestCatalogViewController(
             servicesAssembly: servicesAssembly
         )

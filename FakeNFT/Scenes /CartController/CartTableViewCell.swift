@@ -117,7 +117,7 @@ final class CartTableViewCell: UITableViewCell {
     func updateCell(with model: NftDataModel) {
         titleLabel.text = model.name
         imageNft.kf.setImage(with: URL(string: model.images[0]))
-        ratingView.setRating(rating: model.rating)
+        ratingView.setStars(with: model.rating)
         priceValue.text = "\(model.price) ETH"
         self.id = model.id
     }
