@@ -10,12 +10,12 @@ import UIKit
 final class RatingView: UIView {
 
     private lazy var starsStacView: UIStackView = {
-       let view = UIStackView()
+        let view = UIStackView()
         view.axis = .horizontal
         view.alignment = .leading
         view.distribution = .fill
         view.spacing = 2
-       return view
+        return view
     }()
 
     override init(frame: CGRect) {
@@ -53,7 +53,6 @@ final class RatingView: UIView {
     }
 
     func removeAllArrangedSubviews() {
-
         starsStacView.arrangedSubviews.forEach {
             starsStacView.removeArrangedSubview($0)
         }

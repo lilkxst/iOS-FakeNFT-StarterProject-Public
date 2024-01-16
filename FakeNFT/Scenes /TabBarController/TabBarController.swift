@@ -15,17 +15,17 @@ final class TabBarController: UITabBarController {
         image: UIImage(named: "Profile"),
         tag: 0
     )
-
+    
+    private let cartTabBarItem = UITabBarItem(
+        title: NSLocalizedString("Tab.cart", comment: ""),
+        image: UIImage(named: "TabCart"),
+        tag: 2
+    )
+    
     private let statisticsTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.statistics", comment: ""),
         image: UIImage(named: "tabBarStatImages"),
         tag: 3
-    )
-
-    private let basketTabBarItem = UITabBarItem(
-        title: NSLocalizedString("Tab.basket", comment: ""),
-        image: UIImage(named: "Basket"),
-        tag: 2
     )
 
     init(servicesAssembly: ServicesAssembly) {
@@ -47,6 +47,13 @@ final class TabBarController: UITabBarController {
         let navController = UINavigationController(rootViewController: catalogController)
         setNavigationController(controller: navController)
         catalogController.tabBarItem = catalogTabBarItem
+        
+        let cartController = CartViewController(
+            servicesAssembly: servicesAssembly
+        )
+        let cartNavigationController = UINavigationController(rootViewController: cartController)
+        
+        cartController.tabBarItem = cartTabBarItem
 
         let profilePresenter = ProfileViewControllerPresenter(servicesAssembly: servicesAssembly)
         let profileController = ProfileViewController(presenter: profilePresenter)
@@ -57,16 +64,10 @@ final class TabBarController: UITabBarController {
         )
         statisticsController.tabBarItem = statisticsTabBarItem
 
-        let basketController = CatalogViewController(
-            servicesAssembly: servicesAssembly
-        )
-        basketController.tabBarItem = basketTabBarItem
-
         let navProfileController = UINavigationController(rootViewController: profileController)
-        let navBasketController = UINavigationController(rootViewController: basketController)
         let navStatisticsController = UINavigationController(rootViewController: statisticsController)
 
-        viewControllers = [navProfileController, navController, navBasketController, navStatisticsController]
+        viewControllers = [navProfileController, navController, cartNavigationController, navStatisticsController]
         tabBar.isTranslucent = false
         view.backgroundColor = .ypWhite
         tabBar.barTintColor = .ypWhite
