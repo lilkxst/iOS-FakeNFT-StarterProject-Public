@@ -27,12 +27,15 @@ final class CartDeletePresenter: CartDeletePresenterProtocol {
     }
     
     func deleteNftFromCart(completion: @escaping (Result<[String], Error>) -> Void) {
+        viewController?.startLoadIndicator()
         orderService?.removeNftFromStorage(id: nftIdForDelete, completion: { result in
             switch result {
             case let .success(data):
+                self.viewController?.stopLoadIndicator()
                 completion(.success(data))
             case let .failure(error):
                 self.viewController?.showNetworkError(message: "\(error)")
+                self.viewController?.stopLoadIndicator()
                 print(error)
             }
         } )

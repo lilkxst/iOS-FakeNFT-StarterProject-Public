@@ -9,6 +9,8 @@ import UIKit
 
 protocol CartDeleteControllerProtocol: AnyObject {
     func showNetworkError(message: String)
+    func startLoadIndicator()
+    func stopLoadIndicator()
 }
 
 final class CartDeleteViewController: UIViewController, CartDeleteControllerProtocol {
@@ -72,6 +74,8 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
         return returnButton
     }()
     
+    private let loaderView = LoaderView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,6 +93,8 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
         view.addSubview(questionLabel)
         view.addSubview(deleteButton)
         view.addSubview(returnButton)
+        view.addSubview(loaderView)
+        loaderView.constraintCenters(to: view)
         
         NSLayoutConstraint.activate([
             blurView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -143,6 +149,14 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
                 print(error)
             }
         }
+    }
+    
+    func startLoadIndicator() {
+        loaderView.showLoading()
+    }
+    
+    func stopLoadIndicator() {
+        loaderView.hideLoading()
     }
     
     func showNetworkError(message: String) {

@@ -16,4 +16,15 @@ struct NftDataModel: Decodable {
     var price: Float
     var author: String
     var id: String
+    
+    init(nft: NftDataModel) {
+        self.createdAt = nft.createdAt
+        self.name = nft.name
+        self.images = nft.images
+        self.rating = nft.rating
+        self.description = nft.description
+        self.price = nft.price
+        self.author = nft.author
+        self.id = nft.id
+    }
 }

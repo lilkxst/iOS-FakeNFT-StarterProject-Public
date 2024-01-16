@@ -72,8 +72,11 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         paymentButton.setTitleColor(.white, for: .normal)
         paymentButton.titleLabel?.font = .bodyBold
         paymentButton.setTitle(NSLocalizedString("Cart.paymentButton", comment: ""), for: .normal)
+        paymentButton.addTarget(self, action: #selector(didTapPaymentButton), for: .touchUpInside)
         return paymentButton
     }()
+    
+    private var loaderView = LoaderView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,6 +106,8 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         bottomView.addSubview(totalPriceLabel)
         bottomView.addSubview(paymentButton)
         view.addSubview(placeholderLabel)
+        view.addSubview(loaderView)
+        loaderView.constraintCenters(to: view)
         
         cartTable.translatesAutoresizingMaskIntoConstraints = false
         bottomView.translatesAutoresizingMaskIntoConstraints = false
@@ -158,6 +163,18 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         }
     }
     
+    func updateCartTable() {
+        cartTable.reloadData()
+    }
+    
+    func startLoadIndicator() {
+        loaderView.showLoading()
+    }
+    
+    func stopLoadIndicator() {
+        loaderView.hideLoading()
+    }
+    
     @objc private func didTapSortButton() {
         let alert = UIAlertController(title: NSLocalizedString("CartFilter.filter", comment: ""), message: nil, preferredStyle: .actionSheet)
         
@@ -183,6 +200,13 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         } ))
         
         self.present(alert, animated: true)
+    }
+    
+    @objc private func didTapPaymentButton() {
+        let paymentController = PaymentViewController(servicesAssembly: servicesAssembly)
+        paymentController.hidesBottomBarWhenPushed = true
+        navigationItem.backButtonTitle = ""
+        navigationController?.pushViewController(paymentController, animated: true)
     }
 }
 
